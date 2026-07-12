@@ -1,16 +1,20 @@
 # claude-code-renderpatch
 
-Binary patch for Claude Code's native binary to fix the transcript (Ctrl+O) renderer.
+Version-pinned binary patches for Claude Code's native Ctrl+O and terminal renderer.
 
-The stock `claude` (Bun-compiled Mach-O, version-pinned here to **2.1.203**) renders
-only the last ~30 messages when you press **Ctrl+O**, because it assumes older rows are
-still sitting in the terminal's native scrollback. This patch forces the Ctrl+O
-transcript view to render **all currently-loaded messages**.
+The stock `claude` (Bun-compiled Mach-O, pinned here to **2.1.203**) combines bounded
+React/Ink frames with preserved native terminal scrollback. That makes Ctrl+O omit old
+messages, leaves older expanded rows behind on collapse, and can preserve stale wrapping
+across width changes.
 
-This is a **same-length byte patch** inside the embedded `__BUN` JavaScript bundle,
-followed by an ad-hoc re-sign (macOS requires a valid signature to run). The original
-binary is never modified — the patch is applied to a copy installed as a separate
-launcher, `claude-full-history`.
+Two recipes are retained:
+
+- **V1** (`install_patch.sh`): expand-only; installs `claude-full-history`.
+- **V2 / recommended** (`patches/full-redraw.sh`): complete expand/collapse plus
+  destructive row-zero replay on resize; installs `claude-full-redraw`.
+
+Both use **same-length byte patches** inside the embedded `__BUN` JavaScript bundle,
+followed by an ad-hoc re-sign. The original binary is never modified.
 
 ## What the patch changes
 
@@ -37,12 +41,20 @@ running on the wrong binary.
 
 ## Install
 
+Recommended full-redraw build:
+
+```bash
+bash patches/full-redraw.sh
+```
+
+Creates `~/.local/share/claude/patched/claude-2.1.203-full-redraw` and symlinks
+`~/.local/bin/claude-full-redraw` to it. Normal `claude` is untouched.
+
+The original expand-only build remains reproducible with:
+
 ```bash
 bash install_patch.sh
 ```
-
-Creates `~/.local/share/claude/patched/claude-2.1.203-full-history` and symlinks
-`~/.local/bin/claude-full-history` to it. Normal `claude` is untouched.
 
 ## Uninstall
 
@@ -50,14 +62,19 @@ Creates `~/.local/share/claude/patched/claude-2.1.203-full-history` and symlinks
 trash ~/.local/bin/claude-full-history ~/.local/share/claude/patched
 ```
 
-## Known limitations / open work
+## Documentation and verification
 
-- **Collapse doesn't re-render the whole transcript.** Ctrl+O expands all correctly,
-  but collapsing only re-folds the currently-viewed section; earlier expanded content
-  stays expanded. Desired (pi-style): Ctrl+O toggles expand-all / fold-all with a full
-  re-render each way.
-- **Resize distortion.** On window/width change it should redraw the entire transcript
-  (first visible line → latest message) to avoid mangling. Not yet addressed.
-- **Compaction boundary.** The patch renders every message currently loaded in the
-  session; it cannot resurrect messages already dropped from display state by
-  compaction/resume-pruning (still on disk in the JSONL).
+- [`reference/root-cause.md`](reference/root-cause.md) — architecture and failure modes.
+- [`reference/patch-intent.md`](reference/patch-intent.md) — exact bytes and source mapping.
+- [`REPATCHING-PLAYBOOK.md`](REPATCHING-PLAYBOOK.md) — rediscovery procedure after updates.
+- [`verify/pty-harness.py`](verify/pty-harness.py) — repeatable expand/collapse/resize PTY test.
+
+## Known tradeoffs / limitations
+
+- V2 deliberately uses ED3 and can erase shell scrollback above Claude.
+- Its destructive behavior applies to all full-reset paths, not only Ctrl+O and resize.
+- Removing the frame caps raises memory/CPU costs on very large sessions.
+- "Full" means every message currently loaded in display state; it cannot resurrect
+  messages dropped by compaction/resume pruning (though they may remain in JSONL).
+- The V2 Ctrl+O replacement reuses telemetry bytes, so it sacrifices the
+  `tengu_toggle_transcript` analytics event.
