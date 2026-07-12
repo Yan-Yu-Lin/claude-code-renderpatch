@@ -1,12 +1,12 @@
 # Patch intent and exact byte replacements
 
-This document maps the version-specific minified bytes in Claude Code 2.1.203 back to the readable source dump at:
+This document maps the version-specific minified bytes in Claude Code back to a
+human-readable reference of the app's source structure (e.g. a de-minified / beautified
+rendering of the bundled JS, or any readable reference you reconstruct).
 
-```text
-/Users/linyanyu/20-29-Development/24-reference-repos/claude-code-leaked-src/src
-```
-
-The dump and the installed binary are not identical revisions. Source locations are therefore semantic landmarks, not claims that the minified identifiers are identical.
+The reference and the installed binary are not guaranteed to be identical revisions.
+Source locations are therefore semantic landmarks (which function/prop/construct a byte
+site corresponds to), not claims that the minified identifiers are identical.
 
 ## Invariants
 
