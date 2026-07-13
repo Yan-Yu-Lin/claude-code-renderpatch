@@ -62,6 +62,32 @@ bash install_patch.sh
 trash ~/.local/bin/claude-full-history ~/.local/share/claude/patched
 ```
 
+## Other platforms (Linux / Windows)
+
+The prebuilt scripts here target **macOS / Apple Silicon (arm64)**. But the fix is not
+macOS-specific: Claude Code ships a separate native binary per platform, and the *same*
+minified JavaScript app is bundled inside all of them — only the outer runtime wrapper
+(Mach-O vs ELF vs PE) differs. So the patch sites, and very likely the exact byte
+patterns, are the same for a given version on Linux and Windows; only the packaging
+around them changes.
+
+The per-OS differences are small, and an AI agent following [`REPATCHING-PLAYBOOK.md`](REPATCHING-PLAYBOOK.md)
+should be able to fill them in without much trouble:
+
+- **Linux** — *easier* than macOS. ELF binaries have no code signature, so you skip the
+  re-signing step entirely: patch the bytes in place and run.
+- **Windows** — doable. Windows will run a modified binary, so it's mostly a matter of
+  adapting the signing step (invalidated Authenticode is not a hard block the way macOS
+  Gatekeeper is).
+- **Verification** — [`verify/pty-harness.py`](verify/pty-harness.py) uses a Unix
+  pseudo-terminal (works on macOS/Linux as-is). On Windows an agent would adapt it to
+  ConPTY, or just verify interactively.
+
+These platforms are **untested by me** — but the hard part (locating the sites, deriving
+same-length replacements, confirming the render behavior) is identical everywhere and is
+exactly what the playbook + `reference/` docs cover. Point your agent at them and the
+platform gap should be straightforward to close.
+
 ## Documentation and verification
 
 - [`reference/root-cause.md`](reference/root-cause.md) — architecture and failure modes.
