@@ -9,7 +9,10 @@ The objective is a cumulative custom build that:
 3. uses destructive ED2+ED3 resets on the classic main screen;
 4. replays full resets from row zero;
 5. forces one authoritative redraw after entering Ctrl+O;
-6. passes a PTY expand/collapse/resize test.
+6. applies provider-aware claude-mix context windows;
+7. resolves explicit subagent model aliases instead of false-inheriting a parent whose
+   concrete model id merely contains that alias's family keyword;
+8. passes byte-anchor, signature, version, PTY, and model-routing verification.
 
 ## 0. Preserve the known-good build
 
@@ -288,13 +291,102 @@ This replacement sacrifices `tengu_toggle_transcript` telemetry. Preserve that c
 
 Readable source map: `src/hooks/useGlobalKeybindings.tsx` `handleToggleTranscript`; `src/ink/ink.tsx` `forceRedraw`.
 
-## 8. Build a same-length patcher safely
+## 8. Rediscover the explicit subagent model-routing fix
 
-Start from the stock binary every time:
+### Reproduced failure and mechanism
+
+With the original claude-mix layout, explicit subagent `model:"opus"` correctly resolved
+the configured opus slot from fable (`claude-fable-5[1m]`) and sonnet (`kimi-k3`)
+parents. From the haiku slot, which then resolved to `claude-opus-5[1m]`, the subagent
+silently inherited `claude-opus-5`. This was read from each subagent transcript's API
+response `.message.model`, not model self-reporting.
+
+The subagent resolver checks `CLAUDE_CODE_SUBAGENT_MODEL`, then handles an explicit model
+argument. Before invoking the real alias resolver it calls a family helper that
+canonicalizes the parent's concrete id and substring-tests it for `fable`, `opus`,
+`sonnet`, or `haiku`. A match returns the parent immediately. The haiku slot's concrete id
+contained `opus`, so explicit `opus` was mistaken for a no-op.
+
+### Stable rediscovery anchors
+
+Do not reuse names such as 2.1.207's `lod`/`ble`/`Zo` or 2.1.219's
+`Vrd`/`ote`/`Ei`. Search the new stock bytes for:
+
+```text
+CLAUDE_CODE_SUBAGENT_MODEL
+```
+
+Near the live executable occurrence, locate a resolver with:
+
+- an environment-override branch comparing against `"inherit"`;
+- an explicit argument branch beginning with another `"inherit"` check;
+- a real alias resolver call after a same-family early return;
+- a default/frontmatter branch with a second same-family early return.
+
+Find the nearby family helper using stable literal adjacency equivalent to:
+
+```js
+case "fable": return canonicalParent.includes("fable")
+case "opus":  return canonicalParent.includes("opus")
+case "sonnet":return canonicalParent.includes("sonnet")
+case "haiku": return canonicalParent.includes("haiku")
+```
+
+Confirm the helper has exactly two calls inside the subagent resolver. Patch only the
+**first** call, in the explicit-override branch, to a same-length constant-false condition
+so execution falls through to the existing real alias resolver. For example, 2.1.219
+changes the 21-byte clause:
+
+```js
+if(Vrd(r,t))return t;
+```
+
+to:
+
+```js
+if(!1&&r&&t)return t;
+```
+
+Use a longer contextual anchor containing the following real resolver call, not the
+21-byte clause globally. Require contextual old=1/new=0 before patching and old=0/new=1
+immediately afterward.
+
+### Why this is narrow
+
+Do not patch the family helper itself and do not patch its second call. The narrow edit
+affects explicit model overrides for ordinary local/background agents, workflow agents,
+and remote workflow agents. It leaves unchanged:
+
+- agent-definition/frontmatter defaults and normal same-family inheritance;
+- explicit `inherit`;
+- higher-precedence `CLAUDE_CODE_SUBAGENT_MODEL`;
+- allowlist checks, provider remapping, and 1M handling after alias resolution;
+- `/model`, the main loop, quota routing, classifiers, and `opusplan` main-loop behavior;
+- built-in, resume, observer, and background launches with no explicit model argument.
+
+The behavior intentionally changed is a pinned same-family parent plus explicit family
+alias: the explicit alias now follows its configured slot rather than preserving the
+parent's concrete id.
+
+### Configuration-level belt and braces
+
+The user's `~/.claude/claude-mix-settings.json` already avoids assigning any slot a
+concrete model id containing a **different** slot's family keyword. Preserve that
+configuration invariant as a fallback, but do not treat it as a substitute for
+rediscovering and verifying the binary fix.
+
+## 9. Build a same-length patcher safely
+
+Start from the stock binary every time and apply render, mix-window, and routing edits
+in one in-memory patch list:
 
 ```bash
-cp "$CLAUDE" /tmp/claude-new-full-redraw
+cp "$CLAUDE" /tmp/claude-new-full-redraw-mix-window
 ```
+
+Perform one codesign pass only after every byte replacement and post-patch invariant has
+succeeded. `patches/full-redraw-mix-window-2.1.219.sh` is the current cumulative reference;
+the per-feature scripts are migration and rediscovery references.
 
 Represent every patch as `(name, old_bytes, new_bytes)`. Enforce:
 
@@ -320,9 +412,10 @@ Never:
 - continue after a zero/multiple match;
 - patch the already patched previous-version binary.
 
-Use `patches/full-redraw.sh` as the 2.1.203 reference implementation.
+Use `patches/full-redraw-mix-window-2.1.219.sh` as the current cumulative reference and
+`patches/full-redraw.sh` as the historical 2.1.203 renderer reference.
 
-## 9. Preserve entitlements and re-sign
+## 10. Preserve entitlements and re-sign
 
 Editing `__BUN` invalidates Anthropic's signature. Extract entitlements from the **new stock binary**, then ad-hoc sign the copy:
 
@@ -333,10 +426,10 @@ codesign --force \
   --sign - \
   --identifier com.anthropic.claude-code \
   --entitlements /tmp/claude-entitlements.plist \
-  /tmp/claude-new-full-redraw
+  /tmp/claude-new-full-redraw-mix-window
 
-codesign --verify --strict --verbose=2 /tmp/claude-new-full-redraw
-/tmp/claude-new-full-redraw --version
+codesign --verify --strict --verbose=2 /tmp/claude-new-full-redraw-mix-window
+/tmp/claude-new-full-redraw-mix-window --version
 ```
 
 Compare extracted entitlements with `claude-entitlements.plist`. The stock binary may acquire new entitlements; always prefer extraction over blindly copying the old plist.
@@ -345,13 +438,13 @@ Install under a new versioned name only after verification:
 
 ```bash
 mkdir -p ~/.local/share/claude/patched ~/.local/bin
-cp /tmp/claude-new-full-redraw \
-  ~/.local/share/claude/patched/claude-NEWVERSION-full-redraw
-ln -sfn ~/.local/share/claude/patched/claude-NEWVERSION-full-redraw \
+cp /tmp/claude-new-full-redraw-mix-window \
+  ~/.local/share/claude/patched/claude-NEWVERSION-full-redraw-mix-window
+ln -sfn ~/.local/share/claude/patched/claude-NEWVERSION-full-redraw-mix-window \
   ~/.local/bin/claude-full-redraw-new
 ```
 
-## 10. Verify with the PTY harness
+## 11. Verify with the PTY harness
 
 Select a backed-up large session containing memorable old strings:
 
@@ -388,7 +481,7 @@ Then perform the decisive real-terminal test in Ghostty:
 5. repeatedly resize narrow/wide;
 6. inspect for stale wrapping, duplicates, or mangled borders.
 
-## 11. Diagnose failures
+## 12. Diagnose failures
 
 ### Stock SHA mismatch
 
@@ -434,7 +527,7 @@ Destructive clear was patched, but reset still starts at the visible slice or me
 
 For the pinned 2.1.203 installer, stop: the recipe drifted. On a new version, record the new verified stock and result SHAs after PTY/Ghostty validation. Ad-hoc signing output can theoretically change with macOS tooling, so distinguish a code-patch mismatch from signature-blob variation by comparing bytes before the `__LINKEDIT` signature region.
 
-## 12. Preserve the tradeoffs in every future version
+## 13. Preserve the tradeoffs in every future version
 
 Communicate these every time:
 

@@ -1,11 +1,13 @@
 # claude-code-renderpatch
 
-Version-pinned binary patches for Claude Code's native Ctrl+O and terminal renderer.
+Version-pinned binary patches for Claude Code's terminal renderer, claude-mix context
+windows, and explicit subagent model routing. The current cumulative recipe targets
+**2.1.219**; older per-version scripts remain as rediscovery references.
 
-The stock `claude` (Bun-compiled Mach-O, pinned here to **2.1.203**) combines bounded
-React/Ink frames with preserved native terminal scrollback. That makes Ctrl+O omit old
-messages, leaves older expanded rows behind on collapse, and can preserve stale wrapping
-across width changes.
+The stock `claude` is a Bun-compiled Mach-O containing readable minified JavaScript in
+its `__BUN` segment. The renderer combines bounded React/Ink frames with preserved native
+terminal scrollback, making Ctrl+O omit old messages, leaving expanded rows behind after
+collapse, and preserving stale wrapping across width changes.
 
 Two recipes are retained:
 
@@ -13,8 +15,9 @@ Two recipes are retained:
 - **V2 / recommended** (`patches/full-redraw.sh`): complete expand/collapse plus
   destructive row-zero replay on resize; installs `claude-full-redraw`.
 
-Both use **same-length byte patches** inside the embedded `__BUN` JavaScript bundle,
-followed by an ad-hoc re-sign. The original binary is never modified.
+All recipes use **same-length byte patches** inside the embedded `__BUN` JavaScript
+bundle, followed by an entitlement-preserving ad-hoc re-sign. The original binary is
+never modified.
 
 ## What the patch changes
 
@@ -29,26 +32,68 @@ Corresponding readable source: `src/screens/REPL.tsx` ~line 4390–4402
 (the transcript `Messages` element), `src/components/Messages.tsx`
 (`MAX_MESSAGES_TO_SHOW_IN_TRANSCRIPT_MODE = 30`).
 
-## Target binary
+## Additional cumulative patches
 
-- Version: `2.1.203`
-- SHA-256 (original, unmodified): `57b5aec68a35f42036bd2f82836d91c2d2990c2d589fb3465e3ee87142af9a1e`
-- Path: `~/.local/share/claude/versions/2.1.203`
+### Provider-aware claude-mix windows
 
-The byte patterns are **version-specific** — they do NOT exist in 2.1.205. Any upgrade
-needs a fresh inspection, not a blind re-apply. The install script SHA-guards against
-running on the wrong binary.
+The mix-window patch keeps Claude models on native handling, assigns `kimi*` a 262144
+window, and assigns other non-Claude providers (such as GPT) a 372000 window. This avoids
+server-overwritable cache values and global context-window environment overrides.
+
+### Explicit subagent model-override routing
+
+Claude Code's subagent resolver has a same-family shortcut. Before resolving an explicit
+alias, it canonicalizes the **parent's concrete model id** and substring-tests it for
+`fable`, `opus`, `sonnet`, or `haiku`. If it appears to match, it returns the parent model
+without running the real alias resolver.
+
+This was measured from each subagent's own transcript `.message.model` field:
+
+| parent slot | concrete parent at reproduction time | subagent `model:"opus"` |
+|---|---|---|
+| fable | `claude-fable-5[1m]` | resolved the opus slot correctly |
+| sonnet | `kimi-k3` | resolved the opus slot correctly |
+| haiku | `claude-opus-5[1m]` | **incorrectly inherited `claude-opus-5`** |
+
+The haiku slot's concrete id contained `opus`, so the shortcut fired before the configured
+opus alias could resolve. The patch disables only that shortcut's **explicit-override**
+call site. It deliberately retains the second call used for frontmatter/default
+same-family inheritance, as well as `inherit`, `CLAUDE_CODE_SUBAGENT_MODEL` precedence,
+available-model checks, provider remapping, and 1M handling. It does not affect `/model`,
+the main loop, quota routing, classifiers, or `opusplan` main-loop behavior. Local,
+background, workflow, and remote-workflow agents with explicit model overrides all use
+the corrected path.
+
+A configuration-only belt-and-braces workaround is also active in
+`~/.claude/claude-mix-settings.json`: no slot is mapped to a concrete model id containing
+a **different** slot's family keyword. Keep that invariant even though the binary is now
+fixed.
+
+## Current target binary
+
+- Version: `2.1.219`
+- Stock SHA-256: `a8e806faaefac53c7a0f26523d8a45c60dbef3407b14ef990c75765d08febc82`
+- Stock path: `~/.local/share/claude/versions/2.1.219`
+- Cumulative output: `~/.local/share/claude/patched/claude-2.1.219-full-redraw-mix-window`
+- Verified cumulative SHA-256: `a3423442e91548f046b3c7e723a41266935ae6137e4ffdc26e932c3d8cfc25f2`
+
+The byte patterns are **version-specific**. Every update requires semantic rediscovery;
+installers SHA-guard their expected input and require every old anchor exactly once.
 
 ## Install
 
-Recommended full-redraw build:
+Recommended 2.1.219 cumulative build (seven render edits + mix-window + routing fix,
+one final codesign):
 
 ```bash
-bash patches/full-redraw.sh
+bash patches/full-redraw-mix-window-2.1.219.sh
 ```
 
-Creates `~/.local/share/claude/patched/claude-2.1.203-full-redraw` and symlinks
-`~/.local/bin/claude-full-redraw` to it. Normal `claude` is untouched.
+It writes `~/.local/share/claude/patched/claude-2.1.219-full-redraw-mix-window`, preserving
+the previous combined artifact as `.pre-routing-fix` when that backup does not already
+exist. Normal `claude` is untouched. The version-specific standalone migration script is
+`patches/subagent-model-override-2.1.219.sh`; clean rebuilds should prefer the cumulative
+script.
 
 The original expand-only build remains reproducible with:
 
@@ -87,6 +132,17 @@ These platforms are **untested by me** — but the hard part (locating the sites
 same-length replacements, confirming the render behavior) is identical everywhere and is
 exactly what the playbook + `reference/` docs cover. Point your agent at them and the
 platform gap should be straightforward to close.
+
+## Routing-fix rediscovery after updates
+
+Do not reuse `Vrd`, `ote`, `Ei`, or any old offset: minified identifiers regenerate.
+Search for the stable `CLAUDE_CODE_SUBAGENT_MODEL` literal, then locate the nearby resolver
+with an `"inherit"` explicit-model branch. Confirm its family helper contains adjacent
+`fable`/`opus`/`sonnet`/`haiku` cases whose results use `.includes(...)`. The resolver has
+two helper calls: patch only the first, explicit-override call immediately before the real
+alias resolver; retain the second default/frontmatter call. Require one contextual anchor,
+an equal-length replacement, old=0/new=1 afterward, then re-extract entitlements and sign.
+See `REPATCHING-PLAYBOOK.md` for the complete procedure.
 
 ## Documentation and verification
 
