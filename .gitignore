@@ -1,3 +1,5 @@
 *.plist
 patched/
 *.tgz
+__pycache__/
+*.pyc

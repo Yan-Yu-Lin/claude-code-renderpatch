@@ -80,6 +80,54 @@ fixed.
 The byte patterns are **version-specific**. Every update requires semantic rediscovery;
 installers SHA-guard their expected input and require every old anchor exactly once.
 
+## Experimental zero-patch preload runtime
+
+Claude Code's embedded Bun runtime honors `BUN_OPTIONS=--preload=<absolute module>`.
+The preload executes in Claude Code's own JavaScript process before CLI argument parsing,
+shares process-wide globals, and worked unchanged on the patched 2.1.219 binary and stock
+2.1.220. This creates an update-following extension seam for runtime-reachable surfaces
+without modifying, signing, or pinning the selected executable.
+
+This does **not** make every existing byte patch obsolete. A preload can wrap globals such
+as `console`, mutate `process.argv`, and use Bun/Node APIs, but Claude Code's renderer,
+resolvers, React state, and other minified lexical bindings remain private. Features that
+need those internals still require a version-specific direct patch or a much smaller bridge
+patch that invokes the external runtime.
+
+The experiment is deliberately separate from `claude-mix`:
+
+```bash
+# Show which newest installed Claude candidate would be used.
+./preload/claude-preload-lab --renderpatch-status
+
+# Load the quiet bootstrap and run the selected Claude candidate normally.
+./preload/claude-preload-lab --version
+
+# Prove that external code can intercept Claude's own console.log.
+CLAUDE_RENDERPATCH_MODULE="$PWD/preload/examples/console-prefix.mjs" \
+  ./preload/claude-preload-lab --version
+
+# Run all ordering, shared-global, API, trust, failure, and bypass checks.
+uv run verify/preload-harness.py
+```
+
+`--renderpatch-safe` invokes the same resolved candidate after removing preload-related
+environment variables, even if the bootstrap is missing or broken. Normal mode refuses an
+inherited `BUN_OPTIONS`, accepts only a trusted bootstrap path, and the bootstrap requires
+an explicitly selected, trusted external-module entry file under the user's home. These
+checks do not inspect transitive imports; trusted extensions still have full same-user code
+execution. The runtime never discovers or loads code from the current project automatically.
+
+Run `preload/install.sh` only if you want the optional
+`~/.local/bin/claude-preload-lab` convenience command. It copies the launcher and
+bootstrap into `~/.local/share/claude-renderpatch/preload/`, then links only that durable
+copy. The installer does not change `claude`, `claude-mix`, settings, or any installed
+Claude binary. Remove the lab files with `preload/install.sh --uninstall`.
+
+See [`reference/preload-runtime.md`](reference/preload-runtime.md) for the empirical record,
+security boundary, update matrix, failed alternatives, and the recommended external-runtime
+plus minimal-internal-bridge architecture.
+
 ## Install
 
 Recommended 2.1.219 cumulative build (seven render edits + mix-window + routing fix,
@@ -148,8 +196,12 @@ See `REPATCHING-PLAYBOOK.md` for the complete procedure.
 
 - [`reference/root-cause.md`](reference/root-cause.md) — architecture and failure modes.
 - [`reference/patch-intent.md`](reference/patch-intent.md) — exact bytes and source mapping.
+- [`reference/preload-runtime.md`](reference/preload-runtime.md) — tested external preload
+  behavior, security boundary, and update/repatch matrix.
 - [`REPATCHING-PLAYBOOK.md`](REPATCHING-PLAYBOOK.md) — rediscovery procedure after updates.
 - [`verify/pty-harness.py`](verify/pty-harness.py) — repeatable expand/collapse/resize PTY test.
+- [`verify/preload-harness.py`](verify/preload-harness.py) — repeatable latest-candidate
+  preload, same-global, trust, failure, child-environment, and bypass tests.
 
 ## Known tradeoffs / limitations
 

@@ -1,0 +1,169 @@
+#!/usr/bin/env bash
+# Launch the newest installed Claude Code candidate with a user-owned Bun preload.
+# This is intentionally separate from claude-mix and every patched launcher.
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage:
+  claude-preload-lab [claude arguments...]
+  claude-preload-lab --renderpatch-status
+  claude-preload-lab --renderpatch-safe [claude arguments...]
+  claude-preload-lab --renderpatch-help
+
+The launcher intentionally resolves the numerically newest trusted executable under:
+  ~/.local/share/claude/versions
+It does not follow the active ~/.local/bin/claude pin.
+
+Environment overrides:
+  CLAUDE_PRELOAD_TARGET        Exact trusted Claude binary to launch
+  CLAUDE_PRELOAD_VERSIONS_DIR  Alternate versions directory
+  CLAUDE_PRELOAD_BOOTSTRAP     Alternate trusted bootstrap module
+  CLAUDE_RENDERPATCH_MODULE    Trusted external module loaded by bootstrap.mjs
+
+--renderpatch-safe launches the same resolved Claude binary without any Bun preload.
+For safety, normal mode refuses to inherit an existing BUN_OPTIONS value.
+Requires Python 3 and Bash; currently tested on macOS.
+EOF
+}
+
+if [[ "${1:-}" == "--renderpatch-help" ]]; then
+  usage
+  exit 0
+fi
+
+command -v python3 >/dev/null || {
+  echo "Required command not found: python3" >&2
+  exit 1
+}
+
+SCRIPT_PATH="$(python3 - "$0" <<'PY'
+import os
+import sys
+print(os.path.realpath(sys.argv[1]))
+PY
+)"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+VERSIONS_DIR="${CLAUDE_PRELOAD_VERSIONS_DIR:-$HOME/.local/share/claude/versions}"
+BOOTSTRAP_INPUT="${CLAUDE_PRELOAD_BOOTSTRAP:-$SCRIPT_DIR/bootstrap.mjs}"
+
+resolve_target() {
+  python3 - "${CLAUDE_PRELOAD_TARGET:-}" "$VERSIONS_DIR" <<'PY'
+from pathlib import Path
+import os
+import re
+import sys
+
+try:
+    override = sys.argv[1]
+    if override:
+        print(Path(override).expanduser().absolute())
+        raise SystemExit
+
+    root = Path(sys.argv[2]).expanduser().resolve(strict=True)
+    candidates = []
+    for path in root.iterdir():
+        if path.is_symlink() or not path.is_file() or not os.access(path, os.X_OK):
+            continue
+        if not re.fullmatch(r"\d+(?:\.\d+)*", path.name):
+            continue
+        candidates.append((tuple(int(part) for part in path.name.split(".")), path))
+    if not candidates:
+        raise RuntimeError(f"No executable numeric Claude versions found in: {root}")
+    print(max(candidates)[1])
+except (OSError, RuntimeError) as error:
+    raise SystemExit(str(error))
+PY
+}
+
+validate_user_path() {
+  local kind="$1"
+  local input="$2"
+  local executable="$3"
+  python3 - "$kind" "$input" "$executable" <<'PY'
+from pathlib import Path
+import os
+import stat
+import sys
+
+kind, raw, executable = sys.argv[1:]
+try:
+    original = Path(raw).expanduser()
+    if not original.is_absolute():
+        raise RuntimeError(f"{kind} path must be absolute: {original}")
+    current = Path(original.anchor)
+    for part in original.parts[1:]:
+        current /= part
+        if stat.S_ISLNK(current.lstat().st_mode):
+            raise RuntimeError(f"{kind} path component must not be a symlink: {current}")
+    path = original.resolve(strict=True)
+    if not path.is_file():
+        raise RuntimeError(f"{kind} is not a regular file: {path}")
+    if executable == "1" and not os.access(path, os.X_OK):
+        raise RuntimeError(f"{kind} is not executable: {path}")
+
+    uid = os.getuid()
+    home = Path.home().resolve()
+    under_home = path == home or home in path.parents
+    current = path
+    while True:
+        info = current.stat()
+        allowed_owners = {uid} if under_home else {uid, 0}
+        if info.st_uid not in allowed_owners:
+            raise RuntimeError(f"{kind} path component has an untrusted owner: {current}")
+        if info.st_mode & (stat.S_IWGRP | stat.S_IWOTH):
+            raise RuntimeError(f"{kind} path component is group/world writable: {current}")
+        if (under_home and current == home) or current == current.parent:
+            break
+        current = current.parent
+
+    if kind == "Bootstrap" and any(character.isspace() for character in str(path)):
+        raise RuntimeError(f"Bootstrap path cannot contain whitespace in this experiment: {path}")
+    print(path)
+except (OSError, RuntimeError) as error:
+    raise SystemExit(str(error))
+PY
+}
+
+TARGET="$(validate_user_path "Claude target" "$(resolve_target)" 1)"
+
+case "${1:-}" in
+  --renderpatch-safe)
+    shift
+    unset BUN_OPTIONS CLAUDE_RENDERPATCH_ACTIVE CLAUDE_RENDERPATCH_MODULE \
+      CLAUDE_RENDERPATCH_TARGET CLAUDE_PRELOAD_TARGET \
+      CLAUDE_PRELOAD_VERSIONS_DIR CLAUDE_PRELOAD_BOOTSTRAP
+    exec "$TARGET" "$@"
+    ;;
+  --renderpatch-status)
+    BOOTSTRAP="$(validate_user_path "Bootstrap" "$BOOTSTRAP_INPUT" 0)"
+    REPORTED_VERSION="$(
+      unset BUN_OPTIONS CLAUDE_RENDERPATCH_ACTIVE CLAUDE_RENDERPATCH_MODULE \
+        CLAUDE_RENDERPATCH_TARGET
+      "$TARGET" --version
+    )"
+    if [[ "$REPORTED_VERSION" == *$'\n'* ]]; then
+      echo "Claude target returned a multiline version string" >&2
+      exit 1
+    fi
+    printf 'target=%s\n' "$TARGET"
+    printf 'reported_version=%s\n' "$REPORTED_VERSION"
+    printf 'bootstrap=%s\n' "$BOOTSTRAP"
+    printf 'external_module=%s\n' "${CLAUDE_RENDERPATCH_MODULE:-<none>}"
+    exit 0
+    ;;
+esac
+
+BOOTSTRAP="$(validate_user_path "Bootstrap" "$BOOTSTRAP_INPUT" 0)"
+if [[ -n "${BUN_OPTIONS:-}" ]]; then
+  echo "Refusing inherited BUN_OPTIONS; use --renderpatch-safe or unset it first." >&2
+  exit 1
+fi
+
+export BUN_OPTIONS="--preload=$BOOTSTRAP"
+export CLAUDE_RENDERPATCH_ACTIVE=1
+export CLAUDE_RENDERPATCH_TARGET="$TARGET"
+unset CLAUDE_PRELOAD_TARGET CLAUDE_PRELOAD_VERSIONS_DIR CLAUDE_PRELOAD_BOOTSTRAP
+
+exec "$TARGET" "$@"
