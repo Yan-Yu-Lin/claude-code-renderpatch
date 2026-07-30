@@ -11,7 +11,6 @@ import hashlib
 import json
 import os
 import pty
-import re
 import select
 import signal
 import stat
@@ -227,6 +226,7 @@ export default activate
     live_facade_module = fixture / "live-safe-facades.mjs"
     live_facade_module.write_text(
         """import {appendFileSync} from "node:fs"
+
 export function activate(runtime) {
   let emitted = false
   const report = () => {
@@ -249,7 +249,7 @@ export function activate(runtime) {
       msgExport: runtime.actions.msg.export({generation: generations[3], limit: 5}).available,
       statusContainsRaw: JSON.stringify(runtime.read.status()).includes("prompt"),
     }
-    appendFileSync(process.env.LIVE_SAFE_LOG, JSON.stringify(result) + "\n")
+    appendFileSync(process.env.LIVE_SAFE_LOG, JSON.stringify(result) + "\\n")
   }
   const disposers = [0, 1, 2, 3, 4, 5].map((id) => runtime.read.observe(id, report))
   report()
@@ -542,12 +542,14 @@ printf trusted >"$RP_MOCK_STATE"
                 "CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID": "internal-sdk-2.1.220.1",
                 "CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256": TARGET_SHA256,
                 "CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION": "2.1.220",
+                "LIVE_SAFE_LOG": str(live_facade_log),
             },
             seconds=10.0,
         )
-        live_match = re.search(r"REAL_SAFE_FACADES (\{[^\r\n]+\})", live_output)
-        require(live_match is not None, live_output[-4000:])
-        live_facades = json.loads(live_match.group(1))
+        require(live_facade_log.is_file(), live_output[-4000:])
+        live_lines = live_facade_log.read_text(encoding="utf-8").splitlines()
+        require(live_lines, live_output[-4000:])
+        live_facades = json.loads(live_lines[-1])
         for domain in ("mc", "sr", "msg", "repl", "app", "ink", "key", "diag"):
             require(live_facades[domain] is True, live_facades)
         require(live_facades["replCurrentViewIsString"] is False, live_facades)
