@@ -15,7 +15,16 @@ console.log(
     bunOptionsPresent: "BUN_OPTIONS" in process.env,
     activePresent: "CLAUDE_RENDERPATCH_ACTIVE" in process.env,
     targetPresent: "CLAUDE_RENDERPATCH_TARGET" in process.env,
-    runtimeApiVersion: runtime?.apiVersion ?? null,
+    bridgeBuildPresent: "CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID" in process.env,
+    bridgeArtifactShaPresent:
+      "CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256" in process.env,
+    bridgeTargetVersionPresent:
+      "CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION" in process.env,
+    userModulePresent: "CLAUDE_RENDERPATCH_USER_MODULE" in process.env,
+    registryApiVersion: runtime?.apiVersion ?? null,
+    runtimeApiVersion: runtime?.runtimeApiVersion ?? null,
+    policyApiVersion: runtime?.policyApiVersion ?? null,
+    bridgeAbi: runtime?.bridgeAbi ?? null,
     execPath: process.execPath,
   }),
 )

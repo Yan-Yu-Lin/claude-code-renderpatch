@@ -1,0 +1,532 @@
+#!/usr/bin/env bash
+# Run the immutable Claude Code 2.1.220 SDK candidate through the local provider proxy.
+
+set -euo pipefail
+
+# Herdr identifies the foreground process-group leader. Re-exec this Bash
+# wrapper with a Claude argv[0] so child MCP servers cannot override it.
+if [[ "${HERDR_ENV:-}" == "1" && "${CLAUDE_MIX_HERDR_ARGV0:-}" != "1" ]]; then
+  export CLAUDE_MIX_HERDR_ARGV0=1
+  exec -a claude /bin/bash "$0" "$@"
+fi
+
+RELEASE_ID="2.1.220-internal-sdk-2.1.220.1-6b2198db"
+TARGET_VERSION="2.1.220"
+BRIDGE_BUILD_ID="internal-sdk-2.1.220.1"
+TARGET_SHA256="6b2198dba56913004ea8d12bdfe9cd753c3b9a079681ff136285d6e2fa7c5a49"
+BOOTSTRAP_SHA256="cc18598a53576f74ac6cd493377e9b8b277a47821f044890cd129717002a916f"
+SHARED_EXTENSION_SHA256="3ac015a3765800e843377008266cc548c4ccf145c6494a667110a8b6d06e658c"
+DEFAULT_EXTENSION_SHA256="36bc0a4d709327dcd9b10905c8bcac65c9e2e1b3290e64982ef95210f31d59ac"
+DIAGNOSTIC_EXTENSION_SHA256="d78a89d6e0c466f4816efa654fb35831160354637218e8c722379b4849b18641"
+INTERNAL_MANIFEST_SHA256="f31b8409c35220209161ecdcdc8b6aff8a7f5af7535033df62ef333589836f05"
+RELEASE_MANIFEST_SHA256="742436dc296b7e5944cee026355e3b19ae852fc43833283ef41aab5f1e3efdc5"
+TRUST_HELPER_SHA256="72fd2d30e9ea844c03e3bf19dc19cc2f56b16748f63a84958a6a2291357d877c"
+MARKER_CONTENT="$RELEASE_ID $RELEASE_MANIFEST_SHA256"
+
+PROXY_URL="http://127.0.0.1:8317"
+KEY_FILE="$HOME/.cli-proxy-api/.local-api-key"
+SETTINGS="$HOME/.claude/settings.json"
+OVERLAY="$HOME/.claude/claude-mix-settings.json"
+MIX_NOTE="Model routing note: this session runs through a local multi-provider proxy (claude-renderpatch-candidate). The /model aliases map to real upstream models on different subscriptions: fable = Claude Fable 5 (Anthropic, 1M context), opus = Claude Opus 5 (Anthropic, 1M context), sonnet = GPT-5.6 Sol (OpenAI, 372K context), haiku = Kimi K3 (Moonshot, 262K context). The model id shown in your system prompt is the model actually answering. Subagents default to the haiku slot unless a model is specified."
+
+usage() {
+  cat <<'EOF'
+Usage:
+  claude-renderpatch-candidate [--renderpatch-extension /absolute/module.mjs] [claude arguments...]
+  claude-renderpatch-candidate [--renderpatch-extension /absolute/module.mjs] --renderpatch-status
+  claude-renderpatch-candidate --renderpatch-safe [claude arguments...]
+  claude-renderpatch-candidate --renderpatch-diagnose
+  claude-renderpatch-candidate --renderpatch-help
+
+Normal mode loads immutable default policies first, then an optional explicitly selected
+trusted user extension, and uses the multi-provider settings/local CLIProxyAPI service.
+Safe mode ignores the extension option and uses the exact same patched target and
+multi-provider arguments after removing all preload/renderpatch metadata.
+EOF
+}
+
+for command_name in python3 shasum codesign curl lsof ps cliproxyapi; do
+  command -v "$command_name" >/dev/null || {
+    echo "claude-renderpatch-candidate: required command not found: $command_name" >&2
+    exit 1
+  }
+done
+
+USER_MODULE=""
+WRAPPER_MODE="normal"
+claude_arguments=()
+wrapper_options=true
+set_wrapper_mode() {
+  local requested="$1"
+  if [[ "$WRAPPER_MODE" != "normal" ]]; then
+    echo "claude-renderpatch-candidate: wrapper modes may be supplied only once" >&2
+    exit 2
+  fi
+  WRAPPER_MODE="$requested"
+}
+while (($# > 0)); do
+  if [[ "$wrapper_options" == false ]]; then
+    claude_arguments+=("$1")
+    shift
+    continue
+  fi
+  case "$1" in
+    --)
+      wrapper_options=false
+      claude_arguments+=("--")
+      shift
+      ;;
+    --renderpatch-extension)
+      (($# >= 2)) || {
+        echo "claude-renderpatch-candidate: --renderpatch-extension requires an absolute path" >&2
+        exit 2
+      }
+      case "$2" in
+        --|--renderpatch-*)
+          echo "claude-renderpatch-candidate: --renderpatch-extension requires an absolute path, not another wrapper option" >&2
+          exit 2
+          ;;
+      esac
+      [[ "$2" == /* ]] || {
+        echo "claude-renderpatch-candidate: --renderpatch-extension requires an absolute path: $2" >&2
+        exit 2
+      }
+      [[ -z "$USER_MODULE" ]] || {
+        echo "claude-renderpatch-candidate: --renderpatch-extension may be supplied only once" >&2
+        exit 2
+      }
+      USER_MODULE="$2"
+      shift 2
+      ;;
+    --renderpatch-status)
+      set_wrapper_mode status
+      shift
+      ;;
+    --renderpatch-safe)
+      set_wrapper_mode safe
+      shift
+      ;;
+    --renderpatch-diagnose)
+      set_wrapper_mode diagnose
+      shift
+      ;;
+    --renderpatch-help)
+      set_wrapper_mode help
+      shift
+      ;;
+    --renderpatch-*)
+      echo "claude-renderpatch-candidate: unknown wrapper option: $1" >&2
+      exit 2
+      ;;
+    *)
+      claude_arguments+=("$1")
+      shift
+      ;;
+  esac
+done
+set -- "${claude_arguments[@]}"
+
+if [[ "$WRAPPER_MODE" == "help" ]]; then
+  (($# == 0)) || {
+    echo "claude-renderpatch-candidate: --renderpatch-help accepts no Claude arguments" >&2
+    exit 2
+  }
+  usage
+  exit 0
+fi
+
+SCRIPT_PATH="$(python3 - "$0" <<'PY'
+import os
+import sys
+print(os.path.realpath(sys.argv[1]))
+PY
+)"
+RELEASE_DIR="$(dirname "$SCRIPT_PATH")"
+TARGET="$RELEASE_DIR/claude-2.1.220-internal-sdk"
+BOOTSTRAP="$RELEASE_DIR/bootstrap.mjs"
+SHARED_EXTENSION="$RELEASE_DIR/extensions/_shared.mjs"
+DEFAULT_EXTENSION="$RELEASE_DIR/extensions/default.mjs"
+DIAGNOSTIC_EXTENSION="$RELEASE_DIR/extensions/diagnostic.mjs"
+INTERNAL_MANIFEST="$RELEASE_DIR/manifests/internal-sdk-2.1.220.json"
+RELEASE_MANIFEST="$RELEASE_DIR/release-manifest.json"
+TRUST_HELPER="$RELEASE_DIR/helpers/trust-file.py"
+
+sha256() {
+  shasum -a 256 "$1" | cut -d ' ' -f 1
+}
+
+verify_hash() {
+  local label="$1"
+  local path="$2"
+  local expected="$3"
+  if [[ -L "$path" || ! -f "$path" ]]; then
+    echo "claude-renderpatch-candidate: $label is missing, not regular, or a symlink: $path" >&2
+    exit 1
+  fi
+  local actual
+  actual="$(sha256 "$path")"
+  if [[ "$actual" != "$expected" ]]; then
+    echo "claude-renderpatch-candidate: $label SHA-256 mismatch" >&2
+    echo "  expected: $expected" >&2
+    echo "  actual:   $actual" >&2
+    exit 1
+  fi
+}
+
+verify_release_layout() {
+  local level="$1"
+  python3 - "$RELEASE_DIR" "$MARKER_CONTENT" "$level" <<'PY'
+from pathlib import Path
+import os
+import stat
+import sys
+
+root = Path(sys.argv[1])
+marker_content, level = sys.argv[2:]
+home = Path.home().resolve()
+uid = os.getuid()
+try:
+    if root.is_symlink() or not root.is_dir():
+        raise RuntimeError(f"release root is unavailable: {root}")
+    if root == home or home not in root.parents:
+        raise RuntimeError(f"release root must live below the current user's home: {root}")
+
+    current = home
+    for part in root.relative_to(home).parts:
+        current /= part
+        info = current.lstat()
+        if stat.S_ISLNK(info.st_mode):
+            raise RuntimeError(f"release path component is a symlink: {current}")
+        if info.st_uid != uid:
+            raise RuntimeError(f"release path component is not user-owned: {current}")
+        if info.st_mode & (stat.S_IWGRP | stat.S_IWOTH):
+            raise RuntimeError(f"release path component is group/world writable: {current}")
+
+    basic_modes = {
+        root: 0o555,
+        root / "claude-renderpatch-candidate": 0o555,
+        root / "claude-2.1.220-internal-sdk": 0o555,
+        root / "release-manifest.json": 0o444,
+        root / ".claude-renderpatch-release": 0o444,
+    }
+    full_modes = {
+        root / "extensions": 0o555,
+        root / "helpers": 0o555,
+        root / "manifests": 0o555,
+        root / "bootstrap.mjs": 0o444,
+        root / "extensions/_shared.mjs": 0o444,
+        root / "extensions/default.mjs": 0o444,
+        root / "extensions/diagnostic.mjs": 0o444,
+        root / "helpers/trust-file.py": 0o444,
+        root / "manifests/internal-sdk-2.1.220.json": 0o444,
+    }
+    expected_modes = basic_modes | (full_modes if level == "full" else {})
+    for path, expected_mode in expected_modes.items():
+        info = path.lstat()
+        if stat.S_ISLNK(info.st_mode):
+            raise RuntimeError(f"release asset is a symlink: {path}")
+        if info.st_uid != uid:
+            raise RuntimeError(f"release asset is not user-owned: {path}")
+        actual_mode = stat.S_IMODE(info.st_mode)
+        if actual_mode != expected_mode:
+            raise RuntimeError(
+                f"release mode mismatch: {path}: "
+                f"expected {oct(expected_mode)}, found {oct(actual_mode)}"
+            )
+
+    marker = root / ".claude-renderpatch-release"
+    if marker.read_text(encoding="utf-8").rstrip("\n") != marker_content:
+        raise RuntimeError(f"release marker mismatch: {marker}")
+except (OSError, RuntimeError, ValueError) as error:
+    raise SystemExit(f"claude-renderpatch-candidate: {error}")
+PY
+}
+
+verify_target_release() {
+  verify_release_layout basic
+  verify_hash "release manifest" "$RELEASE_MANIFEST" "$RELEASE_MANIFEST_SHA256"
+  verify_hash "candidate" "$TARGET" "$TARGET_SHA256"
+  [[ -x "$TARGET" ]] || {
+    echo "claude-renderpatch-candidate: candidate is not executable: $TARGET" >&2
+    exit 1
+  }
+  codesign --verify --strict "$TARGET" 2>/dev/null || {
+    echo "claude-renderpatch-candidate: candidate code signature verification failed" >&2
+    exit 1
+  }
+}
+
+verify_full_release() {
+  verify_target_release
+  verify_release_layout full
+  verify_hash "bootstrap" "$BOOTSTRAP" "$BOOTSTRAP_SHA256"
+  verify_hash "shared extension" "$SHARED_EXTENSION" "$SHARED_EXTENSION_SHA256"
+  verify_hash "default extension" "$DEFAULT_EXTENSION" "$DEFAULT_EXTENSION_SHA256"
+  verify_hash "diagnostic extension" "$DIAGNOSTIC_EXTENSION" "$DIAGNOSTIC_EXTENSION_SHA256"
+  verify_hash "trusted file helper" "$TRUST_HELPER" "$TRUST_HELPER_SHA256"
+  verify_hash "internal SDK manifest" "$INTERNAL_MANIFEST" "$INTERNAL_MANIFEST_SHA256"
+}
+
+scrub_preload_environment() {
+  unset BUN_OPTIONS \
+    CLAUDE_RENDERPATCH_ACTIVE \
+    CLAUDE_RENDERPATCH_MODULE \
+    CLAUDE_RENDERPATCH_USER_MODULE \
+    CLAUDE_RENDERPATCH_TARGET \
+    CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID \
+    CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256 \
+    CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION \
+    CLAUDE_PRELOAD_TARGET \
+    CLAUDE_PRELOAD_VERSIONS_DIR \
+    CLAUDE_PRELOAD_BOOTSTRAP
+}
+
+reject_ambient_preload_environment() {
+  for name in \
+    BUN_OPTIONS \
+    CLAUDE_RENDERPATCH_ACTIVE \
+    CLAUDE_RENDERPATCH_MODULE \
+    CLAUDE_RENDERPATCH_USER_MODULE \
+    CLAUDE_RENDERPATCH_TARGET \
+    CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID \
+    CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256 \
+    CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION; do
+    if [[ -v "$name" ]]; then
+      echo "claude-renderpatch-candidate: refusing inherited $name; use --renderpatch-safe or unset it first." >&2
+      exit 1
+    fi
+  done
+}
+
+set_preload_environment() {
+  local extension="$1"
+  export BUN_OPTIONS="--preload=$BOOTSTRAP"
+  export CLAUDE_RENDERPATCH_ACTIVE=1
+  export CLAUDE_RENDERPATCH_MODULE="$extension"
+  if [[ -n "$USER_MODULE" ]]; then
+    export CLAUDE_RENDERPATCH_USER_MODULE="$USER_MODULE"
+  else
+    unset CLAUDE_RENDERPATCH_USER_MODULE
+  fi
+  export CLAUDE_RENDERPATCH_TARGET="$TARGET"
+  export CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID="$BRIDGE_BUILD_ID"
+  export CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256="$TARGET_SHA256"
+  export CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION="$TARGET_VERSION"
+  unset CLAUDE_PRELOAD_TARGET CLAUDE_PRELOAD_VERSIONS_DIR CLAUDE_PRELOAD_BOOTSTRAP
+}
+
+validate_sensitive_files() {
+  KEY_FILE="$(python3 "$TRUST_HELPER" "Proxy API key" "$KEY_FILE" 0600)"
+  OVERLAY="$(python3 "$TRUST_HELPER" "Settings overlay" "$OVERLAY" 0600)"
+}
+
+realpath_value() {
+  python3 - "$1" <<'PY'
+import os
+import sys
+print(os.path.realpath(sys.argv[1]))
+PY
+}
+
+trusted_listener() {
+  local listener_pid=""
+  local candidate_pid
+  while IFS= read -r candidate_pid; do
+    [[ -n "$candidate_pid" ]] || continue
+    if [[ -n "$listener_pid" && "$candidate_pid" != "$listener_pid" ]]; then
+      echo "claude-renderpatch-candidate: multiple processes are listening on TCP 8317" >&2
+      return 2
+    fi
+    listener_pid="$candidate_pid"
+  done < <(lsof -tiTCP:8317 -sTCP:LISTEN 2>/dev/null || true)
+  [[ -n "$listener_pid" ]] || return 1
+
+  local details command_name="" listener_uid=""
+  details="$(lsof -nP -a -p "$listener_pid" -iTCP:8317 -sTCP:LISTEN -Fpcu 2>/dev/null)" || {
+    echo "claude-renderpatch-candidate: unable to inspect TCP 8317 listener" >&2
+    return 2
+  }
+  while IFS= read -r detail; do
+    case "$detail" in
+      c*) command_name="${detail#c}" ;;
+      u*) listener_uid="${detail#u}" ;;
+    esac
+  done <<<"$details"
+  if [[ "$listener_uid" != "$UID" || "$command_name" != "cliproxyapi" ]]; then
+    echo "claude-renderpatch-candidate: refusing unexpected TCP 8317 listener pid=$listener_pid uid=${listener_uid:-unknown} command=${command_name:-unknown}" >&2
+    return 2
+  fi
+
+  local process_args process_executable expected_executable
+  process_args="$(ps -ww -p "$listener_pid" -o args= 2>/dev/null)" || {
+    echo "claude-renderpatch-candidate: unable to inspect cliproxyapi process $listener_pid" >&2
+    return 2
+  }
+  process_args="${process_args#"${process_args%%[![:space:]]*}"}"
+  process_executable="${process_args%%[[:space:]]*}"
+  expected_executable="$(command -v cliproxyapi)"
+  if [[ "$(realpath_value "$process_executable")" != "$(realpath_value "$expected_executable")" ]]; then
+    echo "claude-renderpatch-candidate: refusing unexpected cliproxyapi executable: $process_executable" >&2
+    return 2
+  fi
+  return 0
+}
+
+proxy_alive() {
+  local listener_status
+  if trusted_listener; then
+    listener_status=0
+  else
+    listener_status=$?
+  fi
+  ((listener_status == 0)) || return "$listener_status"
+  {
+    local token
+    IFS= read -r token <"$KEY_FILE"
+    printf 'Authorization: Bearer %s\n' "$token"
+  } | curl -sf --max-time 1 "$PROXY_URL/v1/models" -H @- 2>/dev/null \
+    | grep -q '"object"'
+}
+
+start_proxy() {
+  local status
+  if proxy_alive; then
+    return
+  else
+    status=$?
+  fi
+  if ((status == 2)); then
+    exit 1
+  fi
+  echo "claude-renderpatch-candidate: starting cliproxyapi via brew services ..." >&2
+  command -v brew >/dev/null || {
+    echo "claude-renderpatch-candidate: required command not found: brew" >&2
+    exit 1
+  }
+  brew services start cliproxyapi >/dev/null 2>&1 || {
+    echo "claude-renderpatch-candidate: failed to start cliproxyapi via brew services" >&2
+    exit 1
+  }
+  for _ in $(seq 1 40); do
+    if proxy_alive; then
+      return
+    else
+      status=$?
+    fi
+    if ((status == 2)); then
+      exit 1
+    fi
+    sleep 0.25
+  done
+  echo "claude-renderpatch-candidate: cliproxyapi did not come up; check 'brew services info cliproxyapi'" >&2
+  exit 1
+}
+
+if [[ "$WRAPPER_MODE" == "status" ]]; then
+  (($# == 0)) || {
+    echo "claude-renderpatch-candidate: --renderpatch-status accepts no Claude arguments" >&2
+    exit 2
+  }
+  scrub_preload_environment
+  verify_full_release
+  validate_sensitive_files
+  reported_version="$("$TARGET" --version)"
+  [[ "$reported_version" != *$'\n'* ]] || {
+    echo "claude-renderpatch-candidate: candidate returned a multiline version string" >&2
+    exit 1
+  }
+  printf 'release_id=%s\n' "$RELEASE_ID"
+  printf 'target=%s\n' "$TARGET"
+  printf 'target_version=%s\n' "$TARGET_VERSION"
+  printf 'reported_version=%s\n' "$reported_version"
+  printf 'target_sha256=%s\n' "$TARGET_SHA256"
+  printf 'release_manifest_sha256=%s\n' "$RELEASE_MANIFEST_SHA256"
+  printf 'bridge_build_id=%s\n' "$BRIDGE_BUILD_ID"
+  printf 'policy_domains=0,1,2,3,4\n'
+  printf 'capture_domains=0,1,2,3,4,5\n'
+  printf 'default_extension=%s\n' "$DEFAULT_EXTENSION"
+  if [[ -n "$USER_MODULE" ]]; then
+    printf 'user_extension=%s\n' "${USER_MODULE##*/}"
+  else
+    printf 'user_extension=<none>\n'
+  fi
+  printf 'mode=multi-provider\n'
+  printf 'proxy_url=%s\n' "$PROXY_URL"
+  if proxy_alive; then
+    printf 'proxy_status=up\n'
+    printf 'proxy_listener=trusted-current-user-cliproxyapi\n'
+  else
+    proxy_status=$?
+    if ((proxy_status == 2)); then exit 1; fi
+    printf 'proxy_status=down\n'
+    printf 'proxy_listener=absent\n'
+  fi
+  printf 'settings_overlay=%s\n' "$OVERLAY"
+  printf 'verification=ok\n'
+  exit 0
+fi
+
+if [[ "$WRAPPER_MODE" == "diagnose" ]]; then
+  (($# == 0)) || {
+    echo "claude-renderpatch-candidate: --renderpatch-diagnose accepts no arguments" >&2
+    exit 2
+  }
+  reject_ambient_preload_environment
+  verify_full_release
+  set_preload_environment "$DIAGNOSTIC_EXTENSION"
+  exec "$TARGET" --version
+fi
+
+safe_mode=false
+if [[ "$WRAPPER_MODE" == "safe" ]]; then
+  safe_mode=true
+  scrub_preload_environment
+  verify_target_release
+else
+  reject_ambient_preload_environment
+  verify_full_release
+fi
+
+validate_sensitive_files
+start_proxy
+
+previous_model=""
+if command -v jq >/dev/null 2>&1 && [[ -f "$SETTINGS" ]]; then
+  previous_model="$(jq -r '.model // empty' "$SETTINGS" 2>/dev/null)"
+fi
+
+if [[ "$safe_mode" == false ]]; then
+  set_preload_environment "$DEFAULT_EXTENSION"
+fi
+set +e
+"$TARGET" \
+  --settings "$OVERLAY" \
+  --append-system-prompt "$MIX_NOTE" \
+  "$@"
+rc=$?
+scrub_preload_environment
+set -e
+
+# Guard the shared profile: /model can save a provider-specific model into user
+# settings, which would break ordinary Claude launches.
+if command -v jq >/dev/null 2>&1 && [[ -f "$SETTINGS" ]]; then
+  new_model="$(jq -r '.model // empty' "$SETTINGS" 2>/dev/null)"
+  case "$new_model" in
+    gpt-*|kimi-*|k2*|k3*|grok-*|cursor*|composer-*)
+      case "$previous_model" in
+        gpt-*|kimi-*|k2*|k3*|grok-*|cursor*|composer-*) previous_model="" ;;
+      esac
+      temporary_settings="$(mktemp "$SETTINGS.claude-renderpatch-candidate.XXXXXX")"
+      if [[ -n "$previous_model" ]]; then
+        jq --arg model "$previous_model" '.model = $model' "$SETTINGS" >"$temporary_settings"
+      else
+        jq 'del(.model)' "$SETTINGS" >"$temporary_settings"
+      fi
+      chmod 600 "$temporary_settings"
+      mv -f "$temporary_settings" "$SETTINGS"
+      echo "claude-renderpatch-candidate: restored settings.json model to '${previous_model:-default}'" >&2
+      ;;
+  esac
+fi
+
+exit "$rc"

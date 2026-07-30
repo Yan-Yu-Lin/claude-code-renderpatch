@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "2.1.220-internal-sdk-2.1.220.1-6b2198db",
+  "product": "Claude Code",
+  "targetVersion": "2.1.220",
+  "bridgeBuildId": "internal-sdk-2.1.220.1",
+  "bridgeAbi": 1,
+  "policyApiVersion": 2,
+  "runtimeApiVersion": 2,
+  "rawSlotApi": "2.1.220.1",
+  "stockProvenanceSha256": "8addc857f3fe64d5a0368af9ee50321b50afb4a6918ba3ef018ab84f5dbbe081",
+  "signedArtifactSha256": "6b2198dba56913004ea8d12bdfe9cd753c3b9a079681ff136285d6e2fa7c5a49",
+  "launcher": "claude-renderpatch-candidate",
+  "defaultExtension": "extensions/default.mjs",
+  "diagnosticExtension": "extensions/diagnostic.mjs",
+  "capabilities": {
+    "policyDomains": [0, 1, 2, 3, 4],
+    "captureDomains": [0, 1, 2, 3, 4, 5],
+    "fullRedrawAtomic": true,
+    "mixWindow": true,
+    "subagentRouting": true,
+    "userExtensionSecondStage": true,
+    "proxyPeerVerified": true,
+    "sensitiveFilesMode0600": true,
+    "unsafeRawExactArtifactOnly": true
+  },
+  "assets": {
+    "claude-2.1.220-internal-sdk": {
+      "sha256": "6b2198dba56913004ea8d12bdfe9cd753c3b9a079681ff136285d6e2fa7c5a49",
+      "mode": "0555"
+    },
+    "bootstrap.mjs": {
+      "sha256": "cc18598a53576f74ac6cd493377e9b8b277a47821f044890cd129717002a916f",
+      "mode": "0444"
+    },
+    "extensions/_shared.mjs": {
+      "sha256": "3ac015a3765800e843377008266cc548c4ccf145c6494a667110a8b6d06e658c",
+      "mode": "0444"
+    },
+    "extensions/default.mjs": {
+      "sha256": "36bc0a4d709327dcd9b10905c8bcac65c9e2e1b3290e64982ef95210f31d59ac",
+      "mode": "0444"
+    },
+    "extensions/diagnostic.mjs": {
+      "sha256": "d78a89d6e0c466f4816efa654fb35831160354637218e8c722379b4849b18641",
+      "mode": "0444"
+    },
+    "helpers/trust-file.py": {
+      "sha256": "72fd2d30e9ea844c03e3bf19dc19cc2f56b16748f63a84958a6a2291357d877c",
+      "mode": "0444"
+    },
+    "manifests/internal-sdk-2.1.220.json": {
+      "sha256": "f31b8409c35220209161ecdcdc8b6aff8a7f5af7535033df62ef333589836f05",
+      "mode": "0444"
+    }
+  }
+}

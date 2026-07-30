@@ -128,19 +128,37 @@ PY
 
 TARGET="$(validate_user_path "Claude target" "$(resolve_target)" 1)"
 
+scrub_renderpatch_environment() {
+  unset BUN_OPTIONS CLAUDE_RENDERPATCH_ACTIVE CLAUDE_RENDERPATCH_MODULE \
+    CLAUDE_RENDERPATCH_USER_MODULE CLAUDE_RENDERPATCH_TARGET \
+    CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID \
+    CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256 \
+    CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION \
+    CLAUDE_PRELOAD_TARGET CLAUDE_PRELOAD_VERSIONS_DIR CLAUDE_PRELOAD_BOOTSTRAP
+}
+
+reject_ambient_renderpatch_environment() {
+  for name in BUN_OPTIONS CLAUDE_RENDERPATCH_ACTIVE CLAUDE_RENDERPATCH_USER_MODULE \
+    CLAUDE_RENDERPATCH_TARGET CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID \
+    CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256 \
+    CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION; do
+    if [[ -v "$name" ]]; then
+      echo "Refusing inherited $name; use --renderpatch-safe or unset it first." >&2
+      exit 1
+    fi
+  done
+}
+
 case "${1:-}" in
   --renderpatch-safe)
     shift
-    unset BUN_OPTIONS CLAUDE_RENDERPATCH_ACTIVE CLAUDE_RENDERPATCH_MODULE \
-      CLAUDE_RENDERPATCH_TARGET CLAUDE_PRELOAD_TARGET \
-      CLAUDE_PRELOAD_VERSIONS_DIR CLAUDE_PRELOAD_BOOTSTRAP
+    scrub_renderpatch_environment
     exec "$TARGET" "$@"
     ;;
   --renderpatch-status)
     BOOTSTRAP="$(validate_user_path "Bootstrap" "$BOOTSTRAP_INPUT" 0)"
     REPORTED_VERSION="$(
-      unset BUN_OPTIONS CLAUDE_RENDERPATCH_ACTIVE CLAUDE_RENDERPATCH_MODULE \
-        CLAUDE_RENDERPATCH_TARGET
+      scrub_renderpatch_environment
       "$TARGET" --version
     )"
     if [[ "$REPORTED_VERSION" == *$'\n'* ]]; then
@@ -156,14 +174,14 @@ case "${1:-}" in
 esac
 
 BOOTSTRAP="$(validate_user_path "Bootstrap" "$BOOTSTRAP_INPUT" 0)"
-if [[ -n "${BUN_OPTIONS:-}" ]]; then
-  echo "Refusing inherited BUN_OPTIONS; use --renderpatch-safe or unset it first." >&2
-  exit 1
-fi
+reject_ambient_renderpatch_environment
 
 export BUN_OPTIONS="--preload=$BOOTSTRAP"
 export CLAUDE_RENDERPATCH_ACTIVE=1
 export CLAUDE_RENDERPATCH_TARGET="$TARGET"
-unset CLAUDE_PRELOAD_TARGET CLAUDE_PRELOAD_VERSIONS_DIR CLAUDE_PRELOAD_BOOTSTRAP
+unset CLAUDE_RENDERPATCH_USER_MODULE CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID \
+  CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256 \
+  CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION \
+  CLAUDE_PRELOAD_TARGET CLAUDE_PRELOAD_VERSIONS_DIR CLAUDE_PRELOAD_BOOTSTRAP
 
 exec "$TARGET" "$@"

@@ -128,6 +128,57 @@ See [`reference/preload-runtime.md`](reference/preload-runtime.md) for the empir
 security boundary, update matrix, failed alternatives, and the recommended external-runtime
 plus minimal-internal-bridge architecture.
 
+## Immutable 2.1.220 internal-SDK candidate
+
+The frozen 2.1.220 SDK bridge is available through one separate user-facing command:
+`claude-renderpatch-candidate`. It mirrors the existing multi-provider proxy, settings overlay,
+provider note, and model-restoration behavior without calling or changing `claude-mix`.
+Normal `claude`, `claude-mix`, and `claude-preload-lab` remain independent.
+
+```bash
+# Install the exact signed candidate and its runtime assets.
+./candidate/install.sh
+
+# Verify release/build/hash/capability metadata without enabling the preload.
+claude-renderpatch-candidate --renderpatch-status
+
+# Run through the multi-provider overlay with the default SDK policies.
+claude-renderpatch-candidate --version
+
+# Keep defaults active, then load one explicit trusted user extension.
+claude-renderpatch-candidate \
+  --renderpatch-extension "$HOME/path/to/my-extension.mjs" --version
+
+# Prove the signed bridge gate, default policies, and child environment cleanup.
+claude-renderpatch-candidate --renderpatch-diagnose
+
+# Use the same exact patched target and multi-provider arguments without any preload.
+claude-renderpatch-candidate --renderpatch-safe --version
+
+# Exercise installation integrity, conflicts, status, normal/safe modes, and cleanup.
+uv run verify/candidate-launcher-harness.py
+```
+
+The immutable release lives at
+`~/.local/share/claude-renderpatch/releases/2.1.220-internal-sdk-2.1.220.1-6b2198db/`
+and is linked only as `~/.local/bin/claude-renderpatch-candidate`. Normal mode verifies
+ownership, restrictive modes, the release manifest, code signature, and exact SHA-256 for the
+candidate/bootstrap/extensions/helpers/manifests before setting one-shot preload and bridge
+metadata. The proxy key and settings overlay must be user-owned, symlink-free `0600` files;
+the TCP 8317 listener must be the current user's Homebrew `cliproxyapi`, and its bearer header
+is supplied to curl over standard input rather than argv. Preload metadata is set only after
+release/file checks, proxy startup, and the previous-model snapshot, then scrubbed immediately
+when the target returns.
+`--renderpatch-extension` is consumed by the wrapper, never forwarded to Claude, and accepts
+only an explicit absolute user-owned regular module under the user's home with no symlink or
+writable path component. Immutable defaults activate first; a user-module throw/rejection is
+reported and skipped without disabling them. The first `--` ends wrapper-option parsing, so
+all later tokens are forwarded verbatim and can never activate renderpatch options. No
+current-directory or project code is discovered. Safe mode ignores the extension option,
+verifies the same patched target, and scrubs all
+preload/renderpatch state. Remove only this managed release with
+`candidate/install.sh --uninstall`.
+
 ## Install
 
 Recommended 2.1.219 cumulative build (seven render edits + mix-window + routing fix,
@@ -202,6 +253,8 @@ See `REPATCHING-PLAYBOOK.md` for the complete procedure.
 - [`verify/pty-harness.py`](verify/pty-harness.py) — repeatable expand/collapse/resize PTY test.
 - [`verify/preload-harness.py`](verify/preload-harness.py) — repeatable latest-candidate
   preload, same-global, trust, failure, child-environment, and bypass tests.
+- [`verify/candidate-launcher-harness.py`](verify/candidate-launcher-harness.py) — immutable
+  single-command install, hash/mode, status, policy, safe-mode, conflict, and uninstall tests.
 
 ## Known tradeoffs / limitations
 
