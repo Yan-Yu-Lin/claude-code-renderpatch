@@ -16,7 +16,7 @@ It implements the five frozen `globalThis.__rp.q` policy domains and all six fro
 - Ignored prototype:
   `patched/claude-2.1.220-semantic-bridge-prototype`
 - Signed prototype SHA-256:
-  `6b2198dba56913004ea8d12bdfe9cd753c3b9a079681ff136285d6e2fa7c5a49`
+  `97dfb1826861b90c8711dfe054a8f2f212b7299ea77bce7c6d724a8f12bc1157`
 - Signed prototype size: **256,908,032 bytes**. The 240-byte difference is the final
   ad-hoc code-signature layout; the pre-sign patched binary remains exactly stock length and
   the complete `__BUN` range changes only inside the nine declared ranges.
@@ -24,6 +24,13 @@ It implements the five frozen `globalThis.__rp.q` policy domains and all six fro
 The builder extracts entitlements from the exact stock binary, applies and immediately
 post-verifies every edit, performs one final ad-hoc signing pass, runs strict `codesign`
 verification, and requires `2.1.220 (Claude Code)` from `--version`.
+
+The REPL range remains exactly 18,599 bytes. Its five Unicode UI literals are encoded as
+ASCII Unicode escapes so Bun's embedded-source reader cannot reinterpret their UTF-8 bytes.
+The 16-byte expansion is offset by three equivalent minifications in the same range:
+`Boolean(Lv)` to `!!Lv`, `Array.from(bi.values())` to `[...bi.values()]`, and the d1 bitmap
+literal `16777215` to the equal numeric expression `~0>>>8`. No bridge call, slot, bitmap
+value, lifecycle edge, or stock fallback changes.
 
 ## Physical site table
 

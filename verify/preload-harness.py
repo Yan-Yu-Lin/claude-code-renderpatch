@@ -27,7 +27,7 @@ DEFAULT_WRAPPER = REPO_ROOT / "preload" / "claude-preload-lab"
 EXAMPLES = REPO_ROOT / "preload" / "examples"
 PATCHED_PROTOTYPE = REPO_ROOT / "patched" / "claude-2.1.220-semantic-bridge-prototype"
 PATCHED_PROTOTYPE_SHA256 = (
-    "6b2198dba56913004ea8d12bdfe9cd753c3b9a079681ff136285d6e2fa7c5a49"
+    "97dfb1826861b90c8711dfe054a8f2f212b7299ea77bce7c6d724a8f12bc1157"
 )
 BRIDGE_BUILD_ID = "internal-sdk-2.1.220.1"
 SCRUB_ENV = {

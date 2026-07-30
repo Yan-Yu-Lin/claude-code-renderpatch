@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "releaseId": "2.1.220-internal-sdk-2.1.220.1-6b2198db",
+  "releaseId": "2.1.220-internal-sdk-2.1.220.1-97dfb182",
   "product": "Claude Code",
   "targetVersion": "2.1.220",
   "bridgeBuildId": "internal-sdk-2.1.220.1",
@@ -9,7 +9,7 @@
   "runtimeApiVersion": 2,
   "rawSlotApi": "2.1.220.1",
   "stockProvenanceSha256": "8addc857f3fe64d5a0368af9ee50321b50afb4a6918ba3ef018ab84f5dbbe081",
-  "signedArtifactSha256": "6b2198dba56913004ea8d12bdfe9cd753c3b9a079681ff136285d6e2fa7c5a49",
+  "signedArtifactSha256": "97dfb1826861b90c8711dfe054a8f2f212b7299ea77bce7c6d724a8f12bc1157",
   "launcher": "claude-renderpatch-candidate",
   "defaultExtension": "extensions/default.mjs",
   "diagnosticExtension": "extensions/diagnostic.mjs",
@@ -26,7 +26,7 @@
   },
   "assets": {
     "claude-2.1.220-internal-sdk": {
-      "sha256": "6b2198dba56913004ea8d12bdfe9cd753c3b9a079681ff136285d6e2fa7c5a49",
+      "sha256": "97dfb1826861b90c8711dfe054a8f2f212b7299ea77bce7c6d724a8f12bc1157",
       "mode": "0555"
     },
     "bootstrap.mjs": {

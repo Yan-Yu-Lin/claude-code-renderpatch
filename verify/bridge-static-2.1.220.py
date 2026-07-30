@@ -21,6 +21,7 @@ from semantic_bridge_2_1_220 import (
     EXPECTED_FILE_SIZE,
     EXPECTED_STOCK_SHA256,
     OUTPUT_NAME,
+    REPLACEMENTS,
     VERSION,
     digest,
     discover_patches,
@@ -93,6 +94,23 @@ def main() -> int:
                 offset in range(patch.offset, patch.end) for offset in bun_diff_offsets
             ),
             f"{patch.name}: replacement range contains no changed bytes",
+        )
+
+    repl_asset = (REPLACEMENTS / "repl-d4.js").read_bytes()
+    repl_patch = next(
+        patch for patch in patches if patch.name == "repl-render-d4-static-d1"
+    )
+    require(len(repl_asset) == repl_patch.length, "REPL replacement lost exact byte fit")
+    require(repl_asset.isascii(), "REPL replacement contains raw non-ASCII bytes")
+    for escape in (b"\\u2733", b"\\u2802", b"\\u2810", b"\\u2026", b"\\u00b7"):
+        require(
+            repl_asset.count(escape) == 1,
+            f"REPL replacement expected one ASCII Unicode escape: {escape!r}",
+        )
+    for fragment in (b"rpC(1,0,~0>>>8,[", b"[...bi.values()]", b"||!!Lv"):
+        require(
+            fragment in repl_asset,
+            f"REPL exact-fit minification anchor missing: {fragment!r}",
         )
 
     q_snippets = {

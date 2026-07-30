@@ -82,7 +82,7 @@ def main() -> int:
     require(d0.find(b"ts(),") < d0.find(d0_call), "d0 publishes before its initializer dependencies finish")
 
     d1 = region(patches, "repl-render-d4-static-d1")
-    d1_call = b"rpC(1,0,16777215,[xd,Qsr,Rhs,CXr,vUu,khs,Hms,Oms,_Xr,S3u,Ju_,Kpe,QHt,sM,Krl,w,gqe,SMe,R7,N5,M,lb,PAl,SEi])"
+    d1_call = b"rpC(1,0,~0>>>8,[xd,Qsr,Rhs,CXr,vUu,khs,Hms,Oms,_Xr,S3u,Ju_,Kpe,QHt,sM,Krl,w,gqe,SMe,R7,N5,M,lb,PAl,SEi])"
     require(d1.count(d1_call) == 1, "d1 slot order/bitmap differs from the manifest")
     require(
         d1.find(b"OGt={") < d1.find(b"rpS||(rpS=1,") < d1.find(d1_call),

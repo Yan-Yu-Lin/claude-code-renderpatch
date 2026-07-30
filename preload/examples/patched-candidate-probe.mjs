@@ -39,7 +39,7 @@ const unsafeActivation = runtime.registerExtension(
         version: "2.1.220",
         bridgeBuildId: "internal-sdk-2.1.220.1",
         stockSha256: "8addc857f3fe64d5a0368af9ee50321b50afb4a6918ba3ef018ab84f5dbbe081",
-        artifactSha256: "6b2198dba56913004ea8d12bdfe9cd753c3b9a079681ff136285d6e2fa7c5a49",
+        artifactSha256: "97dfb1826861b90c8711dfe054a8f2f212b7299ea77bce7c6d724a8f12bc1157",
       },
       captureDomains: [{ id: "d3", abiVersion: 1 }],
     },

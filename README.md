@@ -160,8 +160,11 @@ uv run verify/candidate-launcher-harness.py
 ```
 
 The immutable release lives at
-`~/.local/share/claude-renderpatch/releases/2.1.220-internal-sdk-2.1.220.1-6b2198db/`
-and is linked only as `~/.local/bin/claude-renderpatch-candidate`. Normal mode verifies
+`~/.local/share/claude-renderpatch/releases/2.1.220-internal-sdk-2.1.220.1-97dfb182/`
+and is linked only as `~/.local/bin/claude-renderpatch-candidate`. The exact-length REPL
+replacement stores its five Unicode UI glyphs as ASCII `\\u` escape bytes; equivalent
+`!!` coercion, iterable spread, and a compact unsigned-shift bitmap expression recover the
+required 16-byte budget without changing the bridge sites or runtime contracts. Normal mode verifies
 ownership, restrictive modes, the release manifest, code signature, and exact SHA-256 for the
 candidate/bootstrap/extensions/helpers/manifests before setting one-shot preload and bridge
 metadata. The proxy key and settings overlay must be user-owned, symlink-free `0600` files;
