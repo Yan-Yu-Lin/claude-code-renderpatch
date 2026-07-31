@@ -176,19 +176,38 @@ uv run verify/candidate-launcher-harness.py
 ```
 
 2.1.220 的 `in_process_teammate` view 另有一個 stock 資料供應 bug：running transcript
-只保留 bounded live window，completed/failed 時更會被縮成最後一筆，而 `Ahl` 的磁碟回填 effect
-只處理 `local_agent`。因此 renderer 實際只收到最後一筆；上方看似「第一句 prompt」的是 task
-header，不是完整 transcript。可用 exact-artifact extension 從該 teammate 的 sidechain JSONL 回填最近
-80 筆，不需新增 binary bridge：
+只保留 bounded live window（`cpt`，`fvo = 50`），completed/failed 時更會被縮成最後一筆，而
+`Ahl` 的磁碟回填 effect 只處理 `local_agent`。因此 renderer 實際只收到最後一筆；上方看似
+「第一句 prompt」的是 task header，不是完整 transcript。可用 exact-artifact extension 從該
+teammate 的 sidechain JSONL 回填，不需新增 binary bridge、不需 byte patch：
 
 ```bash
 claude-renderpatch-candidate \
   --renderpatch-extension "$PWD/candidate/subagent-view-history.mjs"
+
+# 診斷輸出（預設 summary，寫到 ~/.claude/renderpatch-subagent-view.log）
+CLAUDE_RENDERPATCH_SUBAGENT_VIEW_DEBUG=verbose \
+  claude-renderpatch-candidate \
+  --renderpatch-extension "$PWD/candidate/subagent-view-history.mjs"
+
+node verify/subagent-view-history.mjs
 ```
 
-這個 extension 只在目前 viewing task 是 `in_process_teammate` 時作用，透過既有 d4 unsafe
-store capture 合併磁碟上的最新 parent chain 與 live messages。它不改主 session、`local_agent`、
-policy ownership 或 JSONL，並把 display state 限制在最多 100 筆。
+**只在該 teammate 進入 terminal status（`completed`/`failed`/`killed`）時注入。** 這是設計核心，
+不是保守選擇：stock 的每個 writer（`Hko`、`Zsn`、agent loop 的 `Iid`/`cpt`、`Opd`）都以
+`status === "running"` 為前提，terminal 之後就沒有其他 writer，extension 因此是唯一 writer，
+不需要任何 timer、debounce 或 retry。反過來說，running 中的 teammate 無法用延遲解決 ——
+`cpt` 是「每收到一則訊息就重新截斷」，競爭寫入由 agent 輸出觸發而非時鐘，所以 running teammate
+維持 stock 的 50 筆 window。
+
+Merge 是 order-preserving 且 idempotent 的：以物件 identity 而非 uuid 是否存在來去重，
+避免沒有 uuid 的訊息每輪重複累積。找不到合格 leaf 時回傳空結果（對齊 stock `Xft` 的
+`m$t -> undefined -> null`），而不是輸出未排序的記錄堆。
+
+涵蓋範圍：帶 `resumableAgentId` 的 `in_process_teammate`。Task 工具的 subagent 是
+`local_agent`，本來就有 stock `Ahl` 回填、不受此 bug 影響；tmux-pane teammate 沒有
+sidechain JSONL。不改主 session、`local_agent`、policy ownership 或 JSONL。
+`--renderpatch-safe` 會忽略此 extension。
 
 The immutable release lives at
 `~/.local/share/claude-renderpatch/releases/2.1.220-internal-sdk-2.1.220.1-97dfb182/`
