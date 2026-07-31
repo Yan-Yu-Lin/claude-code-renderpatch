@@ -1,5 +1,12 @@
 # External preload runtime: findings, limits, and update boundary
 
+> **Current implementation note（2026-07）：** 本文的 empirical preload boundary、failed
+> alternatives、security reasoning 與 update checklist 仍有效；但部分 `bootstrap.mjs` 行號與
+> 「current lab implementation」描述是在小型 registry API v1 時期撰寫，早於目前 1,425 行的
+> runtime API v2。Current callable API 請以 [`preload/bootstrap.mjs`](../preload/bootstrap.mjs)
+> 與 [`docs/README.md`](../docs/README.md) 為準；2.1.220 physical bridge 請見
+> [`bridge-intent-2.1.220.md`](bridge-intent-2.1.220.md)。
+
 This document records the external-JavaScript preload experiment for Claude Code's
 Bun-compiled executable. Its purpose is to separate three questions that are easy to
 conflate:

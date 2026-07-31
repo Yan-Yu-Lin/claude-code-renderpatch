@@ -19,6 +19,22 @@ All recipes use **same-length byte patches** inside the embedded `__BUN` JavaScr
 bundle, followed by an entitlement-preserving ad-hoc re-sign. The original binary is
 never modified.
 
+## Developer and extension documentation（繁體中文）
+
+本 repo 現在提供獨立 **2.1.220 internal-SDK candidate/prototype** 的 developer-facing map，
+涵蓋 runtime API、safe reads/actions、exact-version unsafe access、目前缺口、bridge 維護，
+以及 version-pinned Banner renderer 研究：
+
+- **從這裡開始：** [`docs/README.md`](docs/README.md)
+- **目前已驗證與未完成狀態：** [`docs/PROJECT-STATUS.md`](docs/PROJECT-STATUS.md)
+- **Capability map：** [`docs/CAPABILITY-MAP.md`](docs/CAPABILITY-MAP.md)
+- **撰寫 user extension：** [`docs/extensions/getting-started.md`](docs/extensions/getting-started.md)
+- **Banner/Clawd internals：** [`docs/internals/BANNER-RENDERER-2.1.220.md`](docs/internals/BANNER-RENDERER-2.1.220.md)
+
+2.1.219 cumulative direct-patch recipe 與 2.1.220 internal-SDK candidate 是兩條不同路徑。
+後者已在本機 macOS arm64 驗證，但尚未 merge 到 `main`、沒有公開 GitHub release/PR，
+fresh clone 也不包含 `candidate/install.sh` 所需、被 gitignore 的 signed candidate artifact。
+
 ## What the patch changes
 
 Two equal-length replacements in the transcript's `<Messages>` render call (minified):
@@ -248,11 +264,31 @@ See `REPATCHING-PLAYBOOK.md` for the complete procedure.
 
 ## Documentation and verification
 
+Developer-facing documentation（繁體中文）:
+
+- [`docs/README.md`](docs/README.md) — developer/AI entry point and source-of-truth order.
+- [`docs/PROJECT-STATUS.md`](docs/PROJECT-STATUS.md) — locally verified, intentionally denied,
+  incomplete, packaging-gap, and future/unbridged status.
+- [`docs/CAPABILITY-MAP.md`](docs/CAPABILITY-MAP.md) — runtime/read/action/policy/capture map.
+- [`docs/BRIDGE-DEVELOPMENT.md`](docs/BRIDGE-DEVELOPMENT.md) — bridge design and maintenance rules.
+- [`docs/internals/BANNER-RENDERER-2.1.220.md`](docs/internals/BANNER-RENDERER-2.1.220.md) —
+  version-pinned Banner/Clawd/WelcomeV2 internals and proposed, unimplemented bridge boundary.
+
+Engineering records:
+
 - [`reference/root-cause.md`](reference/root-cause.md) — architecture and failure modes.
 - [`reference/patch-intent.md`](reference/patch-intent.md) — exact bytes and source mapping.
 - [`reference/preload-runtime.md`](reference/preload-runtime.md) — tested external preload
-  behavior, security boundary, and update/repatch matrix.
+  behavior, security boundary, and update/repatch matrix; early implementation references predate runtime API 2.
+- [`reference/internal-sdk-map.md`](reference/internal-sdk-map.md) — frozen pre-build domain,
+  policy, lifecycle, and raw-slot contract; its `planned` status is historical.
+- [`reference/bridge-intent-2.1.220.md`](reference/bridge-intent-2.1.220.md) — verified nine-site
+  bridge record for the artifact later used by the local immutable candidate.
 - [`REPATCHING-PLAYBOOK.md`](REPATCHING-PLAYBOOK.md) — rediscovery procedure after updates.
+
+Verification:
+
+- [`verify/docs.py`](verify/docs.py) — local Markdown file/link/anchor validation.
 - [`verify/pty-harness.py`](verify/pty-harness.py) — repeatable expand/collapse/resize PTY test.
 - [`verify/preload-harness.py`](verify/preload-harness.py) — repeatable latest-candidate
   preload, same-global, trust, failure, child-environment, and bypass tests.

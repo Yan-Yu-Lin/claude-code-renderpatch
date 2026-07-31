@@ -1,5 +1,14 @@
 # Internal SDK map for Claude Code 2.1.220
 
+> **實作後狀態（2026-07）：** 本文件是在 bridge bytes 建立前凍結的 pre-build design
+> contract，因此內文中的 `planned`、`prototypeRequired`、`8–10 sites` 等描述保留當時的
+> 設計歷史。後續已完成並驗證九個 physical ranges，build ID 為
+> `internal-sdk-2.1.220.1`，exact signed artifact SHA-256 為 `97dfb182…`，並在本機安裝為
+> immutable candidate。Current callable API 以 [`preload/bootstrap.mjs`](../preload/bootstrap.mjs)
+> 為準；physical implementation 以 [`bridge-intent-2.1.220.md`](bridge-intent-2.1.220.md)
+> 為準；開發者入口請見 [`docs/README.md`](../docs/README.md)。Hash-pinned JSON manifest
+> 仍保留 contract-freeze 狀態，不應為了更新文案直接修改。
+
 This document is the human-readable companion to
 [`manifests/internal-sdk-2.1.220.json`](../manifests/internal-sdk-2.1.220.json). It freezes the
 internal SDK contract before any bridge bytes are designed or applied.

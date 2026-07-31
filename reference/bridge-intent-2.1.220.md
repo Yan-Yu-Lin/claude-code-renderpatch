@@ -1,5 +1,12 @@
 # Semantic bridge intent for Claude Code 2.1.220
 
+> **Promotion note（2026-07）：** 本文最初記錄 disposable prototype，因此內文仍保留
+> `prototype`／`not installed candidate` 的歷史措辭。後續 exact signed artifact
+> `97dfb1826861b90c8711dfe054a8f2f212b7299ea77bce7c6d724a8f12bc1157` 被納入本機
+> immutable release `2.1.220-internal-sdk-2.1.220.1-97dfb182`。本文件仍是九個 physical
+> bridge ranges 與 fallback/verification 的 authoritative engineering record；公開 shipping、
+> fresh-clone packaging 與 current API 狀態請見 [`docs/PROJECT-STATUS.md`](../docs/PROJECT-STATUS.md)。
+
 This document records the disposable nine-site internal SDK bridge built by
 [`tools/build-semantic-bridge-2.1.220.py`](../tools/build-semantic-bridge-2.1.220.py).
 It implements the five frozen `globalThis.__rp.q` policy domains and all six frozen
