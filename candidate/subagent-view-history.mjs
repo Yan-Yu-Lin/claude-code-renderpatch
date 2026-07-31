@@ -377,7 +377,10 @@ export function activate(runtime) {
   }
 
   // Drops markers for tasks that no longer exist, so an evicted-then-respawned teammate is
-  // evaluated fresh instead of being skipped by a stale marker.
+  // evaluated fresh instead of being skipped by a stale marker. Deliberately keyed on
+  // absence from state.tasks rather than on any specific deletion path: entries are removed
+  // by evictTerminal/remove and also by applyOffsetsAndEvict (WN_ @233217396), and that list
+  // is version-specific. Absence covers all of them.
   const pruneMarkers = (state) => {
     if (injected.size === 0) return
     for (const taskId of [...injected.keys()]) {
@@ -420,9 +423,19 @@ export function activate(runtime) {
       // disk read was in flight. Returning the same object makes setState a no-op (stock BC
       // bails on Object.is), so a stale attempt cannot notify subscribers or overwrite a
       // newer decision.
+      //
+      // The comparison is on the full identity, not just taskId. Task ids come from a1()
+      // and are random, so reuse is not the concern; re-registration under the same id is.
+      // A task entry can be replaced (resume/respawn) while our disk read is in flight, and
+      // taskId alone would let one agent's JSONL land in another agent's transcript.
       store.setState((state) => {
         const stillEligible = eligibleTarget(state)
-        if (!stillEligible || stillEligible.taskId !== taskId) {
+        if (
+          !stillEligible ||
+          stillEligible.taskId !== taskId ||
+          stillEligible.parentSessionId !== parentSessionId ||
+          stillEligible.agentId !== agentId
+        ) {
           outcome = "target-moved"
           return state
         }
@@ -487,8 +500,13 @@ export function activate(runtime) {
 
     const transcript = state.transcripts?.[target.taskId]
     const liveMessages = Array.isArray(transcript?.messages) ? transcript.messages : null
-    // Identity check, not a length check: this is what stops the re-entrant loop, since our
-    // own setState re-enters evaluate() synchronously through the subscriber list.
+    // Identity, not length. For the immediate synchronous re-entry (BC.setState assigns,
+    // then notifies subscribers before returning) this is redundant with the inFlight check
+    // above -- both are already closed at that point, and either alone would stop it.
+    // Its non-redundant job is the later passes, once inFlight has cleared: queued d4
+    // observe events and unrelated store notifications, each of which would otherwise
+    // re-read the JSONL from disk to reach the same answer. A length or content comparison
+    // would not survive a merge that legitimately returns the same count.
     if (liveMessages && injected.get(target.taskId) === liveMessages) return
 
     log.verbose(
@@ -529,7 +547,7 @@ export function activate(runtime) {
   // here keeps the subscription bound to the live object instead of a stale generation.
   // In practice the store identity is stable (useState holds it), so attach() usually
   // short-circuits.
-  runtime.read.observe("d4", ({ event }) => {
+  const stopObserving = runtime.read.observe("d4", ({ event }) => {
     if (event === "clear") {
       unsubscribe?.()
       unsubscribe = null
@@ -542,10 +560,14 @@ export function activate(runtime) {
 
   attach()
 
+  // Both disposers, in this order. Dropping the observer would leave stop() non-durable:
+  // a later d4 publish would call attach() and re-subscribe the store we just released.
   runtime.register?.("subagent-view-history:stop", () => {
+    stopObserving?.()
     unsubscribe?.()
     unsubscribe = null
     subscribedStore = null
+    log.verbose("stop: observer and store subscription released")
   })
 
   return activation

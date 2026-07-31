@@ -258,7 +258,86 @@ check("collapsed single-message live array (the stock terminal case) recovers fu
 // Reproduces the v1 flicker: the extension injects, then a stock writer runs. Confirms the
 // terminal-status gate is what stops the fight, not any delay value.
 
-check("SIMULATION: no re-injection loop once the extension owns the array", () => {
+// Models the real ordering, parameterised over each gate so the harness shows which one is
+// actually load-bearing instead of asserting it.
+//
+//   inject(): inFlight.add -> await disk read -> setState(updater)
+//   updater:  injected.set(newArray), returns new state
+//   BC:       assigns, then notifies subscribers *before returning* -> evaluate re-enters
+//   inject(): finally -> inFlight.delete
+//
+// At the moment of synchronous re-entry BOTH gates are already closed: inFlight is still
+// set, and the identity marker was set inside the updater. They are redundant here, so
+// neither can be credited alone -- measured, not assumed.
+function simulateReentry({ useInFlight, useIdentity }) {
+  const injected = new Map()
+  const inFlight = new Set()
+  let live = ["seed"]
+  let diskReads = 0
+  let writes = 0
+  let depth = 0
+
+  const evaluate = () => {
+    if (useInFlight && inFlight.has("task")) return
+    if (useIdentity && injected.get("task") === live) return
+    if (depth > 6) {
+      diskReads++ // runaway guard: an ungated loop would recurse forever
+      return
+    }
+    inject()
+  }
+
+  const inject = () => {
+    inFlight.add("task")
+    try {
+      diskReads++ // the awaited JSONL read
+      const merged = [...Array(50).keys()].map(String)
+      if (merged.length <= live.length) return
+      injected.set("task", merged)
+      live = merged
+      writes++
+      depth++
+      try {
+        evaluate() // BC notifies here, before setState returns
+      } finally {
+        depth--
+      }
+    } finally {
+      inFlight.delete("task")
+    }
+  }
+
+  evaluate()
+  return { diskReads, writes }
+}
+
+check("SIMULATION: either gate alone stops the synchronous re-entry", () => {
+  assert.deepEqual(simulateReentry({ useInFlight: true, useIdentity: true }), {
+    diskReads: 1,
+    writes: 1,
+  })
+  assert.deepEqual(
+    simulateReentry({ useInFlight: true, useIdentity: false }),
+    { diskReads: 1, writes: 1 },
+    "inFlight alone is sufficient",
+  )
+  assert.deepEqual(
+    simulateReentry({ useInFlight: false, useIdentity: true }),
+    { diskReads: 1, writes: 1 },
+    "the identity marker alone is sufficient",
+  )
+  // With neither gate the re-entry causes a second disk read. It still settles at one write
+  // because the no-gain check catches it, so the cost of removing both is wasted I/O rather
+  // than a visible loop.
+  const ungated = simulateReentry({ useInFlight: false, useIdentity: false })
+  assert.ok(ungated.diskReads > 1, "removing both gates must cost an extra disk read")
+  assert.equal(ungated.writes, 1)
+})
+
+// The identity marker's non-redundant job: later passes, once inFlight has cleared. These
+// are queued d4 observe events and unrelated store notifications, where inFlight cannot
+// help because the write already finished.
+check("SIMULATION: identity marker suppresses later passes after inFlight clears", () => {
   const disk = parseRecentTranscriptSource(
     chainRecords(50)
       .map((r) => JSON.stringify(r))
@@ -266,20 +345,57 @@ check("SIMULATION: no re-injection loop once the extension owns the array", () =
     agentId,
   )
   const injected = new Map()
-  let writes = 0
-
   let live = [disk.at(-1)]
-  const evaluate = () => {
-    if (injected.get("task") === live) return // identity gate
+  let diskReads = 0
+
+  const evaluate = ({ useIdentity }) => {
+    if (useIdentity && injected.get("task") === live) return
+    diskReads++
     const merged = mergeTranscriptMessages(disk, live)
-    if (merged.length <= live.length) return // no-gain gate
+    if (merged.length <= live.length) return
     injected.set("task", merged)
     live = merged
-    writes++
   }
 
-  for (let tick = 0; tick < 50; tick++) evaluate()
-  assert.equal(writes, 1, `expected exactly one write, got ${writes}`)
+  for (let tick = 0; tick < 50; tick++) evaluate({ useIdentity: true })
+  assert.equal(diskReads, 1, `expected one disk read, got ${diskReads}`)
+
+  // Without the marker every notification re-reads the JSONL: this is the cost it removes.
+  diskReads = 0
+  live = [disk.at(-1)]
+  injected.clear()
+  for (let tick = 0; tick < 50; tick++) evaluate({ useIdentity: false })
+  assert.equal(diskReads, 50, "without the marker each pass re-reads from disk")
+})
+
+// The disk read is async. If the task entry is re-registered under the same id while it is
+// in flight (resume/respawn), revalidating on taskId alone would inject the old agent's
+// JSONL into the new agent's transcript.
+check("REGRESSION: identity change during the read aborts the write", () => {
+  const captured = { taskId: "t-abc", parentSessionId: "s-1", agentId: "a-old" }
+
+  const revalidate = (target, current) =>
+    current !== null &&
+    current.taskId === target.taskId &&
+    current.parentSessionId === target.parentSessionId &&
+    current.agentId === target.agentId
+
+  // Same taskId, different agent: must abort.
+  assert.equal(
+    revalidate(captured, { taskId: "t-abc", parentSessionId: "s-1", agentId: "a-new" }),
+    false,
+    "a changed agentId under the same taskId must abort the write",
+  )
+  // Same taskId, different parent session: must abort.
+  assert.equal(
+    revalidate(captured, { taskId: "t-abc", parentSessionId: "s-2", agentId: "a-old" }),
+    false,
+    "a changed parentSessionId under the same taskId must abort the write",
+  )
+  // Target gone entirely: must abort.
+  assert.equal(revalidate(captured, null), false)
+  // Fully unchanged: proceed.
+  assert.equal(revalidate(captured, { ...captured }), true)
 })
 
 check("SIMULATION: cpt() re-slice proves a running teammate cannot be held", () => {
