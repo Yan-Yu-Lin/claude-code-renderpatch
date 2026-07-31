@@ -175,6 +175,21 @@ claude-renderpatch-candidate --renderpatch-safe --version
 uv run verify/candidate-launcher-harness.py
 ```
 
+2.1.220 的 `in_process_teammate` view 另有一個 stock 資料供應 bug：running transcript
+只保留 bounded live window，completed/failed 時更會被縮成最後一筆，而 `Ahl` 的磁碟回填 effect
+只處理 `local_agent`。因此 renderer 實際只收到最後一筆；上方看似「第一句 prompt」的是 task
+header，不是完整 transcript。可用 exact-artifact extension 從該 teammate 的 sidechain JSONL 回填最近
+80 筆，不需新增 binary bridge：
+
+```bash
+claude-renderpatch-candidate \
+  --renderpatch-extension "$PWD/candidate/subagent-view-history.mjs"
+```
+
+這個 extension 只在目前 viewing task 是 `in_process_teammate` 時作用，透過既有 d4 unsafe
+store capture 合併磁碟上的最新 parent chain 與 live messages。它不改主 session、`local_agent`、
+policy ownership 或 JSONL，並把 display state 限制在最多 100 筆。
+
 The immutable release lives at
 `~/.local/share/claude-renderpatch/releases/2.1.220-internal-sdk-2.1.220.1-97dfb182/`
 and is linked only as `~/.local/bin/claude-renderpatch-candidate`. The exact-length REPL
