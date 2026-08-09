@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# Install the immutable Claude Code 2.1.220 internal-SDK candidate release.
+# Install the immutable Claude Code 2.1.226 internal-SDK candidate release.
 
 set -euo pipefail
 
-RELEASE_ID="2.1.220-internal-sdk-2.1.220.1-97dfb182"
-TARGET_SHA256="97dfb1826861b90c8711dfe054a8f2f212b7299ea77bce7c6d724a8f12bc1157"
-BOOTSTRAP_SHA256="cc18598a53576f74ac6cd493377e9b8b277a47821f044890cd129717002a916f"
+RELEASE_ID="2.1.226-internal-sdk-2.1.226.1-60901a7b"
+TARGET_SHA256="60901a7b9a1259ff1113ef6ce8e8f49fbdc4f5a8fa4cde3cc9249ddcb2d50bb9"
+BOOTSTRAP_SHA256="cdf0a4674410430e910d83bb2c7a0625b8fa4dcbcaac749da5fba17148b814e7"
 SHARED_EXTENSION_SHA256="3ac015a3765800e843377008266cc548c4ccf145c6494a667110a8b6d06e658c"
 DEFAULT_EXTENSION_SHA256="36bc0a4d709327dcd9b10905c8bcac65c9e2e1b3290e64982ef95210f31d59ac"
 DIAGNOSTIC_EXTENSION_SHA256="d78a89d6e0c466f4816efa654fb35831160354637218e8c722379b4849b18641"
 TRUST_HELPER_SHA256="72fd2d30e9ea844c03e3bf19dc19cc2f56b16748f63a84958a6a2291357d877c"
-INTERNAL_MANIFEST_SHA256="f31b8409c35220209161ecdcdc8b6aff8a7f5af7535033df62ef333589836f05"
-RELEASE_MANIFEST_SHA256="c3623177141eff845f2f264281c84efb9db513ffbc7dd3d631c50a0f64f7c192"
-LAUNCHER_SHA256="bde3b01a00995a830dc313dc4ad06aed222a2c976a9fabaea49427b6c9911223"
+INTERNAL_MANIFEST_SHA256="b38dc8c3b4f07bb36902add1d39c17a6ce0713c0bbdcefed0e64ca0821249f64"
+RELEASE_MANIFEST_SHA256="ad74cfe7bf306625ee6c600758a6d3c9d2b89c2ade9f036f662b737dd3d5742d"
+LAUNCHER_SHA256="90228fdcc6eca4f10547b700f3888c20cfc1362213ad1e4c05fd964c0aed4747"
 MARKER_NAME=".claude-renderpatch-release"
 MARKER_CONTENT="$RELEASE_ID $RELEASE_MANIFEST_SHA256"
 
@@ -53,13 +53,13 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 RELEASE_DIR_INPUT="${CLAUDE_RENDERPATCH_RELEASE_DIR:-$HOME/.local/share/claude-renderpatch/releases/$RELEASE_ID}"
 LINK_INPUT="${CLAUDE_RENDERPATCH_LINK:-$HOME/.local/bin/claude-renderpatch-candidate}"
 
-SOURCE_TARGET="$REPO_ROOT/patched/claude-2.1.220-semantic-bridge-prototype"
+SOURCE_TARGET="$REPO_ROOT/patched/claude-2.1.226-semantic-bridge"
 SOURCE_BOOTSTRAP="$REPO_ROOT/preload/bootstrap.mjs"
 SOURCE_SHARED_EXTENSION="$REPO_ROOT/preload/extensions/_shared.mjs"
 SOURCE_DEFAULT_EXTENSION="$REPO_ROOT/preload/extensions/default.mjs"
 SOURCE_DIAGNOSTIC_EXTENSION="$SCRIPT_DIR/diagnostic.mjs"
 SOURCE_TRUST_HELPER="$SCRIPT_DIR/trust-file.py"
-SOURCE_INTERNAL_MANIFEST="$REPO_ROOT/manifests/internal-sdk-2.1.220.json"
+SOURCE_INTERNAL_MANIFEST="$REPO_ROOT/manifests/internal-sdk-2.1.226.json"
 SOURCE_RELEASE_MANIFEST="$SCRIPT_DIR/release-manifest.json"
 SOURCE_LAUNCHER="$SCRIPT_DIR/claude-renderpatch-candidate"
 
@@ -148,7 +148,7 @@ verify_sources() {
   }
   local reported_version
   reported_version="$("$SOURCE_TARGET" --version)"
-  [[ "$reported_version" == "2.1.220 (Claude Code)" ]] || {
+  [[ "$reported_version" == "2.1.226 (Claude Code)" ]] || {
     echo "candidate/install.sh: source candidate version mismatch: $reported_version" >&2
     exit 1
   }
@@ -171,7 +171,7 @@ uid = os.getuid()
 expected_entries = {
     marker_name,
     "bootstrap.mjs",
-    "claude-2.1.220-internal-sdk",
+    "claude-2.1.226-internal-sdk",
     "claude-renderpatch-candidate",
     "extensions",
     "helpers",
@@ -207,7 +207,7 @@ if found_helpers != expected_helpers:
         f"Refusing unexpected helper entries: expected {sorted(expected_helpers)}, "
         f"found {sorted(found_helpers)}"
     )
-expected_manifests = {"internal-sdk-2.1.220.json"}
+expected_manifests = {"internal-sdk-2.1.226.json"}
 found_manifests = {entry.name for entry in manifests.iterdir()}
 if found_manifests != expected_manifests:
     raise SystemExit(
@@ -222,7 +222,7 @@ expected_modes = {
     extensions: 0o555,
     helpers: 0o555,
     manifests: 0o555,
-    root / "claude-2.1.220-internal-sdk": 0o555,
+    root / "claude-2.1.226-internal-sdk": 0o555,
     root / "claude-renderpatch-candidate": 0o555,
     root / "bootstrap.mjs": 0o444,
     root / "release-manifest.json": 0o444,
@@ -231,7 +231,7 @@ expected_modes = {
     extensions / "default.mjs": 0o444,
     extensions / "diagnostic.mjs": 0o444,
     helpers / "trust-file.py": 0o444,
-    manifests / "internal-sdk-2.1.220.json": 0o444,
+    manifests / "internal-sdk-2.1.226.json": 0o444,
 }
 for path, expected_mode in expected_modes.items():
     info = path.lstat()
@@ -246,16 +246,16 @@ for path, expected_mode in expected_modes.items():
             f"expected {oct(expected_mode)}, found {oct(actual_mode)}"
         )
 PY
-  verify_hash "installed candidate" "$RELEASE_DIR/claude-2.1.220-internal-sdk" "$TARGET_SHA256"
+  verify_hash "installed candidate" "$RELEASE_DIR/claude-2.1.226-internal-sdk" "$TARGET_SHA256"
   verify_hash "installed bootstrap" "$RELEASE_DIR/bootstrap.mjs" "$BOOTSTRAP_SHA256"
   verify_hash "installed shared extension" "$RELEASE_DIR/extensions/_shared.mjs" "$SHARED_EXTENSION_SHA256"
   verify_hash "installed default extension" "$RELEASE_DIR/extensions/default.mjs" "$DEFAULT_EXTENSION_SHA256"
   verify_hash "installed diagnostic extension" "$RELEASE_DIR/extensions/diagnostic.mjs" "$DIAGNOSTIC_EXTENSION_SHA256"
   verify_hash "installed trusted file helper" "$RELEASE_DIR/helpers/trust-file.py" "$TRUST_HELPER_SHA256"
-  verify_hash "installed internal SDK manifest" "$RELEASE_DIR/manifests/internal-sdk-2.1.220.json" "$INTERNAL_MANIFEST_SHA256"
+  verify_hash "installed internal SDK manifest" "$RELEASE_DIR/manifests/internal-sdk-2.1.226.json" "$INTERNAL_MANIFEST_SHA256"
   verify_hash "installed release manifest" "$RELEASE_DIR/release-manifest.json" "$RELEASE_MANIFEST_SHA256"
   verify_hash "installed launcher" "$RELEASE_DIR/claude-renderpatch-candidate" "$LAUNCHER_SHA256"
-  codesign --verify --strict "$RELEASE_DIR/claude-2.1.220-internal-sdk" 2>/dev/null || {
+  codesign --verify --strict "$RELEASE_DIR/claude-2.1.226-internal-sdk" 2>/dev/null || {
     echo "candidate/install.sh: installed candidate signature verification failed" >&2
     exit 1
   }
@@ -334,14 +334,14 @@ else
   trap cleanup EXIT
 
   mkdir "$staging/extensions" "$staging/helpers" "$staging/manifests"
-  install -m 0555 "$SOURCE_TARGET" "$staging/claude-2.1.220-internal-sdk"
+  install -m 0555 "$SOURCE_TARGET" "$staging/claude-2.1.226-internal-sdk"
   install -m 0555 "$SOURCE_LAUNCHER" "$staging/claude-renderpatch-candidate"
   install -m 0444 "$SOURCE_BOOTSTRAP" "$staging/bootstrap.mjs"
   install -m 0444 "$SOURCE_SHARED_EXTENSION" "$staging/extensions/_shared.mjs"
   install -m 0444 "$SOURCE_DEFAULT_EXTENSION" "$staging/extensions/default.mjs"
   install -m 0444 "$SOURCE_DIAGNOSTIC_EXTENSION" "$staging/extensions/diagnostic.mjs"
   install -m 0444 "$SOURCE_TRUST_HELPER" "$staging/helpers/trust-file.py"
-  install -m 0444 "$SOURCE_INTERNAL_MANIFEST" "$staging/manifests/internal-sdk-2.1.220.json"
+  install -m 0444 "$SOURCE_INTERNAL_MANIFEST" "$staging/manifests/internal-sdk-2.1.226.json"
   install -m 0444 "$SOURCE_RELEASE_MANIFEST" "$staging/release-manifest.json"
   printf '%s\n' "$MARKER_CONTENT" >"$staging/$MARKER_NAME"
   chmod 0444 "$staging/$MARKER_NAME"

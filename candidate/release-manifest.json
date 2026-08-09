@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "releaseId": "2.1.220-internal-sdk-2.1.220.1-97dfb182",
+  "releaseId": "2.1.226-internal-sdk-2.1.226.1-60901a7b",
   "product": "Claude Code",
-  "targetVersion": "2.1.220",
-  "bridgeBuildId": "internal-sdk-2.1.220.1",
+  "targetVersion": "2.1.226",
+  "bridgeBuildId": "internal-sdk-2.1.226.1",
   "bridgeAbi": 1,
   "policyApiVersion": 2,
   "runtimeApiVersion": 2,
-  "rawSlotApi": "2.1.220.1",
-  "stockProvenanceSha256": "8addc857f3fe64d5a0368af9ee50321b50afb4a6918ba3ef018ab84f5dbbe081",
-  "signedArtifactSha256": "97dfb1826861b90c8711dfe054a8f2f212b7299ea77bce7c6d724a8f12bc1157",
+  "rawSlotApi": "2.1.226.1",
+  "stockProvenanceSha256": "013a1cf17df5ff1dcc189d5d6fd3fdd5f097ddc3cd41aa9992e99805574febbe",
+  "signedArtifactSha256": "60901a7b9a1259ff1113ef6ce8e8f49fbdc4f5a8fa4cde3cc9249ddcb2d50bb9",
   "launcher": "claude-renderpatch-candidate",
   "defaultExtension": "extensions/default.mjs",
   "diagnosticExtension": "extensions/diagnostic.mjs",
@@ -25,12 +25,12 @@
     "unsafeRawExactArtifactOnly": true
   },
   "assets": {
-    "claude-2.1.220-internal-sdk": {
-      "sha256": "97dfb1826861b90c8711dfe054a8f2f212b7299ea77bce7c6d724a8f12bc1157",
+    "claude-2.1.226-internal-sdk": {
+      "sha256": "60901a7b9a1259ff1113ef6ce8e8f49fbdc4f5a8fa4cde3cc9249ddcb2d50bb9",
       "mode": "0555"
     },
     "bootstrap.mjs": {
-      "sha256": "cc18598a53576f74ac6cd493377e9b8b277a47821f044890cd129717002a916f",
+      "sha256": "cdf0a4674410430e910d83bb2c7a0625b8fa4dcbcaac749da5fba17148b814e7",
       "mode": "0444"
     },
     "extensions/_shared.mjs": {
@@ -49,8 +49,8 @@
       "sha256": "72fd2d30e9ea844c03e3bf19dc19cc2f56b16748f63a84958a6a2291357d877c",
       "mode": "0444"
     },
-    "manifests/internal-sdk-2.1.220.json": {
-      "sha256": "f31b8409c35220209161ecdcdc8b6aff8a7f5af7535033df62ef333589836f05",
+    "manifests/internal-sdk-2.1.226.json": {
+      "sha256": "b38dc8c3b4f07bb36902add1d39c17a6ce0713c0bbdcefed0e64ca0821249f64",
       "mode": "0444"
     }
   }

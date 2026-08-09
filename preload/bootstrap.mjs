@@ -26,15 +26,15 @@ delete process.env.CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256
 delete process.env.CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION
 
 const RELEASE = Object.freeze({
-  bridgeBuildId: "internal-sdk-2.1.220.1",
+  bridgeBuildId: "internal-sdk-2.1.226.1",
   bridgeAbi: 1,
   bridgeManifestSchema: 1,
   extensionManifestSchema: 1,
   policyApiVersion: 2,
-  rawSlotApi: "2.1.220.1",
-  targetVersion: "2.1.220",
-  targetStockSha256: "8addc857f3fe64d5a0368af9ee50321b50afb4a6918ba3ef018ab84f5dbbe081",
-  targetFileSize: 256908272,
+  rawSlotApi: "2.1.226.1",
+  targetVersion: "2.1.226",
+  targetStockSha256: "013a1cf17df5ff1dcc189d5d6fd3fdd5f097ddc3cd41aa9992e99805574febbe",
+  targetFileSize: 279661952,
 })
 
 const POLICY_DOMAINS = Object.freeze([

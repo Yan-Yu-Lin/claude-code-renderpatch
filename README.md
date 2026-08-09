@@ -1,8 +1,8 @@
 # claude-code-renderpatch
 
 Version-pinned binary patches for Claude Code's terminal renderer, claude-mix context
-windows, and explicit subagent model routing. The current cumulative recipe targets
-**2.1.219**; older per-version scripts remain as rediscovery references.
+windows, and explicit subagent model routing. The current internal-SDK bridge targets
+**2.1.226**; the older 2.1.219 direct-patch recipe remains as a rediscovery reference.
 
 The stock `claude` is a Bun-compiled Mach-O containing readable minified JavaScript in
 its `__BUN` segment. The renderer combines bounded React/Ink frames with preserved native
@@ -21,7 +21,8 @@ never modified.
 
 ## Developer and extension documentation（繁體中文）
 
-本 repo 現在提供獨立 **2.1.220 internal-SDK candidate/prototype** 的 developer-facing map，
+本 repo 現在提供獨立 **2.1.226 internal-SDK candidate**；既有 developer-facing 文件主要仍是
+2.1.220 的完整設計圖，
 涵蓋 runtime API、safe reads/actions、exact-version unsafe access、目前缺口、bridge 維護，
 以及 version-pinned Banner renderer 研究：
 
@@ -31,8 +32,10 @@ never modified.
 - **撰寫 user extension：** [`docs/extensions/getting-started.md`](docs/extensions/getting-started.md)
 - **Banner/Clawd internals：** [`docs/internals/BANNER-RENDERER-2.1.220.md`](docs/internals/BANNER-RENDERER-2.1.220.md)
 
-2.1.219 cumulative direct-patch recipe 與 2.1.220 internal-SDK candidate 是兩條不同路徑。
-後者已在本機 macOS arm64 驗證，但尚未 merge 到 `main`、沒有公開 GitHub release/PR，
+2.1.219 cumulative direct-patch recipe 與 2.1.226 internal-SDK candidate 是兩條不同路徑。
+後者已在本機 macOS arm64 驗證；exact port record 見
+[`reference/bridge-intent-2.1.226.md`](reference/bridge-intent-2.1.226.md)。它尚未 merge 到
+`main`、沒有公開 GitHub release/PR，
 fresh clone 也不包含 `candidate/install.sh` 所需、被 gitignore 的 signed candidate artifact。
 
 ## What the patch changes
@@ -144,9 +147,9 @@ See [`reference/preload-runtime.md`](reference/preload-runtime.md) for the empir
 security boundary, update matrix, failed alternatives, and the recommended external-runtime
 plus minimal-internal-bridge architecture.
 
-## Immutable 2.1.220 internal-SDK candidate
+## Immutable 2.1.226 internal-SDK candidate
 
-The frozen 2.1.220 SDK bridge is available through one separate user-facing command:
+The frozen 2.1.226 SDK bridge is available through one separate user-facing command:
 `claude-renderpatch-candidate`. It mirrors the existing multi-provider proxy, settings overlay,
 provider note, and model-restoration behavior without calling or changing `claude-mix`.
 Normal `claude`, `claude-mix`, and `claude-preload-lab` remain independent.
@@ -171,16 +174,16 @@ claude-renderpatch-candidate --renderpatch-diagnose
 # Use the same exact patched target and multi-provider arguments without any preload.
 claude-renderpatch-candidate --renderpatch-safe --version
 
-# Exercise installation integrity, conflicts, status, normal/safe modes, and cleanup.
-uv run verify/candidate-launcher-harness.py
+# Verify exact ranges, policy/capture domains, signing, fallback, and lifecycle behavior.
+uv run verify/bridge-static-2.1.226.py
+uv run verify/raw-capture-behavior-2.1.226.py
 ```
 
 The immutable release lives at
-`~/.local/share/claude-renderpatch/releases/2.1.220-internal-sdk-2.1.220.1-97dfb182/`
-and is linked only as `~/.local/bin/claude-renderpatch-candidate`. The exact-length REPL
-replacement stores its five Unicode UI glyphs as ASCII `\\u` escape bytes; equivalent
-`!!` coercion, iterable spread, and a compact unsigned-shift bitmap expression recover the
-required 16-byte budget without changing the bridge sites or runtime contracts. Normal mode verifies
+`~/.local/share/claude-renderpatch/releases/2.1.226-internal-sdk-2.1.226.1-60901a7b/`.
+The installer defaults to `~/.local/bin/claude-renderpatch-candidate`; a stable local alias such
+as `claude-bridge` may point at the same immutable launcher. The 2.1.226 port uses eight physical
+ranges, with capture domain d2 co-located with d4 in the late REPL supplier. Normal mode verifies
 ownership, restrictive modes, the release manifest, code signature, and exact SHA-256 for the
 candidate/bootstrap/extensions/helpers/manifests before setting one-shot preload and bridge
 metadata. The proxy key and settings overlay must be user-owned, symlink-free `0600` files;
@@ -283,7 +286,9 @@ Engineering records:
 - [`reference/internal-sdk-map.md`](reference/internal-sdk-map.md) — frozen pre-build domain,
   policy, lifecycle, and raw-slot contract; its `planned` status is historical.
 - [`reference/bridge-intent-2.1.220.md`](reference/bridge-intent-2.1.220.md) — verified nine-site
-  bridge record for the artifact later used by the local immutable candidate.
+  historical bridge record for the original immutable candidate.
+- [`reference/bridge-intent-2.1.226.md`](reference/bridge-intent-2.1.226.md) — current eight-range
+  port identity, architectural delta, installation target, and verification record.
 - [`REPATCHING-PLAYBOOK.md`](REPATCHING-PLAYBOOK.md) — rediscovery procedure after updates.
 
 Verification:
@@ -293,7 +298,11 @@ Verification:
 - [`verify/preload-harness.py`](verify/preload-harness.py) — repeatable latest-candidate
   preload, same-global, trust, failure, child-environment, and bypass tests.
 - [`verify/candidate-launcher-harness.py`](verify/candidate-launcher-harness.py) — immutable
-  single-command install, hash/mode, status, policy, safe-mode, conflict, and uninstall tests.
+  2.1.220-era single-command install, hash/mode, status, policy, safe-mode, conflict, and uninstall tests.
+- [`verify/bridge-static-2.1.226.py`](verify/bridge-static-2.1.226.py) — current exact-range,
+  policy/capture, signature, and version verification.
+- [`verify/raw-capture-behavior-2.1.226.py`](verify/raw-capture-behavior-2.1.226.py) — current
+  PTY fallback, collision, publication, replacement, and generation-safe clear verification.
 
 ## Known tradeoffs / limitations
 

@@ -1,0 +1,900 @@
+{
+  "schemaVersion": 1,
+  "contractId": "claude-code-renderpatch.internal-sdk",
+  "contractStatus": "verified-local",
+  "bridgeBuildId": "internal-sdk-2.1.226.1",
+  "target": {
+    "product": "Claude Code",
+    "version": "2.1.226",
+    "platform": "darwin",
+    "architecture": "arm64",
+    "stockSha256": "013a1cf17df5ff1dcc189d5d6fd3fdd5f097ddc3cd41aa9992e99805574febbe",
+    "fileSize": 279661952,
+    "bunSection": {
+      "fileOffset": 65306624,
+      "fileSize": 213598208
+    }
+  },
+  "apiVersions": {
+    "registryApi": 1,
+    "runtimeApi": 2,
+    "policyApi": 2,
+    "bridgeAbi": 1,
+    "bridgeManifestSchema": 1,
+    "extensionManifestSchema": 1,
+    "rawSlotApi": "2.1.226.1"
+  },
+  "rendezvous": {
+    "registrySymbol": "claude-code-renderpatch.runtime",
+    "registryExpression": "Symbol.for(\"claude-code-renderpatch.runtime\")",
+    "globalAlias": {
+      "status": "frozen-bridge-abi-1",
+      "name": "__rp",
+      "expression": "globalThis.__rp",
+      "bridgeAbi": 1,
+      "exposes": ["q", "c"],
+      "propertyAttributes": {
+        "enumerable": false,
+        "writable": false,
+        "configurable": false
+      },
+      "collisionBehavior": "If globalThis.__rp already exists with an incompatible value or ABI, do not replace it and disable the bridge facade safely; every internal call then uses its stock fallback or capture no-op."
+    },
+    "policyQuery": {
+      "method": "q",
+      "bridgeAbi": 1,
+      "signature": "q(policyDomainId, fallback, ...primitivePayload)",
+      "synchronous": true,
+      "total": true,
+      "exactFallback": "Return the exact fallback argument, preserving identity for non-primitive fallback values even though bridge ABI 1 policy contracts currently use primitive fallbacks.",
+      "successSentinels": "Valid false and 0 are results, never absence sentinels.",
+      "fallbackConditions": [
+        "facade or runtime absent",
+        "runtime or bridge ABI incompatible",
+        "policy domain unregistered",
+        "handler throws",
+        "handler returns a Promise or any thenable",
+        "handler returns undefined",
+        "handler returns the wrong type",
+        "integer result is outside the policy-domain range",
+        "atomic renderer bundle is incomplete or incompatible"
+      ]
+    },
+    "rawCapture": {
+      "method": "c",
+      "bridgeAbi": 1,
+      "signature": "c(captureDomainId, generation, presenceBitmap, slotsOrNull)",
+      "returnValue": "ignored",
+      "staticGeneration": 0,
+      "presenceBitmap": "Non-negative integer whose bit N declares whether positional slot N is present; omitted slots never renumber later indexes.",
+      "clearSignal": "presenceBitmap is 0 and slotsOrNull is null",
+      "publishOrReplace": "A non-null positional slot array plus its presence bitmap publishes or atomically replaces captureDomainId at generation.",
+      "clear": "presenceBitmap 0 with null slotsOrNull clears captureDomainId only when generation matches the currently published generation, preventing stale cleanup from deleting a newer capture.",
+      "invalidClear": "A null slotsOrNull with nonzero presenceBitmap is invalid and becomes an ignored no-op.",
+      "failureBehavior": "No-op with stock behavior preserved when the facade/runtime is absent, incompatible, disabled, colliding, invalid, or throws."
+    }
+  },
+  "launchIntegrity": {
+    "normalLaunchMetadata": {
+      "scope": "One-shot candidate normal launch only.",
+      "environmentNames": {
+        "bridgeBuildId": "CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID",
+        "artifactSha256": "CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256",
+        "targetVersion": "CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION"
+      },
+      "ambientPolicy": "The candidate wrapper rejects normal launch when any of the three names already exists in its environment.",
+      "wrapperPolicy": "After ambient rejection, the candidate wrapper hardcodes all three normal-mode values from its selected signed RELEASE metadata and verified artifact.",
+      "bootstrapPolicy": "Bootstrap captures all three values before extension loading and immediately deletes all three names from process.env.",
+      "scrubbedPaths": ["status", "--renderpatch-safe", "child processes"]
+    },
+    "signedArtifactActivation": {
+      "releaseAuthority": "The selected signed RELEASE metadata, never ambient input or the current working directory.",
+      "requiredExactMatches": [
+        "wrapper-supplied bridge build ID equals the signed RELEASE bridge build ID",
+        "wrapper-supplied target version equals the signed RELEASE target version",
+        "actual executable target version equals the wrapper-supplied target version",
+        "SHA-256 of the actual executable target equals the wrapper-supplied artifact SHA-256"
+      ],
+      "stockSha256Role": "target.stockSha256 records stock provenance and is not a substitute for verified signed-candidate artifact identity.",
+      "artifactSha256Value": "Release-generated and wrapper-supplied; no temporary prototype artifact SHA-256 is frozen in this contract because later raw-capture sites change the final artifact."
+    },
+    "stockLabCompatibility": {
+      "testOnly": true,
+      "rule": "Stock-lab path and file-size compatibility may exercise runtime and harness behavior only; it cannot activate a signed candidate or satisfy unsafeRaw artifact identity."
+    }
+  },
+  "compatibility": {
+    "exactTargetRequired": true,
+    "rawSlotsRequireExactBridgeBuild": true,
+    "policyFailureUsesExactSuppliedFallback": true,
+    "captureFailureIsIgnored": true,
+    "patchedBinaryWithoutRuntimeMustRemainStock": true,
+    "safeModeMustRemainStock": true,
+    "rawPublicationChangesLexicalControlFlow": false,
+    "replacementBytesSpecified": true,
+    "physicalSiteLayoutVerified": true,
+    "notes": [
+      "This manifest freezes the contract and observed supplier neighborhoods, not byte replacements.",
+      "Per-slot observedSymbol and offset fields retained below are 2.1.220 slot-contract provenance; the exact 2.1.226 sites are frozen in tools/semantic_bridge_2_1_226.py and verify/bridge-static-2.1.226.py.",
+      "The verified 2.1.226 build uses eight physical ranges; d2 is co-located with d4 in the late REPL supplier."
+    ]
+  },
+  "labels": {
+    "lifecycle": {
+      "static": "Published once at generation 0; identical recapture is a no-op and conflicting replacement is rejected.",
+      "provider": "Atomically replaced for each provider generation and cleared with a generation-safe cleanup token.",
+      "render-latest": "Replaced on every render generation; the previous graph is released immediately.",
+      "lookup-live": "The published static registry/map remains valid, but the current live instance is resolved on demand."
+    },
+    "sensitivity": {
+      "public": "Build or capability metadata.",
+      "operational": "Paths, configuration, topology, or diagnostic state.",
+      "content": "Conversation, prompt, command, tool, task, or transcript content.",
+      "decision": "Model, routing, dialog, permission, or policy decision state.",
+      "terminal": "Live frames, renderer state, or terminal output control."
+    },
+    "risk": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    }
+  },
+  "accessTiers": [
+    {
+      "id": 0,
+      "name": "external-runtime",
+      "contract": "Trusted preload, legacy registry API v1, synchronous policy API v2, exact-target bridge manifest, environment cleanup, and safe bypass."
+    },
+    {
+      "id": 1,
+      "name": "read",
+      "contract": "Cloned, frozen, bounded, and redacted snapshots or metadata only; no live mutable object."
+    },
+    {
+      "id": 2,
+      "name": "actions",
+      "contract": "Narrow validated actions with allowlists, lifecycle checks, and stock-safe failure."
+    },
+    {
+      "id": 3,
+      "name": "unsafe",
+      "contract": "Exact-version raw handles only after explicit unsafeRaw opt-in and exact target/build/ABI negotiation."
+    },
+    {
+      "id": 4,
+      "name": "overrides",
+      "contract": "Separate synchronous primitive-only call-site queries with exact stock fallback; raw publication alone never changes lexical flow."
+    }
+  ],
+  "featureActivationTiers": [
+    {
+      "id": 0,
+      "name": "required-infrastructure",
+      "features": ["preload-bootstrap", "registry-api-v1", "policy-api-v2", "exact-target-manifest"]
+    },
+    {
+      "id": 1,
+      "name": "independent-policies",
+      "features": ["mix-window", "subagent-routing"]
+    },
+    {
+      "id": 2,
+      "name": "atomic-renderer-bundle",
+      "features": ["full-redraw"],
+      "activationRule": "Activate none of the renderer handlers unless policy domains 0, 1, and 2 are all present at ABI 1."
+    }
+  ],
+  "assetDomainIds": {
+    "mc": "model-context",
+    "sr": "subagent-routing",
+    "msg": "messages-transcript",
+    "repl": "repl-controls-commands",
+    "app": "app-state-dialogs",
+    "ink": "ink-terminal",
+    "key": "keybindings-actions",
+    "diag": "diagnostics-telemetry"
+  },
+  "assetDomains": [
+    {
+      "id": "mc",
+      "name": "Model and context system",
+      "lifecycle": "static",
+      "sensitivity": "decision",
+      "risk": "medium",
+      "capabilities": [
+        {"id": "mc.catalog", "tier": 1, "namespace": "read"},
+        {"id": "mc.canonicalize", "tier": 1, "namespace": "read"},
+        {"id": "mc.provider", "tier": 1, "namespace": "read"},
+        {"id": "mc.windowPreview", "tier": 1, "namespace": "read"},
+        {"id": "mc.raw", "tier": 3, "namespace": "unsafe"},
+        {"id": "provider.contextWindow", "tier": 4, "namespace": "override"}
+      ],
+      "safeFallback": "Use the complete stock model, provider, 1M, environment, and context-window paths."
+    },
+    {
+      "id": "sr",
+      "name": "Subagent routing",
+      "lifecycle": "static",
+      "sensitivity": "decision",
+      "risk": "high",
+      "capabilities": [
+        {"id": "sr.preview", "tier": 1, "namespace": "read"},
+        {"id": "sr.trace", "tier": 1, "namespace": "read"},
+        {"id": "sr.raw", "tier": 3, "namespace": "unsafe"},
+        {"id": "subagent.explicitModelRouting", "tier": 4, "namespace": "override"}
+      ],
+      "safeFallback": "Use stock environment, inherit, frontmatter/default, allowlist, provider, 1M, alias, fallback, and telemetry behavior."
+    },
+    {
+      "id": "msg",
+      "name": "Messages and transcript pipeline",
+      "lifecycle": "render-latest",
+      "sensitivity": "content",
+      "risk": "high",
+      "capabilities": [
+        {"id": "msg.counts", "tier": 1, "namespace": "read"},
+        {"id": "msg.snapshots", "tier": 1, "namespace": "read"},
+        {"id": "msg.export", "tier": 2, "namespace": "actions"},
+        {"id": "msg.search", "tier": 2, "namespace": "actions"},
+        {"id": "msg.raw", "tier": 3, "namespace": "unsafe"},
+        {"id": "renderer.messages", "tier": 4, "namespace": "override"}
+      ],
+      "safeFallback": "Retain stock show-all, transcript truncation, virtual-scroll, pre-normalization cap, and final cap behavior."
+    },
+    {
+      "id": "repl",
+      "name": "REPL live controls and commands",
+      "lifecycle": "render-latest",
+      "sensitivity": "content",
+      "risk": "critical",
+      "capabilities": [
+        {"id": "repl.state", "tier": 1, "namespace": "read"},
+        {"id": "repl.catalogs", "tier": 1, "namespace": "read"},
+        {"id": "repl.redraw", "tier": 2, "namespace": "actions"},
+        {"id": "repl.toggle", "tier": 2, "namespace": "actions"},
+        {"id": "repl.showAll", "tier": 2, "namespace": "actions"},
+        {"id": "repl.dispatch", "tier": 2, "namespace": "actions"},
+        {"id": "repl.raw", "tier": 3, "namespace": "unsafe"},
+        {"id": "renderer.toggleRedraw", "tier": 4, "namespace": "override"}
+      ],
+      "safeFallback": "Do not dispatch, submit, or mutate stale controls; normal keyboard and UI behavior remains stock."
+    },
+    {
+      "id": "app",
+      "name": "App state and dialogs",
+      "lifecycle": "provider",
+      "sensitivity": "decision",
+      "risk": "critical",
+      "capabilities": [
+        {"id": "app.metadata", "tier": 1, "namespace": "read"},
+        {"id": "app.subscribe", "tier": 2, "namespace": "actions"},
+        {"id": "app.raw", "tier": 3, "namespace": "unsafe"}
+      ],
+      "safeFallback": "Return unavailable for an absent or stale provider; never answer dialogs or mutate permission state automatically."
+    },
+    {
+      "id": "ink",
+      "name": "Ink and terminal renderer",
+      "lifecycle": "lookup-live",
+      "sensitivity": "terminal",
+      "risk": "critical",
+      "capabilities": [
+        {"id": "ink.frame", "tier": 1, "namespace": "read"},
+        {"id": "ink.redraw", "tier": 2, "namespace": "actions"},
+        {"id": "ink.raw", "tier": 3, "namespace": "unsafe"},
+        {"id": "renderer.reset", "tier": 4, "namespace": "override"}
+      ],
+      "safeFallback": "Use the stock full-reset planner and serializer; never emit renderpatch ED3 because the runtime is absent, partial, or incompatible."
+    },
+    {
+      "id": "key",
+      "name": "Keybindings, actions, and command dispatch",
+      "lifecycle": "provider",
+      "sensitivity": "decision",
+      "risk": "critical",
+      "capabilities": [
+        {"id": "key.catalog", "tier": 1, "namespace": "read"},
+        {"id": "key.register", "tier": 2, "namespace": "actions"},
+        {"id": "key.invoke", "tier": 2, "namespace": "actions"},
+        {"id": "key.raw", "tier": 3, "namespace": "unsafe"}
+      ],
+      "safeFallback": "Fail closed when stale and never bypass context, priority, dialog, or input-ownership checks."
+    },
+    {
+      "id": "diag",
+      "name": "Diagnostics and telemetry",
+      "lifecycle": "static",
+      "sensitivity": "operational",
+      "risk": "medium",
+      "capabilities": [
+        {"id": "diag.status", "tier": 1, "namespace": "read"},
+        {"id": "diag.log", "tier": 2, "namespace": "actions"},
+        {"id": "diag.raw", "tier": 3, "namespace": "unsafe"}
+      ],
+      "safeFallback": "Publish no diagnostics and invoke no telemetry; status never contains raw values or content-bearing payload history."
+    }
+  ],
+  "extensionContracts": [
+    {
+      "id": "full-redraw",
+      "activation": "atomic",
+      "requires": [
+        {"policyDomainId": 0, "name": "renderer.messages", "abiVersion": 1},
+        {"policyDomainId": 1, "name": "renderer.reset", "abiVersion": 1},
+        {"policyDomainId": 2, "name": "renderer.toggleRedraw", "abiVersion": 1}
+      ],
+      "failureBehavior": "Publish none of the three handlers when any requirement is absent or incompatible."
+    },
+    {
+      "id": "mix-window",
+      "activation": "independent",
+      "requires": [
+        {"policyDomainId": 3, "name": "provider.contextWindow", "abiVersion": 1}
+      ]
+    },
+    {
+      "id": "subagent-routing",
+      "activation": "independent",
+      "requires": [
+        {"policyDomainId": 4, "name": "subagent.explicitModelRouting", "abiVersion": 1}
+      ]
+    },
+    {
+      "id": "default",
+      "activation": "aggregate",
+      "includes": ["full-redraw", "mix-window", "subagent-routing"],
+      "unsafeRaw": false
+    }
+  ],
+  "extensionManifestRequirements": {
+    "requiredFields": ["id", "version", "schemaVersion", "requires.policyApiVersion", "requires.bridges"],
+    "schemaVersion": 1,
+    "policyApiVersion": 2,
+    "bridgeRequirementShape": {"id": "numeric policy domain or readable name", "abiVersion": 1},
+    "registration": "transactional",
+    "transactionChecks": [
+      "manifest schema and identity",
+      "every required bridge and ABI",
+      "handler synchrony and return contract",
+      "duplicate numeric/readable alias ownership",
+      "atomic feature bundle completeness"
+    ],
+    "unsafeRawRequirements": {
+      "manifestFlag": {"name": "unsafeRaw", "requiredValue": true},
+      "targetObject": "requirements.target",
+      "targetRequiredFields": ["version", "stockSha256", "artifactSha256", "bridgeBuildId"],
+      "artifactIdentity": "requirements.target.artifactSha256 must equal the independently computed SHA-256 of the actual verified executable target.",
+      "stockProvenance": "requirements.target.stockSha256 separately identifies the stock source provenance and never substitutes for artifactSha256."
+    },
+    "targetConstraintsSource": "Verified signed RELEASE metadata and the independently verified executable artifact, never ambient input or the current working directory."
+  },
+  "policyDomains": [
+    {
+      "domainId": 0,
+      "compactId": "o0",
+      "name": "renderer.messages",
+      "hookName": "renderer.messages.policy",
+      "abiVersion": 1,
+      "feature": "full-redraw",
+      "query": {
+        "payload": [
+          {"name": "screen", "type": "string"}
+        ],
+        "fallback": {"type": "integer", "value": 0},
+        "result": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "bits": {
+            "0": "Force effective showAllInTranscript true.",
+            "1": "Force effective disableRenderCap true for both cap computations."
+          }
+        }
+      },
+      "initialPolicy": "2 | (screen === \"transcript\" ? 1 : 0)",
+      "stockEffect": "Unset bits preserve the corresponding stock local values; fallback 0 preserves all stock props, truncation, and caps.",
+      "supplier": {
+        "status": "planned",
+        "function": "lzb",
+        "functionOffset": 241694130,
+        "placement": "Early in Messages after virtual-scroll state is known and before transcript truncation and both Xhf cap starts; fold bits into effective u/H while leaving the transcript JSX prop site stock.",
+        "anchors": [
+          {"offset": 241694130, "text": "lzb=({"},
+          {"offset": 241695167, "text": "let te=!re&&!H?Xhf(e,ce,oe*2):0"},
+          {"offset": 241696889, "text": "let He=!re&&!H?Xhf(at,se,oe):0"},
+          {"offset": 245895092, "text": "showAllInTranscript:fr"},
+          {"offset": 245895235, "text": "disableRenderCap:Cr"}
+        ],
+        "prototypeRequired": true
+      }
+    },
+    {
+      "domainId": 1,
+      "compactId": "o1",
+      "name": "renderer.reset",
+      "hookName": "renderer.reset.policy",
+      "abiVersion": 1,
+      "feature": "full-redraw",
+      "query": {
+        "payload": [
+          {"name": "reason", "type": "string-or-null"},
+          {"name": "altScreen", "type": "boolean"}
+        ],
+        "fallback": {"type": "boolean", "value": false},
+        "result": {"type": "boolean", "name": "destructiveRowZeroReplay"}
+      },
+      "stockEffect": "False preserves the stock start row and stock alt-screen-versus-main-screen serializer choice.",
+      "supplier": {
+        "status": "planned",
+        "function": "CXr",
+        "functionOffset": 231170016,
+        "functionLength": 265,
+        "placement": "One result must atomically drive startY=0 and the emitted clear patch's effective destructive intent while Hms remains stock.",
+        "anchors": [
+          {"offset": 231170042, "length": 108, "text": "let s=n?0:Math.min(o,Math.max(0,e.screen.height-e.viewport.height+1)),a=new khs({x:0,y:s},e.viewport.width);"},
+          {"offset": 231135081, "text": "function Hms"},
+          {"offset": 231135291, "length": 67, "text": "case\"clearTerminal\":s+=a.altScreen?Oms():_Xr(a.viewportRows);break;"}
+        ],
+        "prototypeRequired": true,
+        "goNoGo": "Do not enable this domain unless row-zero replay and destructive clear are empirically atomic. If intent cannot safely reach the stock serializer, use one explicitly declared sixth policy query or treat the five-site prototype as no-go."
+      }
+    },
+    {
+      "domainId": 2,
+      "compactId": "o2",
+      "name": "renderer.toggleRedraw",
+      "hookName": "renderer.toggleRedraw.policy",
+      "abiVersion": 1,
+      "feature": "full-redraw",
+      "query": {
+        "payload": [
+          {"name": "enteringTranscript", "type": "boolean"}
+        ],
+        "fallback": {"type": "boolean", "value": false},
+        "result": {"type": "boolean", "name": "authorizePrivateRedraw"}
+      },
+      "internalScheduling": {
+        "owner": "binary",
+        "redrawHelper": "oFS",
+        "delayMs": 50
+      },
+      "stockEffect": "False preserves stock toggle state and telemetry and schedules no extra redraw.",
+      "supplier": {
+        "status": "planned",
+        "function": "Hui",
+        "functionOffset": 243071716,
+        "functionLength": 2879,
+        "placement": "In the Ctrl+O toggle callback; external policy returns only authorization while the binary retains private state setters, oFS, and setTimeout.",
+        "anchors": [
+          {"offset": 243071663, "text": "function oFS"},
+          {"offset": 243072602, "length": 153, "text": "M(\"tengu_toggle_transcript\""}
+        ],
+        "prototypeRequired": true
+      }
+    },
+    {
+      "domainId": 3,
+      "compactId": "o3",
+      "name": "provider.contextWindow",
+      "hookName": "provider.contextWindow.policy",
+      "abiVersion": 1,
+      "feature": "mix-window",
+      "query": {
+        "payload": [
+          {"name": "canonicalModel", "type": "string"}
+        ],
+        "fallback": {"type": "positive-safe-integer", "source": "exact precomputed stock context-window result"},
+        "result": {"type": "positive-safe-integer", "minimum": 1, "maximum": 10000000}
+      },
+      "initialPolicy": "kimi* -> 262144; claude-* -> fallback; other non-Claude -> 372000",
+      "stockEffect": "The exact stock result remains authoritative for Claude models and every failure path.",
+      "supplier": {
+        "status": "planned",
+        "function": "SZc",
+        "functionOffset": 228834423,
+        "functionLength": 249,
+        "placement": "A wide-enough SZc contextual replacement that computes the exact stock result first and supplies it as q fallback; do not treat the narrow canonical-model-only fit as the final contract.",
+        "anchors": [
+          {"offset": 228834160, "text": "function JE"},
+          {"offset": 228834423, "text": "function SZc"},
+          {"offset": 228834560, "length": 111, "text": "let n=Z.CLAUDE_CODE_MAX_CONTEXT_TOKENS"}
+        ],
+        "prototypeRequired": true
+      }
+    },
+    {
+      "domainId": 4,
+      "compactId": "o4",
+      "name": "subagent.explicitModelRouting",
+      "hookName": "subagent.explicitModelRouting.policy",
+      "abiVersion": 1,
+      "feature": "subagent-routing",
+      "query": {
+        "payload": [
+          {"name": "requestedModel", "type": "string"},
+          {"name": "parentModel", "type": "string"}
+        ],
+        "fallback": {"type": "boolean", "source": "stock first-call Xrd(requestedModel,parentModel) result"},
+        "result": {"type": "boolean", "name": "retainSameFamilyShortcut"}
+      },
+      "initialPolicy": "false for the explicit-override branch",
+      "stockEffect": "Fallback preserves the first stock shortcut; the second default/frontmatter Xrd call and all later resolution remain stock.",
+      "supplier": {
+        "status": "planned",
+        "function": "ite",
+        "functionOffset": 232657409,
+        "functionLength": 623,
+        "placement": "Only the first explicit Xrd(r,t) gate immediately before Jrd(Ei(r)); never the second Xrd(u,t) default/frontmatter gate.",
+        "anchors": [
+          {"offset": 232657619, "text": "CLAUDE_CODE_SUBAGENT_MODEL"},
+          {"offset": 232657803, "length": 110, "text": "if(r){if(r===\"inherit\")return i();if(Xrd(r,t))return t;"},
+          {"offset": 232657837, "text": "if(Xrd(r,t))return t;"},
+          {"offset": 232657956, "text": "if(Xrd(u,t))return t;"},
+          {"offset": 232658974, "text": "function Xrd"}
+        ],
+        "prototypeRequired": true
+      }
+    }
+  ],
+  "captureDomains": [
+    {
+      "id": "d0",
+      "numericId": 0,
+      "name": "static-model-routing",
+      "abiVersion": 1,
+      "assetDomainIds": ["mc", "sr"],
+      "lifecycle": "static",
+      "generation": 0,
+      "sensitivity": "decision",
+      "risk": "high",
+      "slotOrderFrozen": true,
+      "presenceBitmapRequired": true,
+      "safePublication": "Tier 1 uses semantic wrappers and frozen metadata; raw functions exist only in Tier 3.",
+      "unsafeGate": "Exact target, bridge build, bridge ABI, raw-slot API, and unsafeRaw true.",
+      "supplier": {
+        "status": "planned",
+        "placement": "At or after the Ydt initializer immediately following Xrd, where model and routing dependencies are initialized.",
+        "siteCount": "One preferred, two permitted if one entry-scope payload is not safely byte-fit."
+      },
+      "slots": [
+        {"index": 0, "name": "defaultModelResolver", "assetDomainId": "mc", "tier": 3, "observedSymbol": "HH", "observedOffset": 227918015},
+        {"index": 1, "name": "aliasCanonicalizer", "assetDomainId": "mc", "tier": 3, "observedSymbol": "Ei", "observedOffset": 227933508},
+        {"index": 2, "name": "availableModelCheck", "assetDomainId": "mc", "tier": 3, "observedSymbol": "Hl", "observedOffset": 227908447},
+        {"index": 3, "name": "providerModelNormalizer", "assetDomainId": "mc", "tier": 3, "observedSymbol": "lo", "observedOffset": 227931600},
+        {"index": 4, "name": "providerResolver", "assetDomainId": "mc", "tier": 3, "observedSymbol": "n_", "observedOffset": 227683097},
+        {"index": 5, "name": "modelCatalogLookup", "assetDomainId": "mc", "tier": 3, "observedSymbol": "ww", "observedOffset": 225789193},
+        {"index": 6, "name": "effectiveContextWindow", "assetDomainId": "mc", "tier": 3, "observedSymbol": "JE", "observedOffset": 228834160},
+        {"index": 7, "name": "rawContextWindow", "assetDomainId": "mc", "tier": 3, "observedSymbol": "SZc", "observedOffset": 228834423},
+        {"index": 8, "name": "oneMillionSuffixTest", "assetDomainId": "mc", "tier": 3, "observedSymbol": "Wb"},
+        {"index": 9, "name": "nativeOneMillionEligibility", "assetDomainId": "mc", "tier": 3, "observedSymbol": "OH"},
+        {"index": 10, "name": "oneMillionBetaSupport", "assetDomainId": "mc", "tier": 3, "observedSymbol": "tG"},
+        {"index": 11, "name": "disableCompactOverride", "assetDomainId": "mc", "tier": 3, "observedSymbol": "bZc"},
+        {"index": 12, "name": "autoCompactDecision", "assetDomainId": "mc", "tier": 3, "observedSymbol": "gYi"},
+        {"index": 13, "name": "cachedAutoCompactWindow", "assetDomainId": "mc", "tier": 3, "observedSymbol": "fro"},
+        {"index": 14, "name": "outputTokenLimits", "assetDomainId": "mc", "tier": 3, "observedSymbol": "cst"},
+        {"index": 15, "name": "subagentResolver", "assetDomainId": "sr", "tier": 3, "observedSymbol": "ite", "observedOffset": 232657409},
+        {"index": 16, "name": "telemeteredSubagentResolver", "assetDomainId": "sr", "tier": 3, "observedSymbol": "Qrd", "observedOffset": 232658032},
+        {"index": 17, "name": "oneMillionAliasAdjuster", "assetDomainId": "sr", "tier": 3, "observedSymbol": "Jrd", "observedOffset": 232658874},
+        {"index": 18, "name": "sameFamilyShortcut", "assetDomainId": "sr", "tier": 3, "observedSymbol": "Xrd", "observedOffset": 232658974},
+        {"index": 19, "name": "defaultRequestedModel", "assetDomainId": "sr", "tier": 3, "observedSymbol": "tO_", "observedOffset": 232657378},
+        {"index": 20, "name": "familyClassifier", "assetDomainId": "sr", "tier": 3, "observedSymbol": "Cur"},
+        {"index": 21, "name": "disallowedModelWarning", "assetDomainId": "sr", "tier": 3, "observedSymbol": "rO_"}
+      ]
+    },
+    {
+      "id": "d1",
+      "numericId": 1,
+      "name": "static-ink-terminal-dialog-diagnostics",
+      "abiVersion": 1,
+      "assetDomainIds": ["ink", "app", "diag"],
+      "lifecycle": "static",
+      "liveLookupSlots": [0],
+      "generation": 0,
+      "sensitivity": "terminal",
+      "risk": "critical",
+      "slotOrderFrozen": true,
+      "presenceBitmapRequired": true,
+      "safePublication": "Tier 1 exposes dimensions/reset metadata and redacted diagnostics; the live Ink instance is resolved from the map on demand.",
+      "unsafeGate": "Exact target/build negotiation and unsafeRaw true; raw terminal/dialog/telemetry values are never status fields.",
+      "supplier": {
+        "status": "planned",
+        "placement": "Ink assets after T3u/Ju_ initialization; dialog and diagnostic statics may be folded into this publication or a second small static supplier if byte budget requires."
+      },
+      "slots": [
+        {"index": 0, "name": "stdoutInkInstanceMap", "assetDomainId": "ink", "tier": 3, "observedSymbol": "xd", "observedAssignmentOffset": 230930643, "lifecycle": "lookup-live"},
+        {"index": 1, "name": "inkClass", "assetDomainId": "ink", "tier": 3, "observedSymbol": "Qsr", "observedOffset": 231221157},
+        {"index": 2, "name": "diffPlannerClass", "assetDomainId": "ink", "tier": 3, "observedSymbol": "Rhs", "observedOffset": 231165676},
+        {"index": 3, "name": "fullResetPlanner", "assetDomainId": "ink", "tier": 3, "observedSymbol": "CXr", "observedOffset": 231170016},
+        {"index": 4, "name": "renderFrameSlice", "assetDomainId": "ink", "tier": 3, "observedSymbol": "vUu"},
+        {"index": 5, "name": "diffCursorBuilder", "assetDomainId": "ink", "tier": 3, "observedSymbol": "khs"},
+        {"index": 6, "name": "terminalSerializer", "assetDomainId": "ink", "tier": 3, "observedSymbol": "Hms", "observedOffset": 231135081},
+        {"index": 7, "name": "fullClearSequence", "assetDomainId": "ink", "tier": 3, "observedSymbol": "Oms", "observedOffset": 231132162},
+        {"index": 8, "name": "viewportEraseSequence", "assetDomainId": "ink", "tier": 3, "observedSymbol": "_Xr", "observedOffset": 231132222},
+        {"index": 9, "name": "asyncInkConstructor", "assetDomainId": "ink", "tier": 3, "observedSymbol": "S3u"},
+        {"index": 10, "name": "inkInstanceGetter", "assetDomainId": "ink", "tier": 3, "observedSymbol": "Ju_"},
+        {"index": 11, "name": "renderEntry", "assetDomainId": "ink", "tier": 3, "observedSymbol": "Kpe"},
+        {"index": 12, "name": "lowerRenderEntry", "assetDomainId": "ink", "tier": 3, "observedSymbol": "QHt"},
+        {"index": 13, "name": "dialogStore", "assetDomainId": "app", "tier": 3, "observedSymbol": "sM", "observedOffset": 242611887},
+        {"index": 14, "name": "legacyDialogFocusStore", "assetDomainId": "app", "tier": 3, "observedSymbol": "Krl", "optional": true},
+        {"index": 15, "name": "debugLogger", "assetDomainId": "diag", "tier": 3, "observedSymbol": "w", "observedOffset": 225937669},
+        {"index": 16, "name": "flushDebugLogs", "assetDomainId": "diag", "tier": 3, "observedSymbol": "gqe"},
+        {"index": 17, "name": "debugLogPath", "assetDomainId": "diag", "tier": 3, "observedSymbol": "SMe"},
+        {"index": 18, "name": "isDebugMode", "assetDomainId": "diag", "tier": 3, "observedSymbol": "R7"},
+        {"index": 19, "name": "isDebugToStderr", "assetDomainId": "diag", "tier": 3, "observedSymbol": "N5"},
+        {"index": 20, "name": "telemetryEvent", "assetDomainId": "diag", "tier": 3, "observedSymbol": "M", "observedOffset": 225512906},
+        {"index": 21, "name": "telemetryEventAsync", "assetDomainId": "diag", "tier": 3, "observedSymbol": "lb"},
+        {"index": 22, "name": "analyticsStateFactory", "assetDomainId": "diag", "tier": 3, "observedSymbol": "PAl"},
+        {"index": 23, "name": "attachTelemetrySink", "assetDomainId": "diag", "tier": 3, "observedSymbol": "SEi"}
+      ]
+    },
+    {
+      "id": "d2",
+      "numericId": 2,
+      "name": "provider-app-state",
+      "abiVersion": 1,
+      "assetDomainIds": ["app"],
+      "lifecycle": "provider",
+      "sensitivity": "decision",
+      "risk": "critical",
+      "slotOrderFrozen": true,
+      "presenceBitmapRequired": true,
+      "safePublication": "Tier 1 clones and freezes selected slices; Tier 2 subscriptions are unregisterable; setState is unsafe only.",
+      "unsafeGate": "Exact target/build negotiation and unsafeRaw true; normal facade never answers dialogs or exposes test reset methods.",
+      "supplier": {
+        "status": "planned",
+        "preferred": "Inside AppStateProvider dR after let[H1]=z3.useState(oYy).",
+        "coLocationOption": "For REPL-only availability, use the d4 Ahl capture with store at and setter Le; add the provider site only when early/all-mode availability is required."
+      },
+      "observations": [
+        {"offset": 238631021, "symbol": "wYs", "meaning": "static app-store API landmark"},
+        {"offset": 238631180, "symbol": "Ve", "meaning": "state selector hook"},
+        {"offset": 238631295, "symbol": "bo", "meaning": "setter hook"},
+        {"offset": 238631331, "symbol": "_c", "meaning": "store hook"},
+        {"offset": 238804272, "symbol": "Gae", "meaning": "default state factory"},
+        {"offset": 238807399, "symbol": "dR", "meaning": "AppStateProvider"},
+        {"offset": 242611887, "symbol": "sM", "meaning": "dialog store"}
+      ],
+      "slots": [
+        {"index": 0, "name": "liveAppStore", "assetDomainId": "app", "tier": 3, "observedSymbol": "H1-or-at"},
+        {"index": 1, "name": "dialogStore", "assetDomainId": "app", "tier": 3, "observedSymbol": "sM", "observedOffset": 242611887},
+        {"index": 2, "name": "getState", "assetDomainId": "app", "tier": 3, "source": "liveAppStore.getState"},
+        {"index": 3, "name": "setState", "assetDomainId": "app", "tier": 3, "source": "liveAppStore.setState or REPL Le"},
+        {"index": 4, "name": "subscribe", "assetDomainId": "app", "tier": 3, "source": "liveAppStore.subscribe"},
+        {"index": 5, "name": "defaultStateFactory", "assetDomainId": "app", "tier": 3, "observedSymbol": "Gae", "observedOffset": 238804272}
+      ]
+    },
+    {
+      "id": "d3",
+      "numericId": 3,
+      "name": "render-messages-pipeline",
+      "abiVersion": 1,
+      "assetDomainIds": ["msg"],
+      "lifecycle": "render-latest",
+      "sensitivity": "content",
+      "risk": "high",
+      "slotOrderFrozen": true,
+      "presenceBitmapRequired": true,
+      "safePublication": "Tier 1 publishes counts and explicitly requested bounded redacted clones; React-owned arrays and refs remain Tier 3.",
+      "unsafeGate": "Exact target/build negotiation and unsafeRaw true; consumers treat all arrays and refs as stale after replacement.",
+      "supplier": {
+        "status": "planned",
+        "function": "lzb",
+        "functionOffset": 241694130,
+        "placement": "Immediately after Ze is assigned, the first clean point where all declared stages and cap metadata coexist.",
+        "coLocation": "Same function as policy domain 0, but the policy is earlier and capture is later; do not force one mega-replacement if it increases blast radius."
+      },
+      "slots": [
+        {"index": 0, "name": "rawMessages", "assetDomainId": "msg", "tier": 3, "observedSymbol": "e"},
+        {"index": 1, "name": "normalizedMessages", "assetDomainId": "msg", "tier": 3, "observedSymbol": "Ee"},
+        {"index": 2, "name": "collapsedBase", "assetDomainId": "msg", "tier": 3, "observedSymbol": "Ue"},
+        {"index": 3, "name": "postToolStatsMessages", "assetDomainId": "msg", "tier": 3, "observedSymbol": "at"},
+        {"index": 4, "name": "finalRenderedMessages", "assetDomainId": "msg", "tier": 3, "observedSymbol": "Ze"},
+        {"index": 5, "name": "preNormalizationCapStart", "assetDomainId": "msg", "tier": 3, "observedSymbol": "te", "observedOffset": 241695167},
+        {"index": 6, "name": "preCapAnchorRef", "assetDomainId": "msg", "tier": 3, "observedSymbol": "ce"},
+        {"index": 7, "name": "finalCapAnchorRef", "assetDomainId": "msg", "tier": 3, "observedSymbol": "se"},
+        {"index": 8, "name": "hasTruncatedMessages", "assetDomainId": "msg", "tier": 3, "observedSymbol": "ze"},
+        {"index": 9, "name": "hiddenMessageCount", "assetDomainId": "msg", "tier": 3, "observedSymbol": "nt"},
+        {"index": 10, "name": "virtualScrollActive", "assetDomainId": "msg", "tier": 3, "observedSymbol": "re"},
+        {"index": 11, "name": "effectiveCapRows", "assetDomainId": "msg", "tier": 3, "observedSymbol": "oe"},
+        {"index": 12, "name": "screen", "assetDomainId": "msg", "tier": 3, "observedSymbol": "l"},
+        {"index": 13, "name": "showAllInTranscript", "assetDomainId": "msg", "tier": 3, "observedSymbol": "u"},
+        {"index": 14, "name": "disableRenderCap", "assetDomainId": "msg", "tier": 3, "observedSymbol": "H"},
+        {"index": 15, "name": "renderRange", "assetDomainId": "msg", "tier": 3, "observedSymbol": "L"}
+      ],
+      "excludedEphemeralLocals": [
+        {"name": "finalCapStart", "observedSymbol": "He", "reason": "It exists only inside the Ze memo callback; derive diagnostics from at, Ze, se, and Xhf instead of manifesting it."}
+      ]
+    },
+    {
+      "id": "d4",
+      "numericId": 4,
+      "name": "render-repl-controls",
+      "abiVersion": 1,
+      "assetDomainIds": ["repl", "app"],
+      "lifecycle": "render-latest",
+      "sensitivity": "content",
+      "risk": "critical",
+      "slotOrderFrozen": true,
+      "presenceBitmapRequired": true,
+      "safePublication": "Tier 1 exposes state/catalog snapshots; Tier 2 exposes validated redraw/toggle/show-all/whitelisted dispatch; submit and raw setters remain Tier 3.",
+      "unsafeGate": "Exact target/build negotiation and unsafeRaw true; prompt, slash, bash, store, setter, and callback handles never appear in status.",
+      "supplier": {
+        "status": "planned",
+        "function": "Ahl",
+        "functionOffset": 245816318,
+        "placement": "Adjacent to or immediately before OGt construction, after store, state, commands, tools, submit, agents, and refs all exist.",
+        "coLocation": "May supply d2 for REPL-only app-store access. Hui is not a sufficient broad REPL supplier because it lacks commands, tools, and submit."
+      },
+      "observations": [
+        {"offset": 245818985, "text": "[lr,It]", "meaning": "screen state"},
+        {"offset": 245819015, "text": "[fr,Ot]", "meaning": "show-all state"},
+        {"offset": 245819039, "text": "[Cr,yr]", "meaning": "disable-cap/dump state"},
+        {"offset": 245834983, "text": "ug=nnp", "meaning": "current view"},
+        {"offset": 245865944, "text": "let rU=", "meaning": "submit callback"},
+        {"offset": 245893878, "text": "let OGt={screen:", "meaning": "late compact control props"}
+      ],
+      "slots": [
+        {"index": 0, "name": "appStore", "assetDomainId": "app", "tier": 3, "observedSymbol": "at"},
+        {"index": 1, "name": "appSetter", "assetDomainId": "app", "tier": 3, "observedSymbol": "Le"},
+        {"index": 2, "name": "currentView", "assetDomainId": "repl", "tier": 3, "observedSymbol": "ug"},
+        {"index": 3, "name": "screen", "assetDomainId": "repl", "tier": 3, "observedSymbol": "lr"},
+        {"index": 4, "name": "setScreen", "assetDomainId": "repl", "tier": 3, "observedSymbol": "It"},
+        {"index": 5, "name": "showAllInTranscript", "assetDomainId": "repl", "tier": 3, "observedSymbol": "fr"},
+        {"index": 6, "name": "setShowAllInTranscript", "assetDomainId": "repl", "tier": 3, "observedSymbol": "Ot"},
+        {"index": 7, "name": "disableRenderCap", "assetDomainId": "repl", "tier": 3, "observedSymbol": "Cr"},
+        {"index": 8, "name": "setDisableRenderCap", "assetDomainId": "repl", "tier": 3, "observedSymbol": "yr"},
+        {"index": 9, "name": "commands", "assetDomainId": "repl", "tier": 3, "observedSymbol": "Dn"},
+        {"index": 10, "name": "submit", "assetDomainId": "repl", "tier": 3, "observedSymbol": "rU", "observedOffset": 245865944},
+        {"index": 11, "name": "tools", "assetDomainId": "repl", "tier": 3, "observedSymbol": "_o"},
+        {"index": 12, "name": "agentDefinitions", "assetDomainId": "repl", "tier": 3, "observedSymbol": "ee"},
+        {"index": 13, "name": "scrollRef", "assetDomainId": "repl", "tier": 3, "observedSymbol": "Py"},
+        {"index": 14, "name": "jumpSearchRef", "assetDomainId": "repl", "tier": 3, "observedSymbol": "Gr"},
+        {"index": 15, "name": "toggleProps", "assetDomainId": "repl", "tier": 3, "observedSymbol": "OGt", "observedOffset": 245893878}
+      ]
+    },
+    {
+      "id": "d5",
+      "numericId": 5,
+      "name": "provider-keybindings",
+      "abiVersion": 1,
+      "assetDomainIds": ["key"],
+      "lifecycle": "provider",
+      "sensitivity": "decision",
+      "risk": "critical",
+      "slotOrderFrozen": true,
+      "presenceBitmapRequired": true,
+      "safePublication": "Tier 1 exposes cloned catalogs; Tier 2 uses provider-mediated registration/invocation; mutable maps and refs remain Tier 3.",
+      "unsafeGate": "Exact target/build negotiation and unsafeRaw true; raw invocation is never network exposed.",
+      "supplier": {
+        "status": "planned",
+        "function": "tQr",
+        "functionOffset": 231293190,
+        "placement": "Immediately after tp_ is assembled and before c9u/tp_ is passed to dgo.Provider; publish live refs rather than copied registries."
+      },
+      "observations": [
+        {"offset": 231294286, "text": "tp_={", "meaning": "assembled manager object"},
+        {"offset": 231295362, "text": "function Pn", "meaning": "action registration hook"}
+      ],
+      "slots": [
+        {"index": 0, "name": "manager", "assetDomainId": "key", "tier": 3, "observedSymbol": "tp_"},
+        {"index": 1, "name": "bindings", "assetDomainId": "key", "tier": 3, "observedSymbol": "lut"},
+        {"index": 2, "name": "handlerRegistryRef", "assetDomainId": "key", "tier": 3, "observedSymbol": "i9u"},
+        {"index": 3, "name": "preDispatchRef", "assetDomainId": "key", "tier": 3, "observedSymbol": "Ggs"},
+        {"index": 4, "name": "keyHandlerRegistry", "assetDomainId": "key", "tier": 3, "observedSymbol": "s9u"},
+        {"index": 5, "name": "activeContexts", "assetDomainId": "key", "tier": 3, "observedSymbol": "r9u"},
+        {"index": 6, "name": "pendingChordRef", "assetDomainId": "key", "tier": 3, "observedSymbol": "Z4u"},
+        {"index": 7, "name": "setPendingChord", "assetDomainId": "key", "tier": 3, "observedSymbol": "t9u"},
+        {"index": 8, "name": "pendingChord", "assetDomainId": "key", "tier": 3, "observedSymbol": "e9u"}
+      ]
+    }
+  ],
+  "physicalSitePlan": {
+    "status": "planned-pending-byte-fit-prototype",
+    "policyQuerySites": 5,
+    "rawCaptureDomains": 6,
+    "expectedUniqueBridgeSites": {"minimum": 8, "maximum": 10},
+    "policyLayout": [
+      "One early lzb query for show-all and both cap decisions; transcript JSX props stay stock.",
+      "One CXr query for atomic row-zero/destructive reset intent; Hms stays stock if proven safe.",
+      "One Hui Ctrl+O query authorizing binary-owned oFS scheduling.",
+      "One wide-enough SZc tail query with exact precomputed stock fallback.",
+      "One ite query replacing only the first explicit Xrd gate."
+    ],
+    "rawSupplierInventory": [
+      "d0 model/context/subagent statics near Ydt, one or two sites",
+      "d1 Ink statics/map near T3u/Ju_, with dialog/diagnostics folded where safe",
+      "d2 AppStateProvider only when non-REPL/early store availability is required",
+      "d3 Messages latest capture after Ze",
+      "d4 core REPL latest capture near OGt, optionally supplying d2",
+      "d5 keybinding provider capture after tp_"
+    ],
+    "coLocationRules": [
+      "d3 and policy domain 0 share lzb but may remain separate early/late replacements.",
+      "d2 may co-locate with d4 for REPL-only app-store access.",
+      "d0 may share neighborhoods with policy domains 3 or 4 only after scope and byte-fit proof.",
+      "d1 may share the reset neighborhood only if raw publication does not enlarge terminal-policy blast radius.",
+      "Policy domain 2 in Hui cannot replace the broad d4 Ahl capture."
+    ],
+    "sixthPolicySiteFallback": "Only after proof: split Messages into show-all plus shared-cap queries, or add terminal.clearMode to preserve atomic reset pairing.",
+    "noGo": "If destructive clear can partially enable without row-zero replay, or both consolidations fail and require uncontrolled policy-site expansion, reject the prototype rather than silently shipping seven or nine policy patches.",
+    "rule": "Do not force a mega-payload merely to lower site count."
+  },
+  "unsafeRawGate": {
+    "manifestFlag": "unsafeRaw",
+    "requiredValue": true,
+    "targetObject": "requirements.target",
+    "exactMatches": [
+      "requirements.target.version equals the verified target version",
+      "requirements.target.stockSha256 equals the separately verified stock provenance SHA-256 or approved signature-independent stock __BUN hash",
+      "requirements.target.artifactSha256 equals the independently computed SHA-256 of the actual verified executable target",
+      "requirements.target.bridgeBuildId equals the signed RELEASE bridge build ID",
+      "apiVersions.bridgeAbi",
+      "apiVersions.rawSlotApi",
+      "capture domain abiVersion"
+    ],
+    "artifactAndStockAreIndependent": true,
+    "transport": "same-process trusted local extension only",
+    "deniedBehavior": "Omit unsafe entirely while leaving compatible Tier 1 and Tier 2 capabilities available.",
+    "neverAutomatic": true,
+    "neverNetworkExposed": true,
+    "statusMayExposeRawValues": false,
+    "projectAutoloadAllowed": false
+  },
+  "lifecycleRules": {
+    "static": "Generation 0; identical recapture is a no-op, conflicting replacement is rejected.",
+    "provider": "Generation-monotonic atomic replace; cleanup token removes only its own generation; stale actions fail closed.",
+    "render-latest": "Strictly increasing generation on every render; release previous arrays, refs, closures, and object graphs immediately; unmount cleanup is generation-safe.",
+    "lookup-live": "Publish the stable map or registry, then resolve the current live instance on demand rather than retaining it in Tier 1.",
+    "boundedness": "At most one current capture for each d0-d5 domain; slot omission uses the declared presence bitmap and never shifts later indexes.",
+    "staleAction": "Return unavailable/stale and perform no mutation, dispatch, submission, dialog operation, or terminal write."
+  },
+  "securityRules": [
+    "Policy payloads and results are primitives only; no callback, setter, Ink instance, renderer object, resolver function, or raw graph crosses q.",
+    "The bridge facade exposes no eval and no arbitrary method dispatch.",
+    "Bootstrap and extension paths are explicit absolute user-owned regular files under the user's home, with parent-symlink and group/world-write checks.",
+    "Never discover or autoload code from the current project, .claude directories, package metadata, or relative module names.",
+    "Delete BUN_OPTIONS immediately, scrub child preload state, reject ambient BUN_OPTIONS in normal mode, and preserve exact-target --renderpatch-safe.",
+    "The candidate wrapper rejects ambient CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID, CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256, and CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION; hardcodes their verified values only for normal launch; and scrubs them from status, safe-mode, and child paths.",
+    "Bootstrap captures the three one-shot bridge metadata values and immediately deletes all three environment names before extension loading.",
+    "Signed artifact activation requires the signed RELEASE build ID and target version plus an independently computed actual-target SHA-256 equal to the wrapper-supplied artifact SHA-256; stock-lab path/size compatibility is test-only.",
+    "Tier 1 returns cloned, frozen, bounded, and redacted snapshots and never returns live mutable objects.",
+    "Tier 2 validates arguments, checks current generation/liveness, uses command/action allowlists, and fails closed when stale.",
+    "Tier 3 requires explicit unsafeRaw and exact target/build/ABI negotiation; raw messages, stores, setters, terminal instances, submit callbacks, dialog controls, and handler refs never appear in status or logs.",
+    "Normal facades never answer or bypass user-facing dialogs or permissions, and test-only reset methods remain excluded.",
+    "Status exposes only versions, domains, lifecycle, generation, slot presence bitmap/count, and health metadata; never handlers, values, payload history, credentials, or content-bearing paths.",
+    "Extension registration is transactional; numeric/readable alias collision or duplicate ownership rejects the whole extension.",
+    "Full-redraw is the only atomic multi-domain feature; context-window and subagent-routing failures do not disable each other.",
+    "Capture return values are ignored. Raw publication cannot alter Claude Code lexical control flow.",
+    "Patched-without-preload, bootstrap-only, partial/incompatible/throwing policy, and safe mode all preserve stock behavior and emit zero renderpatch ED3."
+  ],
+  "observedStockAnchors": [
+    {"assetDomainId": "mc", "symbol": "ww", "offset": 225789193, "anchor": "function ww"},
+    {"assetDomainId": "mc", "symbol": "Hl", "offset": 227908447, "anchor": "function Hl"},
+    {"assetDomainId": "mc", "symbol": "HH", "offset": 227918015, "anchor": "function HH"},
+    {"assetDomainId": "mc", "symbol": "lo", "offset": 227931600, "anchor": "function lo"},
+    {"assetDomainId": "mc", "symbol": "Ei", "offset": 227933508, "anchor": "function Ei"},
+    {"assetDomainId": "mc", "symbol": "JE", "offset": 228834160, "anchor": "function JE"},
+    {"assetDomainId": "mc", "symbol": "SZc", "offset": 228834423, "anchor": "function SZc"},
+    {"assetDomainId": "sr", "symbol": "ite", "offset": 232657409, "anchor": "function ite"},
+    {"assetDomainId": "sr", "symbol": "Qrd", "offset": 232658032, "anchor": "function Qrd"},
+    {"assetDomainId": "sr", "symbol": "Jrd", "offset": 232658874, "anchor": "function Jrd"},
+    {"assetDomainId": "sr", "symbol": "Xrd", "offset": 232658974, "anchor": "function Xrd"},
+    {"assetDomainId": "msg", "symbol": "lzb", "offset": 241694130, "anchor": "lzb=("},
+    {"assetDomainId": "repl", "symbol": "Hui", "offset": 243071716, "anchor": "function Hui"},
+    {"assetDomainId": "repl", "symbol": "Ahl", "offset": 245816318, "anchor": "function Ahl"},
+    {"assetDomainId": "app", "symbol": "Gae", "offset": 238804272, "anchor": "function Gae"},
+    {"assetDomainId": "app", "symbol": "dR", "offset": 238807399, "anchor": "function dR"},
+    {"assetDomainId": "app", "symbol": "sM", "offset": 242611887, "anchor": "sM={getState"},
+    {"assetDomainId": "ink", "symbol": "xd", "offset": 230930643, "anchor": "xd=fa_"},
+    {"assetDomainId": "ink", "symbol": "Oms", "offset": 231132162, "anchor": "function Oms"},
+    {"assetDomainId": "ink", "symbol": "_Xr", "offset": 231132222, "anchor": "function _Xr"},
+    {"assetDomainId": "ink", "symbol": "Hms", "offset": 231135081, "anchor": "function Hms"},
+    {"assetDomainId": "ink", "symbol": "Rhs", "offset": 231165676, "anchor": "class Rhs"},
+    {"assetDomainId": "ink", "symbol": "CXr", "offset": 231170016, "anchor": "function CXr"},
+    {"assetDomainId": "ink", "symbol": "Qsr", "offset": 231221157, "anchor": "class Qsr"},
+    {"assetDomainId": "key", "symbol": "tQr", "offset": 231293190, "anchor": "function tQr"},
+    {"assetDomainId": "diag", "symbol": "M", "offset": 225512906, "anchor": "function M"},
+    {"assetDomainId": "diag", "symbol": "w", "offset": 225937669, "anchor": "function w"}
+  ]
+}
