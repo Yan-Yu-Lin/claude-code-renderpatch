@@ -179,8 +179,11 @@ uv run verify/bridge-static-2.1.226.py
 uv run verify/raw-capture-behavior-2.1.226.py
 ```
 
-The immutable release lives at
-`~/.local/share/claude-renderpatch/releases/2.1.226-internal-sdk-2.1.226.1-60901a7b/`.
+The current immutable launcher release lives at
+`~/.local/share/claude-renderpatch/releases/2.1.226-internal-sdk-2.1.226.1-60901a7b-herdr1/`.
+The `herdr1` packaging revision uses Herdr's process-scoped `HERDR_AGENT=claude` hint when
+`HERDR_ENV=1`; it does not rename or replace the Bash interpreter. The original
+`2.1.226-internal-sdk-2.1.226.1-60901a7b` release remains usable as a rollback artifact.
 The installer defaults to `~/.local/bin/claude-renderpatch-candidate`; a stable local alias such
 as `claude-bridge` may point at the same immutable launcher. The 2.1.226 port uses eight physical
 ranges, with capture domain d2 co-located with d4 in the late REPL supplier. Normal mode verifies

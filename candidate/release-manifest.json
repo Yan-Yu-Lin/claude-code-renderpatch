@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "releaseId": "2.1.226-internal-sdk-2.1.226.1-60901a7b",
+  "releaseId": "2.1.226-internal-sdk-2.1.226.1-60901a7b-herdr1",
   "product": "Claude Code",
   "targetVersion": "2.1.226",
   "bridgeBuildId": "internal-sdk-2.1.226.1",

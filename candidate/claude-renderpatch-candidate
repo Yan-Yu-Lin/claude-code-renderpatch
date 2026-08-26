@@ -3,14 +3,14 @@
 
 set -euo pipefail
 
-# Herdr identifies the foreground process-group leader. Re-exec this Bash
-# wrapper with a Claude argv[0] so child MCP servers cannot override it.
-if [[ "${HERDR_ENV:-}" == "1" && "${CLAUDE_MIX_HERDR_ARGV0:-}" != "1" ]]; then
-  export CLAUDE_MIX_HERDR_ARGV0=1
-  exec -a claude /bin/bash "$0" "$@"
+# Herdr supports process-scoped agent hints for wrappers whose executable name
+# differs from the agent they launch. Keep the hint local to this launcher and
+# its children; never export it from the user's shell profile.
+if [[ "${HERDR_ENV:-}" == "1" ]]; then
+  export HERDR_AGENT=claude
 fi
 
-RELEASE_ID="2.1.226-internal-sdk-2.1.226.1-60901a7b"
+RELEASE_ID="2.1.226-internal-sdk-2.1.226.1-60901a7b-herdr1"
 TARGET_VERSION="2.1.226"
 BRIDGE_BUILD_ID="internal-sdk-2.1.226.1"
 TARGET_SHA256="60901a7b9a1259ff1113ef6ce8e8f49fbdc4f5a8fa4cde3cc9249ddcb2d50bb9"
@@ -19,7 +19,7 @@ SHARED_EXTENSION_SHA256="3ac015a3765800e843377008266cc548c4ccf145c6494a667110a8b
 DEFAULT_EXTENSION_SHA256="36bc0a4d709327dcd9b10905c8bcac65c9e2e1b3290e64982ef95210f31d59ac"
 DIAGNOSTIC_EXTENSION_SHA256="d78a89d6e0c466f4816efa654fb35831160354637218e8c722379b4849b18641"
 INTERNAL_MANIFEST_SHA256="b38dc8c3b4f07bb36902add1d39c17a6ce0713c0bbdcefed0e64ca0821249f64"
-RELEASE_MANIFEST_SHA256="ad74cfe7bf306625ee6c600758a6d3c9d2b89c2ade9f036f662b737dd3d5742d"
+RELEASE_MANIFEST_SHA256="f2b8231267d2908cd44ed387be0e6cd9603a2f3bcde38416cb1a206aa86a758b"
 TRUST_HELPER_SHA256="72fd2d30e9ea844c03e3bf19dc19cc2f56b16748f63a84958a6a2291357d877c"
 MARKER_CONTENT="$RELEASE_ID $RELEASE_MANIFEST_SHA256"
 
