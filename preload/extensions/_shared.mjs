@@ -21,9 +21,9 @@ export function rendererReset(_fallback, _reason, altScreen) {
   return !altScreen
 }
 
-export function rendererToggleRedraw(_fallback, enteringTranscript) {
-  // The binary owns oFS and the 50 ms timer; policy only authorizes enter redraws.
-  return enteringTranscript
+export function rendererToggleRedraw() {
+  // Enter and exit both need one authoritative replay after the screen changes.
+  return true
 }
 
 export function providerContextWindow(fallback, canonicalModel) {

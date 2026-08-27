@@ -1,30 +1,25 @@
 # claude-code-renderpatch
+Version-pinned renderer, provider-context, and explicit subagent-routing patches for Claude Code.
+The current verified bridge targets **Claude Code 2.1.246 on Linux x64**.
 
-Version-pinned binary patches for Claude Code's terminal renderer, claude-mix context
-windows, and explicit subagent model routing. The current internal-SDK bridge targets
-**2.1.226**; the older 2.1.219 direct-patch recipe remains as a rediscovery reference.
+Claude Code 2.1.245+ stores the application as a Bun ESM chunk graph rather than one readable
+monolithic bundle. The Linux build therefore extracts all 1,576 embedded records, rewrites graph
+paths, patches eight semantic sites in seven source modules, and runs the result with an immutable
+bundled Bun 1.4.0 runtime. The official stock ELF remains unchanged.
 
-The stock `claude` is a Bun-compiled Mach-O containing readable minified JavaScript in
-its `__BUN` segment. The renderer combines bounded React/Ink frames with preserved native
-terminal scrollback, making Ctrl+O omit old messages, leaving expanded rows behind after
-collapse, and preserving stale wrapping across width changes.
+Historical recipes remain for rediscovery:
 
-Two recipes are retained:
-
-- **V1** (`install_patch.sh`): expand-only; installs `claude-full-history`.
-- **V2 / recommended** (`patches/full-redraw.sh`): complete expand/collapse plus
-  destructive row-zero replay on resize; installs `claude-full-redraw`.
-
-All recipes use **same-length byte patches** inside the embedded `__BUN` JavaScript
-bundle, followed by an entitlement-preserving ad-hoc re-sign. The original binary is
-never modified.
+- **V1** (`install_patch.sh`): 2.1.219 expand-only macOS patch.
+- **V2** (`patches/full-redraw.sh`): 2.1.219 cumulative macOS byte patch.
+- **Current Linux source release** (`tools/build-source-release-2.1.246-linux.py`): complete
+  expand/collapse/resize replay, provider-aware context windows, capture domains d0-d5, and
+  explicit subagent model routing.
 
 ## Developer and extension documentation（繁體中文）
 
-本 repo 現在提供獨立 **2.1.226 internal-SDK candidate**；既有 developer-facing 文件主要仍是
-2.1.220 的完整設計圖，
-涵蓋 runtime API、safe reads/actions、exact-version unsafe access、目前缺口、bridge 維護，
-以及 version-pinned Banner renderer 研究：
+本 repo 現在提供已在本機驗證的 **2.1.246 Linux x64 source-graph internal-SDK release**。
+既有 2.1.220/2.1.226 文件仍保留為 runtime API 與 raw-slot 設計歷史；目前 release 狀態以
+[`docs/PROJECT-STATUS.md`](docs/PROJECT-STATUS.md) 為準。
 
 - **從這裡開始：** [`docs/README.md`](docs/README.md)
 - **目前已驗證與未完成狀態：** [`docs/PROJECT-STATUS.md`](docs/PROJECT-STATUS.md)
@@ -32,11 +27,9 @@ never modified.
 - **撰寫 user extension：** [`docs/extensions/getting-started.md`](docs/extensions/getting-started.md)
 - **Banner/Clawd internals：** [`docs/internals/BANNER-RENDERER-2.1.220.md`](docs/internals/BANNER-RENDERER-2.1.220.md)
 
-2.1.219 cumulative direct-patch recipe 與 2.1.226 internal-SDK candidate 是兩條不同路徑。
-後者已在本機 macOS arm64 驗證；exact port record 見
-[`reference/bridge-intent-2.1.226.md`](reference/bridge-intent-2.1.226.md)。它尚未 merge 到
-`main`、沒有公開 GitHub release/PR，
-fresh clone 也不包含 `candidate/install.sh` 所需、被 gitignore 的 signed candidate artifact。
+2.1.246 Linux release 不修改 stock executable；它從 exact stock SHA-256 建置 immutable
+source graph，並由 release launcher 驗證全部 asset hashes。它是本機 verified release，
+不是公開 GitHub binary distribution。
 
 ## What the patch changes
 
@@ -147,64 +140,50 @@ See [`reference/preload-runtime.md`](reference/preload-runtime.md) for the empir
 security boundary, update matrix, failed alternatives, and the recommended external-runtime
 plus minimal-internal-bridge architecture.
 
-## Immutable 2.1.226 internal-SDK candidate
+## Immutable 2.1.246 Linux x64 release
 
-The frozen 2.1.226 SDK bridge is available through one separate user-facing command:
-`claude-renderpatch-candidate`. It mirrors the existing multi-provider proxy, settings overlay,
-provider note, and model-restoration behavior without calling or changing `claude-mix`.
-Normal `claude`, `claude-mix`, and `claude-preload-lab` remain independent.
+Build directly into a versioned immutable directory:
 
 ```bash
-# Install the exact signed candidate and its runtime assets.
-./candidate/install.sh
+python3 tools/build-source-release-2.1.246-linux.py \
+  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.246-internal-sdk-linux-x64.6"
 
-# Verify release/build/hash/capability metadata without enabling the preload.
-claude-renderpatch-candidate --renderpatch-status
-
-# Run through the multi-provider overlay with the default SDK policies.
-claude-renderpatch-candidate --version
-
-# Keep defaults active, then load one explicit trusted user extension.
-claude-renderpatch-candidate \
-  --renderpatch-extension "$HOME/path/to/my-extension.mjs" --version
-
-# Prove the signed bridge gate, default policies, and child environment cleanup.
-claude-renderpatch-candidate --renderpatch-diagnose
-
-# Use the same exact patched target and multi-provider arguments without any preload.
-claude-renderpatch-candidate --renderpatch-safe --version
-
-# Verify exact ranges, policy/capture domains, signing, fallback, and lifecycle behavior.
-uv run verify/bridge-static-2.1.226.py
-uv run verify/raw-capture-behavior-2.1.226.py
+python3 tools/build-source-release-2.1.246-linux.py --verify \
+  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.246-internal-sdk-linux-x64.6"
 ```
 
-The current immutable launcher release lives at
-`~/.local/share/claude-renderpatch/releases/2.1.226-internal-sdk-2.1.226.1-60901a7b-herdr1/`.
-The `herdr1` packaging revision uses Herdr's process-scoped `HERDR_AGENT=claude` hint when
-`HERDR_ENV=1`; it does not rename or replace the Bash interpreter. The original
-`2.1.226-internal-sdk-2.1.226.1-60901a7b` release remains usable as a rollback artifact.
-The installer defaults to `~/.local/bin/claude-renderpatch-candidate`; a stable local alias such
-as `claude-bridge` may point at the same immutable launcher. The 2.1.226 port uses eight physical
-ranges, with capture domain d2 co-located with d4 in the late REPL supplier. Normal mode verifies
-ownership, restrictive modes, the release manifest, code signature, and exact SHA-256 for the
-candidate/bootstrap/extensions/helpers/manifests before setting one-shot preload and bridge
-metadata. The proxy key and settings overlay must be user-owned, symlink-free `0600` files;
-the TCP 8317 listener must be the current user's Homebrew `cliproxyapi`, and its bearer header
-is supplied to curl over standard input rather than argv. Preload metadata is set only after
-release/file checks, proxy startup, and the previous-model snapshot, then scrubbed immediately
-when the target returns.
-`--renderpatch-extension` is consumed by the wrapper, never forwarded to Claude, and accepts
-only an explicit absolute user-owned regular module under the user's home with no symlink or
-writable path component. Immutable defaults activate first; a user-module throw/rejection is
-reported and skipped without disabling them. The first `--` ends wrapper-option parsing, so
-all later tokens are forwarded verbatim and can never activate renderpatch options. No
-current-directory or project code is discovered. Safe mode ignores the extension option,
-verifies the same patched target, and scrubs all
-preload/renderpatch state. Remove only this managed release with
-`candidate/install.sh --uninstall`.
+The verified local release is:
 
-## Install
+```text
+release_id=2.1.246-internal-sdk-linux-x64-7ebd85a5
+bridge_build_id=internal-sdk-2.1.246-linux-x64.6
+identity_sha256=a4daf31c711a640ef9e9693f494fc74e048a472e951d4546fcfd5e1f268b647e
+```
+
+`~/.local/bin/claude-renderpatch-2.1.246` points to that immutable launcher, and
+`~/.local/bin/claude-bridge` uses it by default while retaining the explicit stock fallback:
+
+```bash
+claude-bridge --renderpatch-status
+claude-bridge --renderpatch-safe --version
+CLAUDE_BRIDGE_BIN="$HOME/.local/bin/claude" claude-bridge --version
+```
+
+The release contains the extracted graph, three native N-API modules, Bun 1.4.0, bootstrap,
+default extensions, an asset hash list, and a release identity file. Files are read-only and
+directories are non-writable. Normal launch rejects inherited preload/bridge metadata, verifies
+all release hashes, then activates policies 0-4. Safe mode runs the same patched graph without
+the preload; every source bridge falls back to stock behavior.
+
+Verified behavior on Linux 2.1.246:
+
+- Ctrl+O expansion, collapse, and resize replay all loaded transcript anchors;
+- authoritative phases emit ED2 and ED3 from row zero;
+- policy domains 0-4 and capture domains d0-d5 are live;
+- collision/non-callable/throwing bridge fallbacks remain non-fatal;
+- parent `gpt-5.6-luna` explicit `opus` subagent resolves to `claude-opus-5` through the real proxy.
+
+## Historical 2.1.219 install
 
 Recommended 2.1.219 cumulative build (seven render edits + mix-window + routing fix,
 one final codesign):
@@ -225,37 +204,23 @@ The original expand-only build remains reproducible with:
 bash install_patch.sh
 ```
 
-## Uninstall
+## Historical 2.1.219 uninstall
 
 ```bash
 trash ~/.local/bin/claude-full-history ~/.local/share/claude/patched
 ```
 
-## Other platforms (Linux / Windows)
+## Other platforms
 
-The prebuilt scripts here target **macOS / Apple Silicon (arm64)**. But the fix is not
-macOS-specific: Claude Code ships a separate native binary per platform, and the *same*
-minified JavaScript app is bundled inside all of them — only the outer runtime wrapper
-(Mach-O vs ELF vs PE) differs. So the patch sites, and very likely the exact byte
-patterns, are the same for a given version on Linux and Windows; only the packaging
-around them changes.
+- **Linux x64:** implemented and locally verified for 2.1.246. The supported path is source-graph
+  extraction plus a bundled Bun runtime, not in-place ELF byte mutation.
+- **macOS arm64:** the historical 2.1.219 byte recipes and 2.1.226 internal-SDK candidate remain
+  reference implementations.
+- **Windows:** not packaged or verified. The same semantic sites should exist, but PE extraction,
+  runtime packaging, and ConPTY verification still need a dedicated port.
 
-The per-OS differences are small, and an AI agent following [`REPATCHING-PLAYBOOK.md`](REPATCHING-PLAYBOOK.md)
-should be able to fill them in without much trouble:
-
-- **Linux** — *easier* than macOS. ELF binaries have no code signature, so you skip the
-  re-signing step entirely: patch the bytes in place and run.
-- **Windows** — doable. Windows will run a modified binary, so it's mostly a matter of
-  adapting the signing step (invalidated Authenticode is not a hard block the way macOS
-  Gatekeeper is).
-- **Verification** — [`verify/pty-harness.py`](verify/pty-harness.py) uses a Unix
-  pseudo-terminal (works on macOS/Linux as-is). On Windows an agent would adapt it to
-  ConPTY, or just verify interactively.
-
-These platforms are **untested by me** — but the hard part (locating the sites, deriving
-same-length replacements, confirming the render behavior) is identical everywhere and is
-exactly what the playbook + `reference/` docs cover. Point your agent at them and the
-platform gap should be straightforward to close.
+[`verify/pty-harness.py`](verify/pty-harness.py) runs unchanged on macOS/Linux. A Windows port
+needs equivalent ConPTY phase capture and ED2/ED3 assertions.
 
 ## Routing-fix rediscovery after updates
 
@@ -302,10 +267,10 @@ Verification:
   preload, same-global, trust, failure, child-environment, and bypass tests.
 - [`verify/candidate-launcher-harness.py`](verify/candidate-launcher-harness.py) — immutable
   2.1.220-era single-command install, hash/mode, status, policy, safe-mode, conflict, and uninstall tests.
-- [`verify/bridge-static-2.1.226.py`](verify/bridge-static-2.1.226.py) — current exact-range,
-  policy/capture, signature, and version verification.
-- [`verify/raw-capture-behavior-2.1.226.py`](verify/raw-capture-behavior-2.1.226.py) — current
-  PTY fallback, collision, publication, replacement, and generation-safe clear verification.
+- [`tools/build-source-release-2.1.246-linux.py`](tools/build-source-release-2.1.246-linux.py) —
+  current Linux graph extraction, semantic patching, immutable packaging, and static verification.
+- [`verify/raw-capture-behavior-2.1.246-linux.py`](verify/raw-capture-behavior-2.1.246-linux.py) —
+  current Linux PTY fallback, collision, publication, replacement, and generation-safe clear verification.
 
 ## Known tradeoffs / limitations
 

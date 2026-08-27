@@ -1,100 +1,98 @@
 # 專案狀態
 
-本頁用明確分類說明目前已驗證範圍。這是本機 verified release candidate／prototype，不是公開發布的 SDK。
+本頁記錄目前本機 verified release；它不是公開發布的 SDK 或 GitHub binary release。
 
-## 本機驗證的 candidate 識別資訊
+## 本機 candidate 識別
 
 | 欄位 | 值 |
 |---|---|
-| Release ID | `2.1.220-internal-sdk-2.1.220.1-97dfb182` |
-| Claude Code | `2.1.220`, macOS arm64 |
+| Release ID | `2.1.246-internal-sdk-linux-x64-7ebd85a5` |
+| Claude Code | `2.1.246`, Linux x64 |
+| Bridge build | `internal-sdk-2.1.246-linux-x64.6` |
+| Identity SHA-256 | `a4daf31c711a640ef9e9693f494fc74e048a472e951d4546fcfd5e1f268b647e` |
+| Runtime | bundled Bun `1.4.0` |
 | Runtime API | `2` |
-| Legacy registry API | `1` |
 | Policy API | `2` |
 | Bridge ABI | `1` |
-| Raw slot API | `2.1.220.1` |
+| Raw slot API | `2.1.246-linux-x64.1` |
 | Policy | `0–4` |
 | Capture | `d0–d5` |
 
-精確 hash 與 asset metadata 以 [`candidate/release-manifest.json`](../candidate/release-manifest.json) 為準。
-
-目前狀態：
-
-- feature branch：`docs/internal-sdk-2.1.220-guide`；
-- 尚未 merge 到 `main`；
-- 沒有 GitHub PR；
-- 沒有 GitHub Release；
-- 本機有 locally installed immutable candidate，不代表已有 public distribution。
-
-Verification command 的責任不同：
-
-- `candidate/install.sh --verify`：獨立檢查 release artifact/layout/hash/mode/signature integrity，不依賴 normal multi-provider runtime environment。
-- `claude-renderpatch-candidate --renderpatch-status`：除了 release/assets verification，也會驗證本機 proxy key、settings overlay 與 listener/process environment；它不是純 artifact-only check。
-
-## 1. 本機已驗證可運作
-
-已在本機 candidate/prototype 驗證：Bun preload ordering、shared global、runtime/collision handling、policy `0–4`、capture `d0–d5`、default-first/user-second、safe read、validated actions、capture observe、env scrubbing、safe/status/diagnostic path，以及九個 bridge range 的 static/semantic/PTY verification。
-
-## 2. Exact-version unsafe 存取
-
-`activation.unsafe` 已實作，但只適用於 Claude Code `2.1.220`、bridge build `internal-sdk-2.1.220.1`、exact signed artifact、bridge ABI `1`、raw slot API `2.1.220.1` 與 manifest 明確要求的 capture ABI。
-
-它不是跨版本 API。Raw slots 可能含 conversation、store、setter、React refs、terminal controls、handler map 與 callback。
-
-## 3. 刻意拒絕的功能
-
-- `repl.dispatch` 固定回傳 `denied`。
-- 非 safe key allowlist 的 action 固定拒絕。
-- stale generation 不執行 mutation。
-- normal facade 不回答 dialog、不繞過 permission、不直接呼叫 raw handler。
-- project/CWD autoload 不允許。
-- unsafe negotiation 不完整時省略 `unsafe`。
-
-Safe key allowlist：
+安裝位置：
 
 ```text
-repl.toggleTranscript
-repl.showAll
-ink.redraw
+~/.local/share/claude-renderpatch/releases/2.1.246-internal-sdk-linux-x64.6/
+~/.local/bin/claude-renderpatch-2.1.246
+~/.local/bin/claude-bridge
 ```
 
-## 4. 實作缺口
+`claude-bridge` 預設使用 immutable renderpatch release；可用
+`CLAUDE_BRIDGE_BIN=~/.local/bin/claude` 明確回到 stock launcher。
 
-- `actions.list()` 包含 `app.subscribe` 與 `key.register`，但 generic `actions.invoke()` 無 callback/handler 參數；必須直接呼叫。
-- `read.sr.trace` 目前只是 `read.sr.preview` alias，不是完整 resolver trace。
-- `read.msg.snapshot` 實際是 bounded summary export，不回傳 raw message content。
-- `repl.dispatch` interface 已存在，但 allowlist/dispatch implementation 尚未開放。
+## 已驗證行為
 
-## 5. Packaging／release 缺口
+- 從 official stock ELF SHA-256
+  `1a0a662dc1bb938eaec38545abce9a4a69113d7d7f7c5e1a553ea276617b906a`
+  抽出 1,576 個 Bun records，保留 1,405 個 JavaScript modules 與 3 個 N-API modules。
+- 八個 semantic sites 套用於七個 source modules；stock executable 未修改。
+- Release launcher 驗證 identity、asset list、全部 graph/runtime/extension hashes 與唯讀 modes。
+- `--renderpatch-safe` 使用同一份 patched graph，但不載入 preload；bridge calls 全部回退 stock semantics。
+- Policy domains `0–4`：full-frame messages、destructive reset、toggle redraw、provider context window、explicit subagent routing。
+- Capture domains `d0–d5`：publication/replacement、generation-safe cleanup、collision/throwing/non-callable fallback 全部通過。
+- PTY 100x30 → 80x30：expand `10,962` bytes / ED2 `2` / ED3 `2`；collapse
+  `6,278` bytes / ED2 `1` / ED3 `1`；resize `5,662` bytes / ED2 `1` / ED3 `1`。
+- Expand、collapse、resize 都重播 `FIRST_RENDERPATCH_ANCHOR` 與 `LAST_RENDERPATCH_ANCHOR`。
+- 真實 proxy routing：parent `gpt-5.6-luna`，explicit `opus` subagent 的 API response model
+  為 `claude-opus-5`；最終結果 `SUBAGENT_ROUTE_OK`。
 
-- 目前沒有公開 release channel、相容性承諾或 package registry。
-- Git repository 不包含本機已驗證、被 ignore 的 signed candidate binary artifact。
-- 因此 **fresh clone 不能直接執行 `candidate/install.sh` 完成安裝**。
-- Fresh clone 必須先取得 exact stock Claude Code `2.1.220`，另外執行 build 流程產生被 `.gitignore` 排除的 patched/signed artifact，之後 installer 才有完整輸入。
-- Installer、launcher、manifest 與 build tools 的存在，不等於 clone 內含可安裝 artifact。
-- 目前 locally installed immutable candidate 是本機驗證結果，不是 GitHub 可下載的公開發行版。
+Verification commands：
 
-不要宣稱「clone 後直接執行 installer 即可」。
+```bash
+python3 tools/build-source-release-2.1.246-linux.py --verify \
+  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.246-internal-sdk-linux-x64.6"
 
-## 6. 未來／尚未 bridge 的範圍
+uv run verify/raw-capture-behavior-2.1.246-linux.py \
+  --binary /path/to/raw-source-launcher
 
-尚未納入 runtime API 2：
+uv run verify/pty-harness.py "$HOME/.local/bin/claude-bridge" \
+  --session DISPOSABLE_SESSION_UUID --cwd TRUSTED_PROJECT \
+  --anchor FIRST_RENDERPATCH_ANCHOR --anchor LAST_RENDERPATCH_ANCHOR
+```
 
-- Banner renderer customization；
-- proposed policy domain 5；
-- Linux/Windows candidate packaging；
-- 跨 Claude Code 版本的穩定 raw slot ABI；
-- arbitrary command dispatch；
-- public SDK/release lifecycle。
+## Packaging architecture
 
-Banner 的 exact 2.1.220 internals map 已完成研究，但尚未 bridge：
+Claude Code 2.1.245+ 不再是可直接抽出的一個 monolithic `cli.js`。目前 Linux release：
 
-- [internals/BANNER-RENDERER-2.1.220.md](internals/BANNER-RENDERER-2.1.220.md)
+1. 解析 ELF `.bun` payload 與 52-byte module records；
+2. 抽出完整 ESM chunk graph、assets、N-API modules；
+3. 將 `/$bunfs/root/...` references 改寫到 immutable release path；
+4. 在 source modules 套用 semantic patches；
+5. 搭配 exact Bun 1.4.0 runtime、bootstrap、extensions 與 hash manifest；
+6. 直接 build 到最終 versioned path，因 graph imports 綁定該 absolute release path。
 
-Proposed domain 5 不是目前 policy ID 或 extension manifest requirement。
+因此 release directory 不可搬移；升版應建立新的 immutable directory，而不是覆寫現有 release。
 
-## 凍結的 manifest
+## Exact-version unsafe 存取
 
-[`manifests/internal-sdk-2.1.220.json`](../manifests/internal-sdk-2.1.220.json) 是 hash-pinned frozen contract。它保存 domain、ABI、target 與 slot order，也保留 bridge build 前的 `planned` 狀態。
+Raw slots 仍是 exact-version/exact-build contract，可能包含 conversation、store、setter、React refs、
+terminal controls、handler map 與 callback。它不是跨版本 API。Normal facade 仍不允許任意 command
+dispatch、permission bypass 或 dialog answering。
 
-**不要修改 frozen manifest 來修正文案狀態。** 新版本應建立新的 contract/build identity。
+## 已知 tradeoffs
+
+- Full-frame mode 關閉 Claude 2.1.246 的 virtual/alternate-screen rendering，保留 native terminal scrollback。
+- Expand、collapse、resize 的 authoritative reset 會送 ED2 + ED3，可能清除 Claude 上方的 shell scrollback。
+- 每次 frame 載入所有目前 display-state messages；超大 session 會提高 memory/CPU 成本。
+- 「Full」只包含 Claude Code 目前已載入的 display state，不能復原 compaction/resume pruning 已丟棄的 records。
+- Source graph 綁定 release absolute path；launcher/asset verification 會增加約數百毫秒內的固定啟動成本。
+
+## 仍未完成
+
+- 沒有公開 release channel、package registry、GitHub Release 或跨機器 installer。
+- Windows/ConPTY packaging 尚未實作。
+- macOS 2.1.246 source-graph packaging 尚未移植；repo 只保留舊版 byte-patch/reference candidate。
+- Banner renderer customization、policy domain 5、arbitrary command dispatch 仍未 bridge。
+- `read.sr.trace` 仍只是 preview alias；generic `actions.invoke()` 仍不接受 callback/handler 參數。
+
+不要宣稱 fresh clone 可直接執行 binary release；fresh clone 仍需要 exact stock 2.1.246 Linux x64
+binary與 Bun 1.4.0，然後執行 source-release builder。
