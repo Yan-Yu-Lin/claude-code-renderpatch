@@ -1,5 +1,11 @@
 # Repatching playbook for a new Claude Code version
 
+For the 2.1.245+ Bun module-graph format, use the platform source-release builders.
+The verified Mac 2.1.261 procedure is in
+[bridge-intent-2.1.261.md](reference/bridge-intent-2.1.261.md).
+The equal-length byte recipes below apply to the older monolithic packaging. Their
+behavioral goals still apply, but their offsets and minified names do not.
+
 This playbook is for a future agent after Claude Code updates and the 2.1.203 byte patterns no longer match. Do not copy old offsets or minified variable names. Rediscover the same semantic sites using stable strings and property names.
 
 The objective is a cumulative custom build that:

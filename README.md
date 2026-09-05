@@ -1,6 +1,23 @@
 # claude-code-renderpatch
 Version-pinned renderer, provider-context, and explicit subagent-routing patches for Claude Code.
-The current verified bridge targets **Claude Code 2.1.246 on Linux x64**.
+Verified source-graph bridges: **Claude Code 2.1.261 on macOS arm64** and
+**2.1.246 on Linux x64**. The recipes and platform launchers are version-specific.
+
+The Mac port preserves the five policy domains, six capture domains, inline full-history
+redraw, provider context windows, explicit model routing, trusted extensions, proxy overlay,
+and Herdr detection. It bundles Bun 1.4.1 and all 1,837 official graph records, including five
+Mac native modules. See [the 2.1.261 build and verification record](reference/bridge-intent-2.1.261.md).
+
+```bash
+uv run tools/build-source-release-2.1.261-darwin.py \
+  --stock /absolute/path/to/official/claude \
+  --bun /absolute/path/to/official/bun-1.4.1 \
+  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.3"
+```
+
+The builder refuses to overwrite an existing release. Build and verify the versioned
+candidate before selecting it as the daily launcher. The native binaries and extracted
+application code are local build artifacts, not included in Git.
 
 Claude Code 2.1.245+ stores the application as a Bun ESM chunk graph rather than one readable
 monolithic bundle. The Linux build therefore extracts all 1,576 embedded records, rewrites graph
@@ -81,7 +98,7 @@ A configuration-only belt-and-braces workaround is also active in
 a **different** slot's family keyword. Keep that invariant even though the binary is now
 fixed.
 
-## Current target binary
+## Historical 2.1.219 target binary
 
 - Version: `2.1.219`
 - Stock SHA-256: `a8e806faaefac53c7a0f26523d8a45c60dbef3407b14ef990c75765d08febc82`

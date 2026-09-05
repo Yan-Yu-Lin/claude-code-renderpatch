@@ -1,5 +1,20 @@
 # 專案狀態
 
+## 2026-09-06 Mac update
+
+macOS arm64 now has a verified **2.1.261** source-graph bridge, using Bun **1.4.1**.
+Build ID: `internal-sdk-2.1.261-darwin-arm64.3`; release ID:
+`2.1.261-internal-sdk-darwin-arm64-16461071`.
+Full capture counts match the Mac predecessor: d0=22 slots, d1=17 present slots,
+d2=6, d3=16, d4=16, d5=9. Raw-slot identity is `2.1.261-darwin-arm64.1`.
+
+The Mac builder, launcher, native asset loading, stock fallback, exact extension negotiation,
+context/routing resolvers, and PTY expand/collapse/resize behavior are verified. See
+[the current Mac record](../reference/bridge-intent-2.1.261.md) for evidence and limitations.
+The Linux release below remains at 2.1.246; it was not upgraded by the Mac work.
+
+## Linux 2.1.246 release
+
 本頁記錄目前本機 verified release；它不是公開發布的 SDK 或 GitHub binary release。
 
 ## 本機 candidate 識別
