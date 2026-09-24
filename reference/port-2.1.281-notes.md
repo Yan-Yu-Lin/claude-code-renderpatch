@@ -145,3 +145,36 @@ Also recorded: module records in the stock 2.1.281 `__BUN` carry **bytecode** (2
      - This does NOT meet the "same version as T3 Code" goal unless T3 is also pinned.
      - 2.1.270 lacks Opus 5.5 in the display table (that arrived in 2.1.280). The Opus 5.5 server gate needs UA 2.1.280, which the proxy already overrides, so requests would still work.
   3. **Implement a JS CellSegmenter shim.** Replace `Rs()` with a JS implementation. The native API surface covers graphemes/sgrKeys/uris/setCell/…, so this is large, and a correctness risk for the exact renderer Arthur cares about. Not recommended.
+
+## Option A (host architecture), resumed 2026-09-24
+
+### Entry-interception attempts
+
+| # | Attempt | Result |
+|---|---|---|
+| 1 | Preload awaits `import(patched cli)`, then a never-settling promise | Renders, but `--version` / `-p` never exit (pending TLA blocks exit). Rejected. |
+| 2 | `Bun.plugin build.module("/$bunfs/root/cli")` virtual override | Not applied to the compiled entry; the embedded entry ran too. Rejected. |
+| 3 | `Bun.plugin onLoad` on chunks | Never fires for bunfs modules. Rejected. |
+| 4 | JSC `Loader.registry` from the preload | `globalThis.Loader` undefined in Bun. Rejected. |
+| 5 | **process.env write trap** (`/tmp/cc-2.1.281/host3.mjs`) | **Works.** Details below. |
+
+How the env write trap (#5) works:
+- The embedded entry's static import closure is only 6 tiny modules (cli + 5 helpers, 33 KB, no side effects beyond reading cwd).
+- Its body's first statement is `process.env.NoDefaultCurrentDirectoryInExePath="1"`.
+- The preload imports the patched cli (whose `Mt()` then runs asynchronously), installs a Proxy over `process.env` that throws a sentinel error on that key's write, restores the real env, and swallows the sentinel in `uncaughtException`.
+- host4 stack capture confirms the first writer is exactly `/$bunfs/root/cli:11:629`. The real host checks for that stack frame, so the patched graph's own writes to the key (patched cli and chunk-qp0rn9dk) can never trip it.
+
+Results:
+- `--version` prints once, exit 0.
+- `-p` returns `HOST3_OK`, exit 0 in 8 s.
+- Interactive TUI renders.
+
+### Consequences
+- `process.execPath` is now the official binary, so the Bash helper (ugrep/bfs argv0) works natively. **Patch B1 is dropped.**
+- `Bun.isStandaloneExecutable` is true, so agents-md, embedded rg and self-spawn behave like stock.
+- The host deletes `BUN_OPTIONS` and `RP_HOST_ENTRY` first thing, so children spawned via execPath run stock 2.1.281 with no preload.
+- The modding ABI is retired. Renderer and patch 3 are baked in as constants, equal to what the old default policy returned:
+  - messages bits 2|(transcript?1:0)
+  - reset destructive iff !altScreen
+  - toggle redraw always
+  - explicit routing shortcut never
