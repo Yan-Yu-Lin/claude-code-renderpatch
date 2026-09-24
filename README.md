@@ -1,7 +1,25 @@
 # claude-code-renderpatch
-Version-pinned renderer, provider-context, and explicit subagent-routing patches for Claude Code.
-Verified source-graph bridges: **Claude Code 2.1.261 on macOS arm64** and
-**2.1.246 on Linux x64**. The recipes and platform launchers are version-specific.
+Version-pinned renderer and explicit subagent-routing patches for Claude Code.
+Current Mac bridge: **Claude Code 2.1.281 on macOS arm64 (official-executable host)**.
+Earlier verified source-graph bridges: 2.1.261 on macOS arm64 and 2.1.246 on Linux x64.
+The recipes and platform launchers are version-specific.
+
+> **The extract + public-Bun method ends at Claude Code 2.1.270.** From 2.1.271 the
+> interactive renderer calls `Bun.ant.CellSegmenter`, which exists only in the
+> Anthropic-internal Bun embedded in the official executable, so an extracted graph
+> run on any published Bun never draws a frame (`--version` and `-p` still work).
+> From 2.1.281 the Mac bridge therefore runs its patched graph *inside* a verbatim copy
+> of the official executable through a trusted `--preload` host loader; the modding
+> ABI (policy domains, capture domains, extensions) is retired and the fixes are baked
+> in. See [the 2.1.281 host record](reference/bridge-intent-2.1.281.md).
+
+```bash
+uv run tools/build-host-release-2.1.281-darwin.py \
+  --stock /absolute/path/to/official/2.1.281/claude \
+  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.281-host-darwin-arm64.1"
+```
+
+## Historical: 2.1.261 source-graph bridge
 
 The Mac port preserves the five policy domains, six capture domains, inline full-history
 redraw, provider context windows, explicit model routing, trusted extensions, proxy overlay,

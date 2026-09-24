@@ -50,6 +50,38 @@ def team_id(path):
     return match[1] if match else None
 
 
+def top_level_non_declarations(source):
+    """Return top-level text that is not a function declaration.
+
+    Scans balanced braces while skipping string, template and regex-free
+    minified code; sufficient for the entry prologue, which the builder
+    requires to contain only `function name(...){...}` declarations.
+    """
+    rest, i = [], 0
+    while i < len(source):
+        match = re.match(r"\s*function\s+[\w$]+\s*\([^)]*\)\s*\{", source[i:])
+        if not match:
+            rest.append(source[i:])
+            break
+        i += match.end()
+        depth, quote = 1, None
+        while depth and i < len(source):
+            ch = source[i]
+            if quote:
+                if ch == "\\":
+                    i += 1
+                elif ch == quote:
+                    quote = None
+            elif ch in "\"'`":
+                quote = ch
+            elif ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+            i += 1
+    return "".join(rest).strip()
+
+
 def build(stock, output):
     if output.exists():
         raise ValueError("refusing to overwrite an existing release")
@@ -77,6 +109,15 @@ def build(stock, output):
             text,
         )
         texts[row["name"][len(extractor.ROOT) :]] = text
+    # host.mjs stops the embedded entry at its first statement; require that
+    # statement to be the trapped env write and the entry to run no other code
+    # before it (every earlier top-level item is an import or a declaration).
+    entry = texts["cli"]
+    body = entry[entry.index("\n", entry.index("// Version: " + VERSION)) + 1 :]
+    first = 'process.env.NoDefaultCurrentDirectoryInExePath="1";'
+    head = re.sub(r'import\{[^}]*\}from"[^"]+";', "", body[: body.index(first)])
+    if top_level_non_declarations(head):
+        raise ValueError("embedded entry runs code before the host trap statement")
     patched, changes = patch_graph(texts)
     for row in modules:
         path = paths[row["name"]]

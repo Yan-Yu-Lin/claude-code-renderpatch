@@ -178,3 +178,45 @@ Results:
   - reset destructive iff !altScreen
   - toggle redraw always
   - explicit routing shortcut never
+
+### Verification of the installed release `2.1.281-host-darwin-arm64.1` (2026-09-24)
+
+Release ID `2.1.281-host-darwin-arm64-0a709331`, manifest SHA `81a463752ebea8fbfa252c88bf5eb1fb8497a92dc67c1955b4620a979a6fd867`.
+
+**Static and launcher checks**
+- Status reports `verification=ok`.
+- `runtime/claude` is byte-identical to the official binary (`a922981f…`), Anthropic team Q6L2SF6YDW.
+- Modes: dirs 555, `runtime/claude` 555, other assets 444.
+- Tamper tests all fail closed: a graph edit gives `asset hash mismatch: graph/chunk-rsmxg7f6.js`; a `host.mjs` edit gives `asset hash mismatch`; an extra file gives `unlisted asset`.
+- `--renderpatch-safe --version` returns 2.1.281; normal `--version` prints once, exit 0.
+
+**PTY harness**
+- Patched `--assert-render` rc 0. Every phase (expand, collapse, resize, expand_again, collapse_again) shows exactly one ED2 + one ED3, the first and last anchors, no alt screen, and the expanded detail only on the expand phases.
+- Stock and safe controls: no ED2/ED3, and the first anchor is missing after the toggles, so the bug still exists upstream.
+
+**Real requests and context windows**
+
+| Slot | `-p` reply | `/context` |
+|---|---|---|
+| fable | `PORT_fable_OK` | 1m |
+| opus | `PORT_opus_OK` | 1m |
+| sonnet | `PORT_sonnet_OK` | 372k |
+| haiku | `PORT_haiku_OK` | 372k |
+
+**Patch 3** (parent model `claude-sonnet-4-6`, the collision case, subagent requested `sonnet`; actual models read from the SubagentStop log):
+
+| Spawn | Patched | Stock control (safe mode) |
+|---|---|---|
+| Agent-tool subagent | `gpt-5.6-sol` | `claude-sonnet-4-6` (bug) |
+| Named teammate `routeprobe` | `gpt-5.6-sol` | `claude-sonnet-4-6` (bug) |
+
+**Child isolation**
+- A Bash tool child sees `BUN_OPTIONS` and `RP_HOST_ENTRY` unset. `CLAUDE_CODE_EXECPATH` is the release's `runtime/claude`, so native ugrep/bfs works with no execPath patch.
+- An MCP child of the host has BUN_OPTIONS count 0.
+- Only the host process's own exec-time env (seen via `ps -E`) contains it.
+
+**Other checks**
+- `/model` banner shows `Opus 5.5` natively for `claude-opus-5-5`.
+- Interactive Ctrl+C Ctrl+C exits 0 in 0.8 s (stock also 0.82 s).
+- Invalid flag exits rc 1 (stock also rc 1).
+- The debug log shows no trace of the sentinel.
