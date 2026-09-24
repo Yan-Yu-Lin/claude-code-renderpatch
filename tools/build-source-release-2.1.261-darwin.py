@@ -18,7 +18,7 @@ from source_patches_2_1_261 import patch_graph
 
 REPO = Path(__file__).resolve().parents[1]
 VERSION = "2.1.261"
-BUILD = "internal-sdk-2.1.261-darwin-arm64.3"
+BUILD = "internal-sdk-2.1.261-darwin-arm64.4"
 BUN_SHA = "4c6a735e82bd9da8403f0ece106730ebe431f50a246826197bf51dc0680eb959"
 spec = importlib.util.spec_from_file_location(
     "extract_darwin", REPO / "tools/extract-source-darwin.py"

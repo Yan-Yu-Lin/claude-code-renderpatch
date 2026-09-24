@@ -52,6 +52,12 @@ def patch_graph(texts):
                 'if(r==="inherit")return p();if(ojt(r,t))return t;',
                 'if(r==="inherit")return p();if(__rpQ261(4,ojt(r,t),r,t))return t;',
             ),
+            # The split Bun runtime has no embedded ugrep/bfs. Only the Bash
+            # tool's helper target uses stock Claude; app spawning stays on Bun.
+            (
+                "D[HJe]=process.execPath",
+                'D[HJe]=jAe(SD(),P()==="windows"?"claude.exe":"claude")',
+            ),
         ],
         "try{__rpC261(0,0,4194303,[...globalThis.__rpModel261,cH,PDn,olt,ojt,vV,(e)=>JJ(e,Ue(e)),oDo])}finally{delete globalThis.__rpModel261}",
     )

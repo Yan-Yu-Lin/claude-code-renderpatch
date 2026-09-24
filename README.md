@@ -12,12 +12,17 @@ Mac native modules. See [the 2.1.261 build and verification record](reference/br
 uv run tools/build-source-release-2.1.261-darwin.py \
   --stock /absolute/path/to/official/claude \
   --bun /absolute/path/to/official/bun-1.4.1 \
-  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.3"
+  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.4"
 ```
 
 The builder refuses to overwrite an existing release. Build and verify the versioned
 candidate before selecting it as the daily launcher. The native binaries and extracted
 application code are local build artifacts, not included in Git.
+
+The `.4` Mac recipe also fixes Bash `grep`/`find`: only their shell helper target
+uses the stock native `~/.local/bin/claude`, which supplies embedded ugrep/bfs.
+The custom app and its policies still run through the bundled Bun/graph.
+See the [repair and upgrade notes](reference/bridge-intent-2.1.261.md#grepfind-repair-2026-09-22).
 
 Claude Code 2.1.245+ stores the application as a Bun ESM chunk graph rather than one readable
 monolithic bundle. The Linux build therefore extracts all 1,576 embedded records, rewrites graph

@@ -1,5 +1,20 @@
 # 專案狀態
 
+## 2026-09-22 Mac grep/find repair
+
+Selected build: `internal-sdk-2.1.261-darwin-arm64.4`; release ID:
+`2.1.261-internal-sdk-darwin-arm64-2931bbef`. The `.3` release below is retained
+unchanged for rollback. Only the Bash tool's `CLAUDE_CODE_EXECPATH` assignment
+now selects stock native Claude for embedded ugrep/bfs instead of bare Bun.
+Application startup, renderer, provider routing, settings and tool set are unchanged.
+
+Verified: release integrity/signature, bridge diagnostics, actual Claude Bash call,
+latest zsh snapshot grep/find and gitignore control, version, and live `say hi`.
+The `.3`/`.4` asset comparison found no other differences after normalizing paths
+and build identity. Existing unknown-model warning remains; no warning was suppressed.
+See [repair/rollback/upgrade details](../reference/bridge-intent-2.1.261.md#grepfind-repair-2026-09-22).
+No deployment or version verification was performed on Omarchy in this repair.
+
 ## 2026-09-06 Mac update
 
 macOS arm64 now has a verified **2.1.261** source-graph bridge, using Bun **1.4.1**.

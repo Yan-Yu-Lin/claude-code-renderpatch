@@ -1,8 +1,9 @@
 # Claude Code 2.1.261 — Darwin arm64 source bridge
 
-Verified 2026-09-06. This port builds on the Linux 2.1.246 extraction approach and preserves
-the Mac 2.1.226 bridge contract and launcher behavior. It does not include the unfinished
-subagent-view-history experiment. The Linux deployment remains independent.
+Original port verified 2026-09-06; Bash helper repair verified 2026-09-22. This port
+builds on the Linux 2.1.246 extraction approach and preserves the Mac 2.1.226 bridge
+contract and launcher behavior. It excludes the unfinished subagent-view-history
+experiment. The Linux deployment remains independent.
 
 ## Provenance and release
 
@@ -12,10 +13,10 @@ subagent-view-history experiment. The Linux deployment remains independent.
 | Claude binary SHA-256 | `5efecaff231b798be3c66def9be54183623b328b80eaef17f93c43987024e82a` |
 | Official Bun package | `@oven/bun-darwin-aarch64@1.4.1` |
 | Bun binary SHA-256 | `4c6a735e82bd9da8403f0ece106730ebe431f50a246826197bf51dc0680eb959` |
-| Build | `internal-sdk-2.1.261-darwin-arm64.3` |
-| Local release | `2.1.261-internal-sdk-darwin-arm64-16461071` |
-| Manifest SHA-256 | `bb2a95620a9b9896051604574d9fa0b7155e0e4a1c5002564708fbfc4676ff5d` |
-| Version-named entry SHA-256 | `16461071145ca677a8a9f2a0db1dab3ba425030e79289f0f7bfb57b28d94ec30` |
+| Build | `internal-sdk-2.1.261-darwin-arm64.4` |
+| Local release | `2.1.261-internal-sdk-darwin-arm64-2931bbef` |
+| Manifest SHA-256 | `e275dcb7a6f59641b92ed339064efaf94ebaaa5cea4bafc0025dc66a61a057f0` |
+| Version-named entry SHA-256 | `2931bbefaaa06672078b54917ae78b90663ec5f585d63cd832f707fdb0907d36` |
 
 `latest` and `next` were 2.1.261; `stable` was 2.1.236. The exact official executable's
 preload reported Bun 1.4.1. The builder pins both input hashes and reads Mach-O load commands
@@ -36,10 +37,10 @@ or replacement of stock Claude is required.
 uv run tools/build-source-release-2.1.261-darwin.py \
   --stock /absolute/path/to/claude-package/claude \
   --bun /absolute/path/to/bun-package/bin/bun \
-  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.3"
+  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.4"
 
-"$HOME/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.3/claude-renderpatch-candidate" --renderpatch-status
-"$HOME/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.3/claude-renderpatch-candidate" --renderpatch-diagnose
+"$HOME/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.4/claude-renderpatch-candidate" --renderpatch-status
+"$HOME/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.4/claude-renderpatch-candidate" --renderpatch-diagnose
 ```
 
 The output must not already exist. Its absolute path affects graph and entry hashes;
@@ -70,6 +71,57 @@ and are not installed as the daily command.
 Current module/symbol anchors and exact replacements live in
 `tools/source_patches_2_1_261.py`. Every old anchor must occur exactly once. Do not carry
 these minified identifiers or hashed chunk names into another version.
+
+## Grep/find repair (2026-09-22)
+
+The Bash tool, not the launcher, assigned `CLAUDE_CODE_EXECPATH=process.execPath`.
+In this extracted build that is bare Bun. The shell snapshot re-executes that path
+with argv0 `ugrep` or `bfs`; those implementations belong to the native stock binary,
+not the extracted JavaScript. `ARGV0=ugrep bun graph/cli -G -I hello` exits 1 with
+`error: unknown option '-G'`; it does not enter an embedded grep implementation.
+
+The recipe now makes one exact-anchor replacement in `chunk-3963bmck.js`:
+
+```diff
+-D[HJe]=process.execPath
++D[HJe]=jAe(SD(),P()==="windows"?"claude.exe":"claude")
+```
+
+`HJe` is the Bash helper environment key. `SD()` is the existing native installation
+directory resolver (`~/.local/bin`). The inherited override map still applies after
+this assignment, and missing native binaries still take the existing command fallback.
+Other `process.execPath` consumers, self-invocation, updates and resume are untouched.
+No global executable identity, entrypoint flags, settings, hooks or shell prefixes changed.
+
+Build `.4` was generated at its final immutable path and selected by atomic symlink
+rename. `.3` was not edited. All asset names match; every asset matches `.3` after
+normalizing release paths/build identity and undoing the single Bash expression above.
+The generated launcher differs only in four release identity/hash constants. Its
+settings overlay, appended prompt, proxy checks and custom policies are unchanged.
+
+Verification used the real candidate Bash tool and sourced the existing latest
+`snapshot-zsh-1790066281489-r5qetv.sh` in zsh with the effective helper environment
+observed from that live tool. Results: piped grep prints `hello`; recursive grep
+prints only `some-dir/visible.md:1:something visible`; native find lists both
+`ignored.md` and `visible.md`. The control `command grep` finds both files, proving
+that the shim's ugrep path applies `.gitignore`. Find is not asserted to honor it.
+`claude-bridge --version` remains `2.1.261 (Claude Code)`; `claude-bridge -p "say hi"`
+returned a greeting with exit 0. The existing `claude-f51[1m]` unknown-model warning
+remains. Status reports `verification=ok`; diagnostic policy checks and child Bun pass.
+
+Evidence/build inputs: `~/.local/share/claude-renderpatch/staging/grep-find-repair-20260922/`.
+Backups: `~/.local/share/claude-renderpatch/backups/grep-find-20260922/`, including
+`claude-renderpatch-candidate.bak-20260922` and the original selector symlink.
+
+This survives rebuilding 2.1.261 from the updated recipe, not arbitrary future
+upstream versions or builds from another checkout. Reapply instruction: **port this
+Bash-only native-helper assignment into the next version's exact-anchor recipe,
+build a new immutable release, test the shims, then select it.** Do not copy hashed
+chunks or reuse minified identifiers across versions. Keep native stock Claude
+available at `~/.local/bin/claude`; it was read/executed but not modified here.
+New sessions use the repair; running `.3` processes must be restarted. Raw extensions
+that explicitly pin build `.3` must negotiate `.4`; raw-slot ABI/slot meanings did not change.
+Omarchy was not modified; its actual installed graph must be inspected before porting.
 
 ## Verification
 
@@ -117,7 +169,7 @@ Switch only `~/.local/bin/claude-bridge` after verification, using an atomic sym
 The retained predecessor is:
 
 ```text
-~/.local/share/claude-renderpatch/releases/2.1.226-internal-sdk-2.1.226.1-60901a7b-herdr1/claude-renderpatch-candidate
+~/.local/share/claude-renderpatch/releases/2.1.261-internal-sdk-darwin-arm64.3/claude-renderpatch-candidate
 ```
 
 Repointing the same link to that predecessor restores the old version. No running session
