@@ -1,6 +1,6 @@
 # claude-code-renderpatch
 Version-pinned renderer and explicit subagent-routing patches for Claude Code.
-Current Mac bridge: **Claude Code 2.1.281 on macOS arm64 (official-executable host)**.
+Current Mac bridge: **Claude Code 2.1.287 on macOS arm64 (official-executable host)**, with official Mods working alongside the baked-in patches.
 Earlier verified source-graph bridges: 2.1.261 on macOS arm64 and 2.1.246 on Linux x64.
 The recipes and platform launchers are version-specific.
 
@@ -14,10 +14,29 @@ The recipes and platform launchers are version-specific.
 > in. See [the 2.1.281 host record](reference/bridge-intent-2.1.281.md).
 
 ```bash
-uv run tools/build-host-release-2.1.281-darwin.py \
-  --stock /absolute/path/to/official/2.1.281/claude \
-  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.281-host-darwin-arm64.1"
+python3 tools/build-host-release-2.1.287-darwin.py \
+  --stock /absolute/path/to/official/2.1.287/claude \
+  --output "$HOME/.local/share/claude-renderpatch/releases/2.1.287-host-darwin-arm64.2"
 ```
+
+Selected release: `2.1.287-host-darwin-arm64-700d43be`. The unchanged 2.1.281 host release
+is the rollback. See [the 2.1.287 intent and verification record](reference/bridge-intent-2.1.287.md)
+and [the port history](reference/port-2.1.287-notes.md).
+
+The 2.1.287 builder keeps compiled text-loader references inside the official host;
+rewriting them to external `.txt` files breaks live Mods even when `plugin test` passes.
+The launcher also preserves the official `plugin test` argument fast path. Verify actual
+in-session mod loading as well as validation and tests:
+
+```bash
+claude-bridge plugin validate "$PWD/verify/fixtures/mod-2.1.287"
+claude-bridge plugin test "$PWD/verify/fixtures/mod-2.1.287"
+claude-bridge --plugin-dir "$PWD/verify/fixtures/mod-2.1.287" -p /renderpatch-hello
+```
+
+Claude may generate type declarations in the plugin directory; use a disposable copy
+when verifying without changing the fixture tree. This fixture tests official Mods;
+the bridge itself remains the existing host patch, not a Mod.
 
 ## Historical: 2.1.261 source-graph bridge
 
