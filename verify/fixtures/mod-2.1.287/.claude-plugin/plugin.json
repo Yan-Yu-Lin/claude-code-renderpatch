@@ -1,0 +1,6 @@
+{
+  "name": "renderpatch-mod-fixture",
+  "version": "0.1.0",
+  "description": "Exposes a deterministic command for Claude Code 2.1.287 mod verification",
+  "author": { "name": "claude-code-renderpatch" }
+}
