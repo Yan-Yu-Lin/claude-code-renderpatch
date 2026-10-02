@@ -11,6 +11,8 @@ import { readFile } from "node:fs/promises"
 import { homedir } from "node:os"
 import { join } from "node:path"
 import {
+  activate,
+  eligibleTarget,
   loadRecentTranscriptFile,
   mergeTranscriptMessages,
   parseRecentTranscriptSource,
@@ -253,6 +255,50 @@ check("collapsed single-message live array (the stock terminal case) recovers fu
   assert.ok(merged.length > collapsed.length, "must be a strict gain to be injected")
 })
 
+// --- live target selection ---------------------------------------------------------------
+
+function teammateState(taskOverrides = {}) {
+  const taskId = "task-live-trigger"
+  return {
+    viewingAgentTaskId: taskId,
+    tasks: {
+      [taskId]: {
+        type: "in_process_teammate",
+        status: "running",
+        isIdle: true,
+        identity: {
+          parentSessionId: "3365fa6a-56c4-4226-9cb5-68293949fba1",
+          resumableAgentId: agentId,
+        },
+        ...taskOverrides,
+      },
+    },
+    transcripts: { [taskId]: { messages: [] } },
+  }
+}
+
+check("idle running teammate is eligible: finished turns stay running+isIdle", () => {
+  const target = eligibleTarget(teammateState())
+  assert.equal(target?.taskId, "task-live-trigger")
+  assert.equal(target?.phase, "idle")
+  assert.equal(target?.status, "running")
+})
+
+check("active running teammate remains excluded", () => {
+  assert.equal(eligibleTarget(teammateState({ isIdle: false })), null)
+})
+
+check("terminal teammate remains eligible", () => {
+  const target = eligibleTarget(teammateState({ status: "completed", isIdle: false }))
+  assert.equal(target?.phase, "terminal")
+})
+
+check("tmux-pane teammate without resumable JSONL id is excluded", () => {
+  const state = teammateState()
+  delete state.tasks["task-live-trigger"].identity.resumableAgentId
+  assert.equal(eligibleTarget(state), null)
+})
+
 // --- write-gate simulation --------------------------------------------------------------
 //
 // Reproduces the v1 flicker: the extension injects, then a stock writer runs. Confirms the
@@ -417,6 +463,97 @@ check("SIMULATION: cpt() re-slice proves a running teammate cannot be held", () 
 
   live = cpt(live, { uuid: randomUUID(), type: "assistant" })
   assert.equal(live.length, 50, "a single streamed message destroys the injection")
+})
+
+// --- subscribed trigger integration ------------------------------------------------------
+
+check("REGRESSION: store view notification injects the real idle teammate history", async () => {
+  const parentSessionId = "3365fa6a-56c4-4226-9cb5-68293949fba1"
+  const resumableAgentId = "amac-wanderer-6a7712c4869c0526"
+  const path = join(
+    homedir(),
+    ".claude/projects/-Users-linyanyu",
+    parentSessionId,
+    "subagents",
+    `agent-${resumableAgentId}.jsonl`,
+  )
+
+  let source
+  try {
+    source = await readFile(path, "utf8")
+  } catch {
+    return "skipped (original idle-teammate transcript not present)"
+  }
+  const disk = parseRecentTranscriptSource(source, resumableAgentId, 400)
+  assert.equal(disk.length, 74)
+
+  const taskId = "task-subscribed-trigger"
+  let state = {
+    viewingAgentTaskId: undefined,
+    tasks: {
+      [taskId]: {
+        type: "in_process_teammate",
+        status: "running",
+        isIdle: true,
+        identity: { parentSessionId, resumableAgentId },
+      },
+    },
+    transcripts: {
+      [taskId]: { messages: [disk.at(-1)], inProgressToolUseIDs: new Set() },
+    },
+  }
+  const listeners = new Set()
+  const store = {
+    getState: () => state,
+    setState(updater) {
+      const next = typeof updater === "function" ? updater(state) : updater
+      if (Object.is(next, state)) return
+      state = next
+      for (const listener of [...listeners]) listener()
+    },
+    subscribe(listener) {
+      listeners.add(listener)
+      return () => listeners.delete(listener)
+    },
+  }
+
+  let stop = null
+  const activation = {
+    unsafe: {
+      capture(domain) {
+        assert.equal(domain, "d4")
+        return { presenceBitmap: 1, slots: [store] }
+      },
+    },
+  }
+  const runtime = {
+    registerExtension: () => activation,
+    read: { observe: () => () => true },
+    register(_name, disposer) {
+      stop = disposer
+    },
+  }
+
+  const previousDebug = process.env.CLAUDE_RENDERPATCH_SUBAGENT_VIEW_DEBUG
+  process.env.CLAUDE_RENDERPATCH_SUBAGENT_VIEW_DEBUG = "off"
+  try {
+    activate(runtime)
+    assert.equal(listeners.size, 1, "activate must subscribe to the captured app store")
+    store.setState((current) => ({ ...current, viewingAgentTaskId: taskId }))
+
+    const deadline = Date.now() + 3000
+    while (state.transcripts[taskId].messages.length !== disk.length && Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 10))
+    }
+    assert.equal(state.transcripts[taskId].messages.length, 74)
+    assert.equal(state.transcripts[taskId].messages[0].uuid, disk[0].uuid)
+    assert.equal(state.transcripts[taskId].messages.at(-1), disk.at(-1))
+    return "store notification -> idle target -> disk lookup -> 74-message injection"
+  } finally {
+    stop?.()
+    if (previousDebug === undefined) delete process.env.CLAUDE_RENDERPATCH_SUBAGENT_VIEW_DEBUG
+    else process.env.CLAUDE_RENDERPATCH_SUBAGENT_VIEW_DEBUG = previousDebug
+  }
 })
 
 // --- real sample ------------------------------------------------------------------------

@@ -1,13 +1,14 @@
-// Restores the full transcript for a finished in_process_teammate in the subagent view.
+// Restores the full transcript for a quiescent in_process_teammate in the subagent view.
 //
 // Stock 2.1.220 keeps a teammate's live transcript inside a 50-entry window (cpt), then
-// collapses it to [messages.at(-1)] when the agent reaches a terminal status. The Ahl
-// disk-backfill effect that would restore it only accepts local_agent, so a collapsed
-// teammate can never come back. The complete sidechain JSONL is still on disk.
+// collapses it to [messages.at(-1)] when the agent reaches a terminal status. More commonly,
+// a finished turn leaves the persistent teammate status="running" but isIdle=true, so the
+// bounded window remains. The Ahl disk-backfill effect that would restore either case only
+// accepts local_agent. The complete sidechain JSONL is still on disk.
 //
 // This extension reads that JSONL and writes the reconstructed chain back into
-// state.transcripts[taskId].messages, but only while the teammate is in a terminal status.
-// That restriction is the whole design: see WRITE OWNERSHIP below.
+// state.transcripts[taskId].messages while the teammate has no active transcript writer:
+// either an idle running teammate or a terminal teammate. See WRITE OWNERSHIP below.
 
 import { appendFileSync, statSync, truncateSync } from "node:fs"
 import { lstat, readFile, readdir, stat } from "node:fs/promises"
@@ -16,28 +17,27 @@ import { join } from "node:path"
 
 // WRITE OWNERSHIP
 //
-// Every stock writer of transcripts[taskId].messages for an in_process_teammate is gated
-// on the task still running:
+// The agent loop owns transcripts[taskId].messages only while it is actively producing a
+// turn. Immediately before streaming it atomically writes status="running", isIdle=false,
+// then Iid(...)/cpt(...) appends each message. After the turn it writes isIdle=true and blocks
+// in OW_ waiting for another mailbox/lifecycle event. That idle state is quiescent: no stream
+// writer exists until the next turn first clears isIdle again.
+//
+// Terminal tasks are also quiescent. Every remaining stock writer is gated on running:
 //
 //   Hko            -> returns early unless task.status === "running"
 //   Zsn            -> returns early when CT(status)
-//   agent loop     -> Iid(...)/cpt(...) per streamed message; the loop exits at terminal status
+//   agent loop     -> exits before terminal status and collapses to messages.at(-1)
 //   Opd (progress) -> only reached when the preceding update saw status === "running"
 //
-// So once status is completed/failed/killed, nothing in Claude Code rewrites that array
-// again; only evictTerminal/remove can delete the whole entry. Writing there is therefore
-// a single-writer operation and needs no timers, no retries, and no debounce.
+// So isIdle=true or status completed/failed/killed gives this extension temporary/exclusive
+// ownership. A resumed idle teammate may later become active; that is safe because isIdle is
+// cleared before streaming and the first cpt write returns to the stock 50-entry window. Once
+// it becomes idle again, the extension can restore the newer disk chain.
 //
-// While the teammate is still RUNNING the opposite is true, and it is not a timing problem:
-// cpt() (abs offset 232793368, fvo = 50) re-slices to the last 49 entries on every appended
-// message. Any array injected is destroyed by the next streamed message, no matter how long
-// we wait first. That is what made the first prototype flicker on a ~2s cycle.
-//
-// This also rules out a quiet-period/settle gate for running teammates: a delay measures
-// elapsed silence, but the competing write is triggered by agent output, not by a clock.
-// Two independent rewrites of this file converged on the same terminal-status gate; the
-// binary evidence above is why it is sufficient rather than merely safer. A running
-// teammate is therefore left on its stock 50-entry window on purpose.
+// A non-idle running teammate remains intentionally excluded. cpt() (abs offset 232793368,
+// fvo = 50) re-slices on every append, so no timer or quiet-period heuristic can make an
+// injected array durable while output is active.
 
 const DEFAULT_MESSAGE_LIMIT = 400
 const MAX_MESSAGE_LIMIT = 2000
@@ -51,7 +51,7 @@ const PROJECTS_ROOT = join(homedir(), ".claude", "projects")
 
 const manifest = Object.freeze({
   id: "subagent-view-history",
-  version: "2.0.0",
+  version: "2.1.0",
   schemaVersion: 1,
   unsafeRaw: true,
   requires: Object.freeze({
@@ -209,7 +209,7 @@ export function parseRecentTranscriptSource(source, agentId, limit = DEFAULT_MES
       if (isMessageRecord(value, agentId)) messages.push(value)
     } catch {
       // The final line can be half-written while the queue is flushing. Skipping it is safe:
-      // this extension only reads after the agent reached a terminal status.
+      // this extension reads only while the agent is idle or terminal, after active streaming.
     }
   }
 
@@ -322,15 +322,21 @@ function hasSlot(capture, index) {
   return Math.floor(capture.presenceBitmap / 2 ** index) % 2 === 1
 }
 
-// Returns the teammate the user is currently viewing, but only when it is in a terminal
-// status and therefore has no remaining stock writer.
-function eligibleTarget(state) {
+// Returns the teammate the user is currently viewing, but only while no stock transcript
+// writer is active. Persistent in-process teammates normally finish a turn as running+idle;
+// terminal status is reserved for lifecycle shutdown/failure.
+export function eligibleTarget(state) {
   const taskId = state?.viewingAgentTaskId
   if (typeof taskId !== "string" || taskId.length === 0) return null
 
   const task = state.tasks?.[taskId]
   if (task?.type !== "in_process_teammate") return null
-  if (!TERMINAL_STATUSES.has(task.status)) return null
+  const phase = TERMINAL_STATUSES.has(task.status)
+    ? "terminal"
+    : task.status === "running" && task.isIdle === true
+      ? "idle"
+      : null
+  if (!phase) return null
 
   const parentSessionId = task.identity?.parentSessionId
   const agentId = task.identity?.resumableAgentId
@@ -338,7 +344,7 @@ function eligibleTarget(state) {
   // tmux-pane teammates (lvd) have no resumableAgentId and no JSONL in this session.
   if (!AGENT_ID_PATTERN.test(agentId ?? "")) return null
 
-  return { taskId, parentSessionId, agentId, status: task.status }
+  return { taskId, parentSessionId, agentId, status: task.status, phase }
 }
 
 export function activate(runtime) {
@@ -367,6 +373,7 @@ export function activate(runtime) {
   const inFlight = new Set() // taskId
   let subscribedStore = null
   let unsubscribe = null
+  let lastViewSignature = null
 
   const currentStore = () => {
     const capture = activation.unsafe.capture("d4")
@@ -494,6 +501,27 @@ export function activate(runtime) {
 
     pruneMarkers(state)
 
+    // Summary-level transition trace. The original bug produced only "subscribed" because
+    // running+idle was rejected before the sole verbose log line. Recording one metadata-only
+    // line per viewed-task state makes a future eligibility mismatch observable without
+    // logging transcript content or every store notification.
+    const viewedTaskId = state?.viewingAgentTaskId
+    const viewedTask = typeof viewedTaskId === "string" ? state.tasks?.[viewedTaskId] : null
+    const viewSignature =
+      typeof viewedTaskId === "string"
+        ? [
+            viewedTaskId,
+            viewedTask?.type ?? "missing",
+            viewedTask?.status ?? "missing",
+            viewedTask?.isIdle === true ? "idle" : "active",
+            typeof viewedTask?.identity?.resumableAgentId === "string" ? "sidechain" : "no-sidechain",
+          ].join(":")
+        : null
+    if (viewSignature !== lastViewSignature) {
+      lastViewSignature = viewSignature
+      if (viewSignature) log.summary(`evaluate: view ${viewSignature}`)
+    }
+
     const target = eligibleTarget(state)
     if (!target) return
     if (inFlight.has(target.taskId)) return
@@ -510,7 +538,7 @@ export function activate(runtime) {
     if (liveMessages && injected.get(target.taskId) === liveMessages) return
 
     log.verbose(
-      `evaluate: eligible task=${target.taskId} status=${target.status} live=${liveMessages?.length ?? "none"}`,
+      `evaluate: eligible task=${target.taskId} phase=${target.phase} status=${target.status} live=${liveMessages?.length ?? "none"}`,
     )
     inject(store, target).catch((error) => {
       inFlight.delete(target.taskId)

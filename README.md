@@ -193,12 +193,15 @@ CLAUDE_RENDERPATCH_SUBAGENT_VIEW_DEBUG=verbose \
 node verify/subagent-view-history.mjs
 ```
 
-**只在該 teammate 進入 terminal status（`completed`/`failed`/`killed`）時注入。** 這是設計核心，
-不是保守選擇：stock 的每個 writer（`Hko`、`Zsn`、agent loop 的 `Iid`/`cpt`、`Opd`）都以
-`status === "running"` 為前提，terminal 之後就沒有其他 writer，extension 因此是唯一 writer，
-不需要任何 timer、debounce 或 retry。反過來說，running 中的 teammate 無法用延遲解決 ——
-`cpt` 是「每收到一則訊息就重新截斷」，競爭寫入由 agent 輸出觸發而非時鐘，所以 running teammate
-維持 stock 的 50 筆 window。
+**只在 teammate 沒有 active transcript writer 時注入：`running + isIdle`，或 terminal status
+（`completed`/`failed`/`killed`）。** Persistent in-process teammate 完成一個 turn 後通常不會立刻
+terminal；它會維持 `status="running"`、改成 `isIdle=true`，然後停在 `OW_` 等 mailbox。這正是實際
+subagent view 切換時最常見的狀態，也是舊版 extension 完全沒觸發的原因。
+
+Idle 時沒有 stream writer；若 teammate 被 resume，agent loop 會在開始輸出前先原子地改成
+`isIdle=false`，接著 stock `Iid`/`cpt` 自然把 live array 拉回 50 筆 window。等它再次 idle，extension
+再從新版 JSONL 回填。Terminal 後則所有 writer 都停止。反過來說，`running + !isIdle` 仍不注入：
+`cpt` 是「每收到一則訊息就重新截斷」，競爭寫入由 agent 輸出觸發而非時鐘，timer/debounce 無法解決。
 
 Merge 是 order-preserving 且 idempotent 的：以物件 identity 而非 uuid 是否存在來去重，
 避免沒有 uuid 的訊息每輪重複累積。找不到合格 leaf 時回傳空結果（對齊 stock `Xft` 的
