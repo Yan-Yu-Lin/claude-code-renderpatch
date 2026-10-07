@@ -14,6 +14,14 @@ Built and verified on 2026-10-08. This release adds one feature to the [2.1.291 
 
 `.2` was the first candidate. It passed every gate, but the second-model review found real issues, so it was never selected. `.3` was superseded before testing. Both stay on disk unchanged, as the workflow requires (immutable releases, never reused).
 
+## Selection
+
+After every gate passed and the review was clean, the live launcher was switched atomically on 2026-10-08 (sibling temp link + `os.replace`). The selected-path smoke passed status, version, safe version, the live Mod command, `plugin test` (1/0), and a real Sonnet `SELECTED_291R4_OK`; all exit 0. No running Claude or T3 process was touched; already-running sessions keep the old graph until they restart. Receipt: `~/.local/share/claude-renderpatch/selections/2026-10-08-2.1.291-host-resume.json`.
+
+```bash
+ln -s "$HOME/.local/share/claude-renderpatch/releases/2.1.291-host-darwin-arm64.1/claude-renderpatch-candidate" "$HOME/.local/bin/claude-bridge.rollback" && mv -h "$HOME/.local/bin/claude-bridge.rollback" "$HOME/.local/bin/claude-bridge"
+```
+
 ## Behavior
 
 | Stop path | Before (`.1`, stock) | After (`.4`) |
