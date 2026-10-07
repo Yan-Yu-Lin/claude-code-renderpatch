@@ -19,9 +19,13 @@ python3 tools/build-host-release-2.1.291-darwin.py \
   --output "$HOME/.local/share/claude-renderpatch/releases/2.1.291-host-darwin-arm64.1"
 ```
 
-Selected release: `2.1.291-host-darwin-arm64-74d680c6`. The unchanged 2.1.287 `.2` host release
-is the rollback. See [the 2.1.291 intent and verification record](reference/bridge-intent-2.1.291.md)
+Previously selected release: `2.1.291-host-darwin-arm64-74d680c6` (`.1`). See [the 2.1.291 intent and verification record](reference/bridge-intent-2.1.291.md)
 and [the port history](reference/port-2.1.291-notes.md).
+
+**Resumable stopped agents (`--revision 4`):** release `2.1.291-host-darwin-arm64.4`
+(`2.1.291-host-darwin-arm64-74d61a9b`) adds "stop = pause": every stop path still kills a background
+agent, but SendMessage (by id, or by name after a restart) can always bring it back; nothing restarts
+on its own. `.1` is its rollback. See [the resume intent and verification record](reference/bridge-intent-2.1.291-resume.md).
 
 The extractor and builder keep compiled text-loader references inside the official host;
 rewriting them to external `.txt` files breaks live Mods even when `plugin test` passes.

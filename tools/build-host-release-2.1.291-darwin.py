@@ -23,10 +23,16 @@ import subprocess
 from pathlib import Path
 
 from host_patches_2_1_291 import patch_graph
+from host_patches_2_1_291_resume import patch_resume
 
 REPO = Path(__file__).resolve().parents[1]
 VERSION = "2.1.291"
-BUILD = "host-2.1.291-darwin-arm64.1"
+BUILDS = {
+    1: "host-2.1.291-darwin-arm64.1",
+    2: "host-2.1.291-darwin-arm64.2",  # rejected after review; kept
+    3: "host-2.1.291-darwin-arm64.3",  # superseded before testing; kept
+    4: "host-2.1.291-darwin-arm64.4",
+}
 TEAM_ID = "Q6L2SF6YDW"
 FILE_SIZE = 233211568
 NATIVE_MODULES = {"audio-capture.node", "computer-use-input.node", "computer-use-swift.node"}
@@ -82,7 +88,14 @@ def top_level_non_declarations(source):
     return "".join(rest).strip()
 
 
-def build(stock, output):
+def build(stock, output, revision=1):
+    """revision 1 = renderer + routing; revision 2 adds resumable stopped agents."""
+    if revision not in BUILDS:
+        raise ValueError(f"unknown build revision: {revision}")
+    build_id = BUILDS[revision]
+    baked = ["full-redraw", "explicit-subagent-model-routing"]
+    if revision >= 2:
+        baked.append("resumable-stopped-agents")
     if output.exists():
         raise ValueError("refusing to overwrite an existing release")
     if sha(stock) != STOCK_SHA or stock.stat().st_size != FILE_SIZE:
@@ -128,7 +141,7 @@ def build(stock, output):
     head = re.sub(r'import\{[^}]*\}from"[^"]+";', "", body[: body.index(first)])
     if top_level_non_declarations(head):
         raise ValueError("embedded entry runs code before the host trap statement")
-    patched, changes = patch_graph(texts)
+    patched, changes = patch_graph(texts, patch_resume if revision >= 2 else None)
     for row in modules:
         path = paths[row["name"]]
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -156,12 +169,12 @@ def build(stock, output):
         "architecture": "official-executable-host",
         "targetVersion": VERSION,
         "platform": "darwin-arm64",
-        "bridgeBuildId": BUILD,
+        "bridgeBuildId": build_id,
         "stockSha256": STOCK_SHA,
         "stockTeamId": TEAM_ID,
         "moduleCount": len(modules),
         "semanticEdits": changes,
-        "bakedIn": ["full-redraw", "explicit-subagent-model-routing"],
+        "bakedIn": baked,
         "hostLoaderSha256": assets["host.mjs"]["sha256"],
         "assets": assets,
     }
@@ -171,7 +184,8 @@ def build(stock, output):
     constants = {
         "RELEASE_ID": identity["releaseId"],
         "TARGET_VERSION": VERSION,
-        "BRIDGE_BUILD_ID": BUILD,
+        "BRIDGE_BUILD_ID": build_id,
+        "BAKED_IN": ",".join(baked),
         "TARGET_SHA256": STOCK_SHA,
         "TARGET_TEAM_ID": TEAM_ID,
         "RELEASE_MANIFEST_SHA256": manifest_sha,
@@ -201,5 +215,6 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--stock", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--revision", type=int, default=1, choices=sorted(BUILDS))
     a = p.parse_args()
-    build(a.stock.resolve(), a.output.resolve())
+    build(a.stock.resolve(), a.output.resolve(), a.revision)

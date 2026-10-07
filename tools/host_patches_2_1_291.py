@@ -18,7 +18,7 @@ unchanged. Both plain Agent and named-teammate collisions reproduce on stock.
 """
 
 
-def patch_graph(texts):
+def patch_graph(texts, extra=None):
     result = dict(texts)
     changed = {}
 
@@ -166,4 +166,8 @@ def patch_graph(texts):
             ),
         ],
     )
+    # Optional additional fail-closed edit sets (for example the .2 resume set)
+    # share the same global-uniqueness checks.
+    if extra is not None:
+        extra(result, edit)
     return result, changed

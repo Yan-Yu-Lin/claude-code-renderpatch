@@ -311,7 +311,7 @@ if [[ "$WRAPPER_MODE" == "status" ]]; then
   printf 'bridge_build_id=%s\n' "$BRIDGE_BUILD_ID"
   printf 'architecture=official-executable-host\n'
   printf 'host_loader=%s\n' "$HOST_LOADER"
-  printf 'baked_in=full-redraw,explicit-subagent-model-routing\n'
+  printf 'baked_in=%s\n' "${BAKED_IN:-full-redraw,explicit-subagent-model-routing}"
   printf 'mode=multi-provider\n'
   printf 'proxy_url=%s\n' "$PROXY_URL"
   if proxy_alive; then
