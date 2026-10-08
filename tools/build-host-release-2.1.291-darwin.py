@@ -24,6 +24,7 @@ from pathlib import Path
 
 from host_patches_2_1_291 import patch_graph
 from host_patches_2_1_291_resume import patch_resume
+from host_patches_2_1_291_teammate_view import patch_teammate_view
 
 REPO = Path(__file__).resolve().parents[1]
 VERSION = "2.1.291"
@@ -32,6 +33,7 @@ BUILDS = {
     2: "host-2.1.291-darwin-arm64.2",  # rejected after review; kept
     3: "host-2.1.291-darwin-arm64.3",  # superseded before testing; kept
     4: "host-2.1.291-darwin-arm64.4",
+    5: "host-2.1.291-darwin-arm64.5",
 }
 TEAM_ID = "Q6L2SF6YDW"
 FILE_SIZE = 233211568
@@ -89,13 +91,15 @@ def top_level_non_declarations(source):
 
 
 def build(stock, output, revision=1):
-    """revision 1 = renderer + routing; revision 2 adds resumable stopped agents."""
+    """Revision 1: renderer/routing; 2+: resume; 5+: teammate transcript views."""
     if revision not in BUILDS:
         raise ValueError(f"unknown build revision: {revision}")
     build_id = BUILDS[revision]
     baked = ["full-redraw", "explicit-subagent-model-routing"]
     if revision >= 2:
         baked.append("resumable-stopped-agents")
+    if revision >= 5:
+        baked.append("teammate-transcript-view")
     if output.exists():
         raise ValueError("refusing to overwrite an existing release")
     if sha(stock) != STOCK_SHA or stock.stat().st_size != FILE_SIZE:
@@ -141,7 +145,13 @@ def build(stock, output, revision=1):
     head = re.sub(r'import\{[^}]*\}from"[^"]+";', "", body[: body.index(first)])
     if top_level_non_declarations(head):
         raise ValueError("embedded entry runs code before the host trap statement")
-    patched, changes = patch_graph(texts, patch_resume if revision >= 2 else None)
+    def extra_patches(result, edit):
+        if revision >= 2:
+            patch_resume(result, edit)
+        if revision >= 5:
+            patch_teammate_view(result, edit)
+
+    patched, changes = patch_graph(texts, extra_patches)
     for row in modules:
         path = paths[row["name"]]
         path.parent.mkdir(parents=True, exist_ok=True)

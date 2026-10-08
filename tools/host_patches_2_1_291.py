@@ -52,7 +52,7 @@ def patch_graph(texts, extra=None):
                 )
             text += "\n" + extra
             result[name] = text
-        changed[name] = len(changes)
+        changed[name] = changed.get(name, 0) + len(changes)
 
     # R1: never select the fullscreen alternate-screen renderer.
     edit(
