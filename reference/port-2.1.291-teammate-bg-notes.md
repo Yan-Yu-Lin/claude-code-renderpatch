@@ -85,6 +85,20 @@ and helpers `haiku`. Live `~/.claude/settings.json` and `~/.local/bin/claude-bri
 Timelines (from the transcripts' own timestamps, UTC in the files; Taiwan = +8) are in
 `patched/verification-2.1.291-teammate-bg/` (ignored).
 
+Reproduce:
+1. Make a fresh `/tmp/tbg6/<case>/.claude/settings.json` that allows Bash/Agent/SendMessage/Read/TaskStop.
+   For G3 with the hook, add a `PostToolBatch` entry for `teammate_inbox_wake.py`.
+2. Launch with [`verify/fixtures/teammate-bg-launch.sh`](../verify/fixtures/teammate-bg-launch.sh)
+   `<tmux-session> <dir> <launcher> --model sonnet --permission-mode bypassPermissions`.
+3. Accept the folder trust prompt (Down, Enter), then bracketed-paste a prompt with `tmux paste-buffer -p`:
+   [`teammate-bg-prompt-bash.txt`](../verify/fixtures/teammate-bg-prompt-bash.txt) (`.5` baseline),
+   [`-g1`](../verify/fixtures/teammate-bg-prompt-g1.txt), [`-g2`](../verify/fixtures/teammate-bg-prompt-g2.txt)
+   (for the Esc step, open the `esc` teammate from the footer and press Esc; vim mode needs an extra Esc),
+   [`-g3`](../verify/fixtures/teammate-bg-prompt-g3.txt).
+4. Read the result with [`verify/teammate-bg-timeline-2.1.291.py`](../verify/teammate-bg-timeline-2.1.291.py)
+   `~/.claude/projects/-private-tmp-tbg6-<case>`, plus the runner lines in `debug.log`: `taking N queued`
+   and `exited: stopping`.
+
 ### New gate results
 
 | Case | Result |
