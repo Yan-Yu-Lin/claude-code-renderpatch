@@ -73,6 +73,23 @@ spawned it, not the main agent**, re-invoke that sub-agent if needed, and push t
 Optional, related: fill in the empty `lEr()` collector, so teammates read their inbox every tool round natively; then the
 inbox-wake hook can be removed. Research §4 c has a draft.
 
+### 4b. Same gap for background **Bash** commands (observed 2026-10-14)
+
+- Teammate `selfstatus-a7` ran its astra review (`omp-sub`) with the Bash tool's `run_in_background: true`, ended its
+  turn ("the completion notification will wake me") and went idle at 20:27. The command finished at 20:30 (task output
+  `b5o9f1rkw.output`, exit 0, verdict HOLD). The teammate was never woken; the lead didn't see a notification either. It
+  sat idle about 2.5 hours until the lead read the output file and sent it a message.
+- [inferred, not traced] Same root cause as §3: background task notifications go to the message queue, which a
+  teammate never reads. Check `Kmt()`/`Ymt()`, or whatever notifies on shell-task completion, for the owner computation.
+- Fix in the same patch: when a teammate's own background shell command ends, write the completion notice into the
+  teammate's inbox (as in §4 step 2). The idle poll `Xe()` then wakes it; while running, the inbox-wake hook delivers it.
+- Possible hook-only workaround (untested): a PreToolUse hook on Bash, inside teammates only, that rewrites a
+  `run_in_background` command to also write an inbox message to that teammate when it exits. Risks: writing the inbox from
+  outside Claude Code (the `.lock` directory protocol; ledger provenance `unverifiable`/`forged` may get the message
+  filtered or flagged). Verify how `ke()` treats an unverifiable message before relying on it.
+- Test: a teammate starts `sleep 30` in the background and ends its turn; it must wake and act on the result within a
+  second or two of the command finishing.
+
 ## 5. Tests the new release must pass
 
 Reuse the research §6.3 harness: a separate claude-bridge in tmux, `env -i`, a test-only `--settings` copy, a /tmp
