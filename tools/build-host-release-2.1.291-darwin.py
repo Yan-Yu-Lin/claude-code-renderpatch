@@ -25,6 +25,7 @@ from pathlib import Path
 from host_patches_2_1_291 import patch_graph
 from host_patches_2_1_291_resume import patch_resume
 from host_patches_2_1_291_teammate_view import patch_teammate_view
+from host_patches_2_1_291_teammate_bg import patch_teammate_bg
 
 REPO = Path(__file__).resolve().parents[1]
 VERSION = "2.1.291"
@@ -34,6 +35,7 @@ BUILDS = {
     3: "host-2.1.291-darwin-arm64.3",  # superseded before testing; kept
     4: "host-2.1.291-darwin-arm64.4",
     5: "host-2.1.291-darwin-arm64.5",
+    6: "host-2.1.291-darwin-arm64.6",
 }
 TEAM_ID = "Q6L2SF6YDW"
 FILE_SIZE = 233211568
@@ -91,7 +93,8 @@ def top_level_non_declarations(source):
 
 
 def build(stock, output, revision=1):
-    """Revision 1: renderer/routing; 2+: resume; 5+: teammate transcript views."""
+    """Revision 1: renderer/routing; 2+: resume; 5+: teammate transcript views;
+    6+: background work for in-process teammates."""
     if revision not in BUILDS:
         raise ValueError(f"unknown build revision: {revision}")
     build_id = BUILDS[revision]
@@ -100,6 +103,8 @@ def build(stock, output, revision=1):
         baked.append("resumable-stopped-agents")
     if revision >= 5:
         baked.append("teammate-transcript-view")
+    if revision >= 6:
+        baked.append("teammate-background-work")
     if output.exists():
         raise ValueError("refusing to overwrite an existing release")
     if sha(stock) != STOCK_SHA or stock.stat().st_size != FILE_SIZE:
@@ -150,6 +155,8 @@ def build(stock, output, revision=1):
             patch_resume(result, edit)
         if revision >= 5:
             patch_teammate_view(result, edit)
+        if revision >= 6:
+            patch_teammate_bg(result, edit)
 
     patched, changes = patch_graph(texts, extra_patches)
     for row in modules:
