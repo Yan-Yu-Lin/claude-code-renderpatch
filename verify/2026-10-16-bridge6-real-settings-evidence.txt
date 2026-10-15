@@ -1,0 +1,313 @@
+########## a  (c565ee7a-c607-4a8a-b1e1-5e0d93b7bb40)
+## enqueue (task finished) times
+23:08:44.711 ENQUEUE hand-back ae41a10273f17d512
+23:08:44.927 ENQUEUE Agent "HELPER-A timing helper" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:08:44.761 LEAD USER HAND-BACK: HELPER-A RESULT 7341 </agent-message>  That "other Claude session" is an agent working inside thi
+23:08:44.927 alpha ATTACH Agent "HELPER-A timing helper" finished
+-- timeline
+23:07:57.455 LEAD Agent bg=None desc=case A teammate
+23:08:00.385 aalpha USER-MSG: <teammate-message teammate_id="team-lead" summary="case A teammate"> Do these steps in order. (1) Call the Age
+23:08:08.910 aalpha Agent bg=True desc=HELPER-A timing helper
+23:08:11.578 aalpha   -> async launched / bg started
+23:08:44.761 LEAD USER-MSG: Another Claude session sent a message: <agent-message from="ae41a10273f17d512"> [Subagent hand-back] The text 
+23:08:44.927 LEAD QUEUE enqueue: Agent "HELPER-A timing helper" finished
+23:08:44.927 aalpha GOT queued_command: Agent "HELPER-A timing helper" finished
+23:08:47.064 LEAD QUEUE remove: Agent "HELPER-A timing helper" finished
+23:09:52.660 aalpha SendMessage -> team-lead: ALPHA did not receive HELPER-A result. Its 3 sleep-5 calls ran as own calls 1-3, then 6 sl
+23:09:55.591 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue" summary="ALPHA: HELP
+23:09:58.498 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue"> {"type":"idle_notif
+
+########## a-bypass  (2a98efc8-0419-435a-a457-93dc91265e52)
+## enqueue (task finished) times
+23:15:45.809 ENQUEUE Agent "HELPER-A" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:15:46.135 alpha USER Agent "HELPER-A" finished
+-- timeline
+23:15:03.206 LEAD Agent bg=None desc=case A teammate
+23:15:03.373 aalpha USER-MSG: <teammate-message teammate_id="team-lead" summary="case A teammate"> Do these steps in order. (1) Call the Age
+23:15:14.280 aalpha Agent bg=True desc=HELPER-A
+23:15:14.463 aalpha   -> async launched / bg started
+23:15:34.254 aalpha SendMessage -> team-lead: ALPHA status: HELPER-A launched in background (agent aa48795a526080eaa). Own calls 1-3 don
+23:15:34.454 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue" summary="Status: HEL
+23:15:37.457 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue"> {"type":"idle_notif
+23:15:45.809 LEAD QUEUE enqueue: Agent "HELPER-A" finished
+23:15:46.133 LEAD QUEUE remove: Agent "HELPER-A" finished
+23:15:46.135 aalpha USER-MSG: <summary>Agent "HELPER-A" finished</summary> <note>A task-notification fires each time this agent stops with n
+23:15:49.690 aalpha SendMessage -> team-lead: ALPHA GOT HELPER-A 7341 after own call 3
+23:15:50.478 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue" summary="HELPER-A re
+23:15:52.059 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue"> {"type":"idle_notif
+
+########## a-def  (a34e03b2-e2c8-498f-b53a-3639a6c980c3)
+## enqueue (task finished) times
+23:25:30.968 ENQUEUE Agent "HELPER-A" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:25:30.968 alpha ATTACH Agent "HELPER-A" finished
+-- timeline
+23:24:42.022 LEAD Agent bg=None desc=case A teammate
+23:24:42.170 aalpha USER-MSG: <teammate-message teammate_id="team-lead" summary="case A teammate"> Do these steps in order. (1) Call the Age
+23:24:51.793 aalpha Agent bg=True desc=HELPER-A
+23:24:51.952 aalpha   -> async launched / bg started
+23:25:30.968 LEAD QUEUE enqueue: Agent "HELPER-A" finished
+23:25:30.968 aalpha GOT queued_command: Agent "HELPER-A" finished
+23:25:31.869 aalpha SendMessage -> team-lead: ALPHA status: HELPER-A has not returned yet. I ran 4 timed Bash calls (own call 1 to 3 at 
+23:25:32.119 LEAD QUEUE remove: Agent "HELPER-A" finished
+23:25:32.356 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue" summary="ALPHA statu
+23:25:39.218 aalpha SendMessage -> team-lead: ALPHA GOT HELPER-A 7341 after own call 4
+23:25:39.370 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue" summary="Report HELP
+23:25:41.366 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue"> {"type":"idle_notif
+
+########## a-r5  (5e3f9146-f40e-4d04-90ae-5181836d7134)
+## enqueue (task finished) times
+23:17:59.056 ENQUEUE hand-back a43bf33cc551ab846
+23:17:59.207 ENQUEUE Agent "HELPER-A" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:17:59.725 LEAD USER HAND-BACK: HELPER-A RESULT 7341      Second run of `date +%T; sleep 25; date +%T`: start 07:17:23, end 07:17
+23:18:01.214 LEAD USER Agent "HELPER-A" finished
+-- timeline
+23:15:04.341 LEAD Agent bg=None desc=case A teammate
+23:15:07.158 aalpha USER-MSG: <teammate-message teammate_id="team-lead" summary="case A teammate"> Do these steps in order. (1) Call the Age
+23:15:20.502 aalpha Agent bg=True desc=HELPER-A
+23:16:07.913 a43bf33cc551ab846.jsonl SendMessage -> main: HELPER-A RESULT 7341. The Bash call `date +%T; sleep 25; date +%T` ran successfully: start
+23:16:10.476 LEAD USER-MSG: Another Claude session sent a message: <agent-message from="a43bf33cc551ab846"> HELPER-A RESULT 7341. The Bash
+23:17:19.340 aalpha SendMessage -> a43bf33cc551ab846: HELPER-A: your run ended without delivering a report. Please run the Bash call `date +%T; 
+23:17:21.938 a43bf33cc551ab846.jsonl USER-MSG: Another Claude session sent a message while you were working: <agent-message from="alpha"> HELPER-A: your run 
+23:17:51.271 a43bf33cc551ab846.jsonl SendMessage -> alpha: HELPER-A RESULT 7341
+23:17:58.282 aalpha USER-MSG: <teammate-message teammate_id="a43bf33cc551ab846" color="blue" summary="Reply to alpha with requested HELPER-A
+23:17:58.390 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue"> {"type":"idle_notif
+23:17:59.207 LEAD QUEUE enqueue: Agent "HELPER-A" finished
+23:17:59.725 LEAD USER-MSG: Another Claude session sent a message: <agent-message from="a43bf33cc551ab846"> [Subagent hand-back] The text 
+23:18:01.214 LEAD USER-MSG: <summary>Agent "HELPER-A" finished</summary> <note>A task-notification fires each time this agent stops with n
+23:18:04.441 aalpha SendMessage -> team-lead: ALPHA GOT HELPER-A 7341 after own call 3
+23:18:08.394 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue" summary="Report HELP
+23:18:09.970 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="alpha" color="blue"> {"type":"idle_notif
+
+########## b  (98856d6b-c2cb-4410-b58f-2a306f40752f)
+## enqueue (task finished) times
+23:08:39.839 ENQUEUE Background command "FAKE-BUILD-B" failed with exit code 2
+23:08:50.393 ENQUEUE Background command "LONG-JOB-B" completed (exit code 0)
+
+## who saw task-notifications / hand-backs in their conversation
+23:08:39.904 bravo USER Background command "FAKE-BUILD-B" failed with exit code 2
+23:08:50.615 bravo USER Background command "LONG-JOB-B" completed (exit code 0)
+-- timeline
+23:07:58.284 LEAD Agent bg=None desc=case B teammate
+23:08:00.632 abravo USER-MSG: <teammate-message teammate_id="team-lead" summary="case B teammate"> Do these steps in order. (1) In ONE messa
+23:08:05.281 abravo Bash BG desc=LONG-JOB-B
+23:08:05.440 abravo   -> async launched / bg started
+23:08:05.593 abravo Bash BG desc=FAKE-BUILD-B
+23:08:14.913 abravo   -> async launched / bg started
+23:08:17.649 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="bravo" color="blue"> {"type":"idle_notif
+23:08:39.839 LEAD QUEUE enqueue: Background command "FAKE-BUILD-B" failed with exit code 2
+23:08:39.903 LEAD QUEUE remove: Background command "FAKE-BUILD-B" failed with exit code 2
+23:08:39.904 abravo USER-MSG: <summary>Background command "FAKE-BUILD-B" failed with exit code 2</summary> </task-notification>
+23:08:43.494 abravo SendMessage -> team-lead: BRAVO GOT FAKE-BUILD-B exit=2 output=FAILED at 07:08:41
+23:08:46.685 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="bravo" color="blue" summary="Report FAKE
+23:08:48.283 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="bravo" color="blue"> {"type":"idle_notif
+23:08:50.393 LEAD QUEUE enqueue: Background command "LONG-JOB-B" completed (exit code 0)
+23:08:50.613 LEAD QUEUE remove: Background command "LONG-JOB-B" completed (exit code 0)
+23:08:50.615 abravo USER-MSG: <summary>Background command "LONG-JOB-B" completed (exit code 0)</summary> </task-notification>
+23:08:53.608 abravo SendMessage -> team-lead: BRAVO GOT LONG-JOB-B exit=0 output=DONE_B at 07:08:52
+23:08:57.697 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="bravo" color="blue" summary="Report LONG
+23:08:59.786 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="bravo" color="blue"> {"type":"idle_notif
+
+########## b-r5  (857fce75-edd8-4b58-8ea5-986cc20b515f)
+## enqueue (task finished) times
+23:19:18.112 ENQUEUE Background command "FAKE-BUILD-B" failed with exit code 2
+23:19:35.839 ENQUEUE Background command "LONG-JOB-B" completed (exit code 0)
+
+## who saw task-notifications / hand-backs in their conversation
+-- timeline
+23:18:43.386 LEAD Agent bg=None desc=case B teammate
+23:18:46.422 abravo USER-MSG: <teammate-message teammate_id="team-lead" summary="case B teammate"> Do these steps in order. (1) In ONE messa
+23:18:50.650 abravo Bash BG desc=LONG-JOB-B
+23:18:50.882 abravo   -> async launched / bg started
+23:18:50.956 abravo Bash BG desc=FAKE-BUILD-B
+23:18:53.197 abravo   -> async launched / bg started
+23:18:56.433 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="bravo" color="blue"> {"type":"idle_notif
+23:19:18.112 LEAD QUEUE enqueue: Background command "FAKE-BUILD-B" failed with exit code 2
+23:19:35.839 LEAD QUEUE enqueue: Background command "LONG-JOB-B" completed (exit code 0)
+
+########## c  (d9205f24-5bcb-4ca6-b4c8-d3472d726051)
+## enqueue (task finished) times
+23:08:30.627 ENQUEUE hand-back a31fe35e41ec00143
+23:08:30.795 ENQUEUE Agent "REVIEW-C" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:08:30.646 LEAD USER HAND-BACK: REVIEW-C DONE </agent-message>  That "other Claude session" is an agent working inside this same
+23:08:30.795 charlie ATTACH Agent "REVIEW-C" finished
+-- timeline
+23:07:59.437 LEAD Agent bg=None desc=case C teammate
+23:08:01.770 acharlie USER-MSG: <teammate-message teammate_id="team-lead" summary="case C teammate"> You are building a tiny Python helper. Do
+23:08:13.952 acharlie Agent bg=True desc=REVIEW-C
+23:08:16.566 acharlie   -> async launched / bg started
+23:08:24.014 a31fe35e41ec00143.jsonl SendMessage -> charlie: Review of calc.py is at /tmp/bridge6-test/c/2026-10-16-calc-review.md; the most important 
+23:08:30.278 acharlie USER-MSG: <teammate-message teammate_id="a31fe35e41ec00143" color="blue" summary="Send review path and top finding to ch
+23:08:30.646 LEAD USER-MSG: Another Claude session sent a message: <agent-message from="a31fe35e41ec00143"> [Subagent hand-back] The text 
+23:08:30.795 LEAD QUEUE enqueue: Agent "REVIEW-C" finished
+23:08:30.795 acharlie GOT queued_command: Agent "REVIEW-C" finished
+23:08:33.620 LEAD QUEUE remove: Agent "REVIEW-C" finished
+23:08:45.801 acharlie SendMessage -> team-lead: CHARLIE APPLIED REVIEW: avg() now raises a ValueError on an empty list instead of crashing
+23:08:48.831 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="charlie" color="blue" summary="Report re
+23:08:50.831 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="charlie" color="blue"> {"type":"idle_not
+
+########## c2  (2b7902cd-fbe7-4920-bce5-f94e97eb12af)
+## enqueue (task finished) times
+23:22:15.162 ENQUEUE hand-back a3fe7cc5ab2287089
+23:22:15.362 ENQUEUE Agent "REVIEW-C" finished
+23:22:15.794 ENQUEUE hand-back ac394ccd9b79b9be0
+23:22:15.939 ENQUEUE Agent "REVIEW-C" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:22:15.187 LEAD USER HAND-BACK: Reviewed /tmp/bridge6-test/c2/calc.py (10 lines). Two issues, most important first:   1. avg(xs),
+23:22:16.882 LEAD USER HAND-BACK: Reviewed /tmp/bridge6-test/c2/calc.py (10 lines). Findings, most important first:   1. avg(xs) (l
+23:22:15.362 charlie ATTACH Agent "REVIEW-C" finished
+23:22:15.939 charlie ATTACH Agent "REVIEW-C" finished
+-- timeline
+23:21:51.352 LEAD Agent bg=None desc=case C teammate
+23:21:54.701 acharlie USER-MSG: <teammate-message teammate_id="team-lead" summary="case C teammate"> You are building a tiny Python helper. Do
+23:22:02.587 acharlie Agent bg=True desc=REVIEW-C
+23:22:03.051 acharlie Agent bg=True desc=REVIEW-C
+23:22:05.386 acharlie   -> async launched / bg started
+23:22:07.826 acharlie   -> async launched / bg started
+23:22:15.187 LEAD USER-MSG: Another Claude session sent a message: <agent-message from="a3fe7cc5ab2287089"> [Subagent hand-back] The text 
+23:22:15.362 LEAD QUEUE enqueue: Agent "REVIEW-C" finished
+23:22:15.362 acharlie GOT queued_command: Agent "REVIEW-C" finished
+23:22:15.939 LEAD QUEUE enqueue: Agent "REVIEW-C" finished
+23:22:15.939 acharlie GOT queued_command: Agent "REVIEW-C" finished
+23:22:16.882 LEAD USER-MSG: Another Claude session sent a message: <agent-message from="ac394ccd9b79b9be0"> [Subagent hand-back] The text 
+23:22:24.335 LEAD QUEUE remove: Agent "REVIEW-C" finished
+23:22:24.335 LEAD QUEUE remove: Agent "REVIEW-C" finished
+23:22:30.747 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="charlie" color="blue"> {"type":"idle_not
+
+########## c-def  (266035a8-a742-4ed9-91fb-e2ad45cac152)
+## enqueue (task finished) times
+23:24:57.499 ENQUEUE Agent "REVIEW-C" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:24:57.499 charlie ATTACH Agent "REVIEW-C" finished
+-- timeline
+23:24:43.975 LEAD Agent bg=None desc=case C teammate
+23:24:44.095 acharlie USER-MSG: <teammate-message teammate_id="team-lead" summary="case C teammate"> You are building a tiny Python helper. Do
+23:24:51.445 acharlie Agent bg=True desc=REVIEW-C
+23:24:51.639 acharlie   -> async launched / bg started
+23:24:57.499 LEAD QUEUE enqueue: Agent "REVIEW-C" finished
+23:24:57.499 acharlie GOT queued_command: Agent "REVIEW-C" finished
+23:25:03.421 LEAD QUEUE remove: Agent "REVIEW-C" finished
+23:25:09.602 acharlie SendMessage -> team-lead: CHARLIE APPLIED REVIEW: avg() now raises ValueError on an empty list instead of ZeroDivisi
+23:25:10.219 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="charlie" color="blue" summary="Report re
+23:25:11.552 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="charlie" color="blue"> {"type":"idle_not
+
+########## d  (ece8f627-c1b1-4fa8-823f-27c9b3760c22)
+## enqueue (task finished) times
+23:08:52.351 ENQUEUE hand-back a26fe81d6aea65d53
+23:08:52.512 ENQUEUE Agent "GUARD-NOMODEL" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:08:52.369 LEAD USER HAND-BACK: NOMODEL DONE: The Agent tool was available, and my spawn call (general-purpose, haiku, NESTED, "s
+23:08:52.716 delta USER Agent "GUARD-NOMODEL" finished
+-- timeline
+23:08:01.075 LEAD Agent bg=None desc=case D teammate
+23:08:08.762 adelta USER-MSG: <teammate-message teammate_id="team-lead" summary="case D teammate"> This is a test of spawning rules; some ca
+23:08:15.160 adelta Agent bg=True desc=GUARD-OPUS
+23:08:18.205 adelta Agent bg=True desc=GUARD-FORK
+23:08:22.012 adelta Agent bg=True desc=GUARD-NOMODEL
+23:08:24.846 adelta   -> async launched / bg started
+23:08:29.007 a26fe81d6aea65d53.jsonl Agent bg=None desc=NESTED
+23:08:45.826 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="delta" color="blue"> {"type":"idle_notif
+23:08:52.369 LEAD USER-MSG: Another Claude session sent a message: <agent-message from="a26fe81d6aea65d53"> [Subagent hand-back] The text 
+23:08:52.512 LEAD QUEUE enqueue: Agent "GUARD-NOMODEL" finished
+23:08:52.715 LEAD QUEUE remove: Agent "GUARD-NOMODEL" finished
+23:08:52.716 adelta USER-MSG: <summary>Agent "GUARD-NOMODEL" finished</summary> <note>A task-notification fires each time this agent stops w
+23:08:56.558 adelta SendMessage -> team-lead: DELTA RESULTS opus=refused fork=refused nomodel=launched nested=unknown (the helper's Suba
+23:08:59.833 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="delta" color="blue" summary="Report case
+23:09:02.834 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="delta" color="blue"> {"type":"idle_notif
+
+########## d-def  (2000e6b3-4ac0-4256-9631-66a3eb4ec86d)
+## enqueue (task finished) times
+23:29:51.437 ENQUEUE Agent "GUARD-NOMODEL" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:29:51.541 delta USER Agent "GUARD-NOMODEL" finished
+-- timeline
+23:29:17.196 LEAD Agent bg=None desc=case D teammate
+23:29:17.333 adelta USER-MSG: <teammate-message teammate_id="team-lead" summary="case D teammate"> This is a test of spawning rules; some ca
+23:29:22.378 adelta Agent bg=True desc=GUARD-OPUS
+23:29:25.600 adelta Agent bg=True desc=GUARD-FORK
+23:29:27.500 adelta Agent bg=True desc=GUARD-NOMODEL
+23:29:27.672 adelta   -> async launched / bg started
+23:29:32.353 a3eb6d5663cf36cdc.jsonl Agent bg=None desc=NESTED
+23:29:45.444 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="delta" color="blue"> {"type":"idle_notif
+23:29:51.437 LEAD QUEUE enqueue: Agent "GUARD-NOMODEL" finished
+23:29:51.540 LEAD QUEUE remove: Agent "GUARD-NOMODEL" finished
+23:29:51.541 adelta USER-MSG: <summary>Agent "GUARD-NOMODEL" finished</summary> <note>A task-notification fires each time this agent stops w
+23:29:54.197 adelta SendMessage -> team-lead: DELTA RESULTS opus=refused fork=refused nomodel=launched nested=refused by PreToolUse hook
+23:29:54.467 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="delta" color="blue" summary="Report spaw
+23:29:56.468 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="delta" color="blue"> {"type":"idle_notif
+
+########## e  (caa4a231-02a0-4ba5-9324-cf78411a9929)
+## enqueue (task finished) times
+23:10:10.912 ENQUEUE Background command "Run timed background shell check" completed (exit code 0)
+23:10:23.605 ENQUEUE hand-back a9e9eaf3ce17e4c4a
+23:10:23.784 ENQUEUE Agent "BG-E-AGENT" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:10:24.303 LEAD USER HAND-BACK: Ran one Bash call: `date +%T; sleep 75; date +%T`.      - First timestamp: 07:09:03   - Second ti
+23:10:11.234 echo USER Background command "Run timed background shell check" completed (exit code 0)
+23:10:24.190 echo USER Agent "BG-E-AGENT" finished
+-- timeline
+23:08:47.024 LEAD Agent bg=None desc=case E teammate
+23:08:49.631 aecho USER-MSG: <teammate-message teammate_id="team-lead" summary="case E teammate"> Do these steps in order. (1) In ONE messa
+23:08:55.793 aecho Bash BG desc=Run timed background shell check
+23:08:55.951 aecho   -> async launched / bg started
+23:08:56.317 aecho Agent bg=True desc=BG-E-AGENT
+23:09:00.084 aecho   -> async launched / bg started
+23:09:46.896 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue"> {"type":"idle_notifi
+23:10:10.912 LEAD QUEUE enqueue: Background command "Run timed background shell check" completed (exit code 0)
+23:10:11.232 LEAD QUEUE remove: Background command "Run timed background shell check" completed (exit code 0)
+23:10:11.234 aecho USER-MSG: <summary>Background command "Run timed background shell check" completed (exit code 0)</summary> </task-notifi
+23:10:19.361 aecho SendMessage -> team-lead: ECHO GOT BG-E-SHELL at 07:10:14
+23:10:22.928 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue" summary="Echo BG-E-SH
+23:10:23.784 LEAD QUEUE enqueue: Agent "BG-E-AGENT" finished
+23:10:24.185 LEAD QUEUE remove: Agent "BG-E-AGENT" finished
+23:10:24.190 aecho USER-MSG: <summary>Agent "BG-E-AGENT" finished</summary> <note>A task-notification fires each time this agent stops with
+23:10:24.303 LEAD USER-MSG: Another Claude session sent a message: <agent-message from="a9e9eaf3ce17e4c4a"> [Subagent hand-back] The text 
+23:10:25.825 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue"> {"type":"idle_notifi
+23:10:27.718 aecho SendMessage -> team-lead: ECHO GOT BG-E-AGENT at 07:10:26
+23:10:30.933 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue" summary="Echo BG-E-AG
+23:10:32.936 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue"> {"type":"idle_notifi
+
+########## e-def  (4cf156e7-ecca-4f74-94ed-92bc322fc67e)
+## enqueue (task finished) times
+23:30:38.493 ENQUEUE Background command "Run timed background shell test for BG-E-SHELL" completed (exit code 0)
+23:30:44.004 ENQUEUE Agent "BG-E-AGENT" finished
+
+## who saw task-notifications / hand-backs in their conversation
+23:30:38.607 echo USER Background command "Run timed background shell test for BG-E-SHELL" completed (exit code 0)
+23:30:44.004 echo ATTACH Agent "BG-E-AGENT" finished
+-- timeline
+23:29:17.652 LEAD Agent bg=None desc=case E teammate
+23:29:17.757 aecho USER-MSG: <teammate-message teammate_id="team-lead" summary="case E teammate"> Do these steps in order. (1) In ONE messa
+23:29:23.335 aecho Bash BG desc=Run timed background shell test for BG-E-SHELL
+23:29:23.533 aecho   -> async launched / bg started
+23:29:23.927 aecho Agent bg=True desc=BG-E-AGENT
+23:29:24.096 aecho   -> async launched / bg started
+23:29:28.105 aecho SendMessage -> team-lead: HELPER-E FINISHED
+23:29:28.770 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue" summary="Confirm step
+23:30:01.806 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue"> {"type":"idle_notifi
+23:30:38.493 LEAD QUEUE enqueue: Background command "Run timed background shell test for BG-E-SHELL" completed (e
+23:30:38.606 LEAD QUEUE remove: Background command "Run timed background shell test for BG-E-SHELL" completed (e
+23:30:38.607 aecho USER-MSG: <summary>Background command "Run timed background shell test for BG-E-SHELL" completed (exit code 0)</summary>
+23:30:44.004 LEAD QUEUE enqueue: Agent "BG-E-AGENT" finished
+23:30:44.004 aecho GOT queued_command: Agent "BG-E-AGENT" finished
+23:30:44.167 aecho SendMessage -> team-lead: ECHO GOT BG-E-SHELL at 07:30:42
+23:30:44.389 LEAD QUEUE remove: Agent "BG-E-AGENT" finished
+23:30:44.844 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue" summary="Report BG-E-
+23:30:49.237 aecho SendMessage -> team-lead: ECHO GOT BG-E-AGENT at 07:30:47
+23:30:49.848 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue" summary="Report BG-E-
+23:30:51.630 LEAD USER-MSG: Another Claude session sent a message: <teammate-message teammate_id="echo" color="blue"> {"type":"idle_notifi
+
