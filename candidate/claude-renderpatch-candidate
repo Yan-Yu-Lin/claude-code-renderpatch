@@ -27,7 +27,7 @@ PROXY_URL="http://127.0.0.1:8317"
 KEY_FILE="$HOME/.cli-proxy-api/.local-api-key"
 SETTINGS="$HOME/.claude/settings.json"
 OVERLAY="$HOME/.claude/claude-mix-settings.json"
-MIX_NOTE="Model routing note: this session runs through a local multi-provider proxy (claude-renderpatch-candidate). The /model aliases map to real upstream models on different subscriptions: fable = Claude Fable 5 (Anthropic, 1M context), opus = Claude Opus 5 (Anthropic, 1M context), sonnet = GPT-5.6 Sol (OpenAI, 372K context), haiku = Kimi K3 (Moonshot, 262K context). The model id shown in your system prompt is the model actually answering. Subagents default to the haiku slot unless a model is specified."
+MIX_NOTE="Model routing note: this session runs through a local CLIProxyAPI proxy (claude-renderpatch-candidate). All four /model slots are Anthropic models on one Claude subscription: fable = Claude Fable 5.1 (wire id claude-f51, 1M context), opus = Claude Opus 5.5 (wire id claude-o55, 1M context), sonnet = Claude Sonnet 5.5 (wire id claude-sonnet-5-5, 1M context), haiku = Claude Haiku 5.5 (wire id claude-h55, 1M context). There is no OpenAI or Kimi model behind any slot; GPT-family models (astra, daybreak-blue, sol) are only reachable via omp-sub. The model id shown in your system prompt is the model actually answering. For subagents, specify the desired model alias explicitly."
 
 usage() {
   cat <<'EOF'
