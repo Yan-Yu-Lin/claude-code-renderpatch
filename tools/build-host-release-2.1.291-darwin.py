@@ -36,6 +36,7 @@ BUILDS = {
     4: "host-2.1.291-darwin-arm64.4",
     5: "host-2.1.291-darwin-arm64.5",
     6: "host-2.1.291-darwin-arm64.6",
+    7: "host-2.1.291-darwin-arm64.7",  # .6 graph; launcher execs Claude
 }
 TEAM_ID = "Q6L2SF6YDW"
 FILE_SIZE = 233211568
@@ -94,7 +95,8 @@ def top_level_non_declarations(source):
 
 def build(stock, output, revision=1):
     """Revision 1: renderer/routing; 2+: resume; 5+: teammate transcript views;
-    6+: background work for in-process teammates."""
+    6+: background work for in-process teammates; 7: same graph as 6, launcher
+    execs Claude so it is the terminal's foreground process."""
     if revision not in BUILDS:
         raise ValueError(f"unknown build revision: {revision}")
     build_id = BUILDS[revision]
