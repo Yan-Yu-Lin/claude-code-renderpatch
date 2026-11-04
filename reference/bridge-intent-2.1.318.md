@@ -93,3 +93,17 @@ python3 tools/build-host-release-2.1.318-darwin.py \
 ```
 
 The builder refuses existing outputs. Choose a fresh revision/path for another build; graph imports contain the final absolute release path, so releases must not move. N1/N2, when enabled, are a separate recipe selected by `--mcp-background`; the final port notes record whether they were included and their gate verdict.
+
+## N1/N2 layer
+
+`tools/host_patches_2_1_318_mcp_bg.py` adds 29 replacements over the core: 85 total across 21 chunks. Build with `--mcp-background`, a fresh release directory, and matching `--revision`. `.2` is the first candidate containing this layer.
+
+- Both MCP clients (`6jypdf2f`, `r2ksrv9a`) allow background plain agents and in-process teammates, but retain foreground-child blocking and existing policy/threshold decisions. Server-side MCP Tasks eligibility stays main-only.
+- `kdb20esk:De` records the caller's `agentId` on the new MCP task, acquires `mcp:<taskId>`, and routes normal/degraded completion through `0x9x817t:K3t`. A missing/stopped owner falls back to the lead. TaskStop uses the existing ownership check.
+- `Gne`, `gar`, and `_Rt` recognize MCP work. Deferred `noticeGate` publication is protected by `__rpMcpNoticePending`; enqueue failure, stopped tasks, and task conversion release the keepalive. Queued owner notices survive until consumption; stopped-owner queue forwarding includes MCP tasks.
+- The teammate runner's live-child predicate includes owned running MCP calls. Terminal teammate exit aborts those calls; Esc remains only a turn interruption.
+- `kdb20esk:Ie` recognizes only `_meta["claudecode/backgroundNow"] === true`. A module-local WeakMap registers each eligible child AbortSignal with its early-handoff callback and removes the registration in `finally`. The main-only message-arrival registry is not broadened. The server-trigger notice explicitly says the server requested backgrounding.
+
+Each replacement still enforces global old=1/new=0 before and old=0/new=1 immediately afterward. The redundant end-of-composition replay was removed because N1 intentionally refines the core's owner router and runner helpers; their earlier replacement strings no longer exist verbatim after layering.
+
+Arthur explicitly authorized bounded smoke/owner/marker checks rather than completion of the earlier full gate campaign. See the port notes for observed results and manual verification limits; this is not a claim that every lifecycle scenario passed.

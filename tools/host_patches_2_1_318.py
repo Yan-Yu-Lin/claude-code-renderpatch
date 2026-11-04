@@ -21,7 +21,6 @@ unchanged. Both plain Agent and named-teammate collision paths remain distinct.
 def patch_graph(texts, extra=None):
     result = dict(texts)
     changed = {}
-    applied = []
 
     def global_count(needle):
         return sum(text.count(needle) for text in result.values())
@@ -63,7 +62,6 @@ def patch_graph(texts, extra=None):
             text = text.replace(old, new, 1)
             result[name] = text
             assert_applied(old, new, name)
-            applied.append((name, old, new))
         if extra:
             extra_count = global_count(extra)
             if extra_count != 0:
@@ -192,6 +190,6 @@ def patch_graph(texts, extra=None):
     # global before/after uniqueness checks.
     if extra is not None:
         extra(result, edit)
-    for name, old, new in applied:
-        assert_applied(old, new, name)
+    # Each edit checks global pre/postconditions immediately. Later recipe
+    # layers may intentionally refine an earlier layer's replacement text.
     return result, changed
