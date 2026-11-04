@@ -65,9 +65,9 @@ ln -s "$HOME/.local/share/claude-renderpatch/releases/2.1.318-host-darwin-arm64.
 
 ## `.4` — block server prompt injection (2026-11-05)
 
-Built `~/.local/share/claude-renderpatch/releases/2.1.318-host-darwin-arm64.4/` with the complete `.3` graph plus `block-server-prompt-injection`. The builder applied 99 fail-closed replacements across 25 chunks. Release ID: `2.1.318-host-darwin-arm64-adf9cc07`. Manifest SHA-256: `997d7feabacc34e6f91bc432049704595091afbed6bd9fbd9c8aae01a0837818`.
+Built `~/.local/share/claude-renderpatch/releases/2.1.318-host-darwin-arm64.4/` with the complete `.3` graph plus `block-server-prompt-injection`. The builder applied 102 fail-closed replacements across 26 chunks. Release ID: `2.1.318-host-darwin-arm64-adf9cc07`. Manifest SHA-256: `aab9b766058fe6e3fda3837445c194f02bdd00513cd216118418ffd8a911eb7a`.
 
-The patch drops server-controlled free text from `tengu_heron_brook`, `tengu_brook_heron`, `tengu_toasty_thimble`, `tengu_gentle_parasol`, `tengu_kairos_brief_stop_hook_text`, `tengu_projects_thread_recap_prompt`, `tengu_cinder_plover`, and `tengu_cinder_wren`. Built-in fallback text remains where stock has one. Each distinct blocked channel/text pair is appended once per process/session to `~/.local/state/claude-bridge/blocked-injections.jsonl` with timestamp, model, full text and PID. `CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS=1` restores stock behavior.
+The patch drops server-controlled free text from `tengu_heron_brook`, `tengu_brook_heron`, `tengu_hushed_lark_text`, `tengu_flint_harbor_prompt`, `tengu_toasty_thimble`, `tengu_gentle_parasol`, `tengu_kairos_brief_stop_hook_text`, `tengu_projects_thread_recap_prompt`, `tengu_cinder_plover`, `tengu_cinder_wren`, and `tengu_official_plugin_prompt_overrides`. Built-in fallback text remains where stock has one. Each distinct blocked channel/text pair is appended once per process/session to `~/.local/state/claude-bridge/blocked-injections.jsonl` with timestamp, model, full text and PID. `CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS=1` restores stock behavior.
 
 Normal patched launches also append `-original_games_guidance` to `CLAUDE_CODE_MODEL_CAPABILITIES`. The parser strips `[1m]` before matching, and an unscoped capability entry applies to every model, including proxy IDs such as `claude-o55[1m]`. Safe mode does not set the override. The escape hatch does not set it either.
 

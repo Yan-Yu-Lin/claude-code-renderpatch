@@ -26,6 +26,14 @@ def patch_server_prompts(result, edit):
                 'let uo=Cmr(Re());if(uo!==null)return{kind:"served",text:uo}',
                 'let uo=Cmr(Re(),h);if(uo!==null)return{kind:"served",text:uo}',
             ),
+            (
+                'function BMn(){let e=i.CLAUDE_CODE_SILENT_TURN_REMINDER_TEXT;if(e!==void 0)return e;let n=k("tengu_hushed_lark_text",$Mn);return typeof n==="string"&&n.trim()!==""?n:$Mn}',
+                f'function BMn(){{let e=i.CLAUDE_CODE_SILENT_TURN_REMINDER_TEXT;if(e!==void 0)return e;let n=k("tengu_hushed_lark_text",$Mn);if(typeof n==="string"&&n.trim()!==""){{let r={helper}("tengu_hushed_lark_text",n);if(r!==null)return r}}return $Mn}}',
+            ),
+            (
+                'async getPromptForCommand(e,n){let r=k("tengu_flint_harbor_prompt",{}),s=typeof r?.prompt==="string"?r.prompt:y5o,',
+                f'async getPromptForCommand(e,n){{let r=k("tengu_flint_harbor_prompt",{{}});if(r&&typeof r==="object"&&Object.keys(r).length>0&&{helper}("tengu_flint_harbor_prompt",JSON.stringify(r))===null)r={{}};let s=typeof r?.prompt==="string"?r.prompt:y5o,',
+            ),
         ],
         _helper(helper),
     )
@@ -81,6 +89,18 @@ def patch_server_prompts(result, edit):
             (
                 'let q=k("tengu_cinder_plover","").trim();c=q?`\n${q}\n`:nIi}let m=k("tengu_cinder_wren",""),r=typeof m==="string"?m.trim():"",w=r?`\n${r}\n`:"",',
                 f'let q=k("tengu_cinder_plover","").trim(),B={helper}("tengu_cinder_plover",q,e);c=B===null?nIi:B?`\n${{B}}\n`:nIi}}let m=k("tengu_cinder_wren",""),r=typeof m==="string"?m.trim():"",R={helper}("tengu_cinder_wren",r,e),w=R===null?"":R?`\n${{R}}\n`:"",',
+            ),
+        ],
+        _helper(helper),
+    )
+
+    helper = "__rpBlockPrompt5"
+    edit(
+        "chunk-2b6sw7z3.js",
+        [
+            (
+                'let r=k("tengu_official_plugin_prompt_overrides",{}),s=I().safeParse(r);',
+                f'let r=k("tengu_official_plugin_prompt_overrides",{{}});if(r&&typeof r==="object"&&Object.keys(r).length>0&&{helper}("tengu_official_plugin_prompt_overrides",JSON.stringify(r))===null)return;let s=I().safeParse(r);',
             ),
         ],
         _helper(helper),

@@ -16,20 +16,38 @@ from pathlib import Path
 CHANNELS = [
     "tengu_heron_brook",
     "tengu_brook_heron",
+    "tengu_hushed_lark_text",
+    "tengu_flint_harbor_prompt",
     "tengu_toasty_thimble",
     "tengu_gentle_parasol",
     "tengu_kairos_brief_stop_hook_text",
     "tengu_projects_thread_recap_prompt",
     "tengu_cinder_plover",
     "tengu_cinder_wren",
+    "tengu_official_plugin_prompt_overrides",
 ]
 
 FILES = {
-    "chunk-0x9x817t.js": ["tengu_heron_brook", "tengu_brook_heron"],
+    "chunk-0x9x817t.js": ["tengu_heron_brook", "tengu_brook_heron", "tengu_hushed_lark_text", "tengu_flint_harbor_prompt"],
     "chunk-363wfywp.js": ["tengu_toasty_thimble", "tengu_gentle_parasol"],
     "chunk-3xyf3gs0.js": ["tengu_kairos_brief_stop_hook_text"],
     "chunk-52mcbrhk.js": ["tengu_projects_thread_recap_prompt"],
     "chunk-v5d8s1b8.js": ["tengu_cinder_plover", "tengu_cinder_wren"],
+    "chunk-2b6sw7z3.js": ["tengu_official_plugin_prompt_overrides"],
+}
+
+HELPERS = {
+    "tengu_heron_brook": "__rpBlockPrompt0",
+    "tengu_brook_heron": "__rpBlockPrompt0",
+    "tengu_hushed_lark_text": "__rpBlockPrompt0",
+    "tengu_flint_harbor_prompt": "__rpBlockPrompt0",
+    "tengu_toasty_thimble": "__rpBlockPrompt1",
+    "tengu_gentle_parasol": "__rpBlockPrompt1",
+    "tengu_kairos_brief_stop_hook_text": "__rpBlockPrompt2",
+    "tengu_projects_thread_recap_prompt": "__rpBlockPrompt3",
+    "tengu_cinder_plover": "__rpBlockPrompt4",
+    "tengu_cinder_wren": "__rpBlockPrompt4",
+    "tengu_official_plugin_prompt_overrides": "__rpBlockPrompt5",
 }
 
 
@@ -59,16 +77,8 @@ def main():
         home = Path(td)
         script = home / "smoke.mjs"
         calls = []
-        for index, channel in enumerate(CHANNELS):
-            helper = f"__rpBlockPrompt{min(index // 2, 4)}"
-            if channel in {"tengu_toasty_thimble", "tengu_gentle_parasol"}:
-                helper = "__rpBlockPrompt1"
-            elif channel == "tengu_kairos_brief_stop_hook_text":
-                helper = "__rpBlockPrompt2"
-            elif channel == "tengu_projects_thread_recap_prompt":
-                helper = "__rpBlockPrompt3"
-            elif channel.startswith("tengu_cinder_"):
-                helper = "__rpBlockPrompt4"
+        for channel in CHANNELS:
+            helper = HELPERS[channel]
             call = f'out.push({helper}({json.dumps(channel)},{json.dumps("FAKE_" + channel)},"claude-o55[1m]"));'
             calls.extend([call, call])
         script.write_text("\n".join(helpers) + "\nlet out=[];\n" + "\n".join(calls) + "\nconsole.log(JSON.stringify(out));\n")
