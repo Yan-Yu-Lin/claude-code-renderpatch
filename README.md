@@ -1,6 +1,8 @@
 # claude-code-renderpatch
-Version-pinned renderer and explicit subagent-routing patches for Claude Code.
-Current Mac bridge: **Claude Code 2.1.291 on macOS arm64 (official-executable host)**, with official Mods working alongside the baked-in patches.
+Version-pinned renderer, subagent-routing, teammate and MCP-background patches for Claude Code.
+Current Mac bridge: **Claude Code 2.1.318 on macOS arm64 (official-executable host), release `.2`**, with official Mods working alongside the baked-in patches. Rollback: 2.1.291 `.7`. See [the 2.1.318 port notes](reference/port-2.1.318-notes.md).
+
+**Why each patch exists:** [WHY.md](WHY.md) (the problem in stock Claude Code, and what each patch makes possible).
 Earlier verified source-graph bridges: 2.1.261 on macOS arm64 and 2.1.246 on Linux x64.
 The recipes and platform launchers are version-specific.
 

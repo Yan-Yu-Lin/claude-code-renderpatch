@@ -1,0 +1,30 @@
+# Why each patch exists
+
+claude-bridge is Arthur's patched Claude Code. This page says **why** each patch is there: what went wrong in stock Claude Code, and what the patch makes possible. For how each one is implemented and verified, see `reference/bridge-intent-<version>.md` and `reference/port-<version>-notes.md`.
+
+Current release: **2.1.318 `.2`** (`~/.local/share/claude-renderpatch/releases/2.1.318-host-darwin-arm64.2`). Rollback: 2.1.291 `.7`.
+
+None of these are fixed upstream as of 2.1.318, unless a row says otherwise.
+
+| Patch (`baked_in` name) | Since | The problem in stock Claude Code | What the patch does |
+|---|---|---|---|
+| `full-redraw` | 2.1.203 | In the classic (non-fullscreen) terminal, Ctrl+O expand/collapse and window resizes left a half-drawn screen. Old messages vanished, and the transcript was capped at the last ~30 messages. Arthur reads long sessions and needs the whole history to stay readable. Upstream treats this as intended behaviour, so the fork is long-term. | Inline mode only. Messages are uncapped, and every full redraw is a real clear (ED2 + ED3) replayed from row 0, so expand, collapse and resize always show the complete, correct transcript. |
+| `explicit-subagent-model-routing` (S1 plain, S2 teammate) | 2.1.219 | With Arthur's multi-provider slots (claude-mix), asking a subagent for `model: "sonnet"` could silently run it on the **parent's** model, because a "same family" shortcut matched the parent's model id by substring. The subagent then ran on the wrong (often more expensive) model. | The explicit model argument always resolves to its configured slot. Defaults and `inherit` are unchanged. S1 covers plain subagents, S2 covers named teammates (different code path). |
+| `resumable-stopped-agents` | 2.1.291 `.4` | Stopping a background subagent (TaskStop, Esc, task panel, app exit) killed it for good. After a restart it couldn't even be found by name, so its context was lost. | "Stop = pause". The agent is still stopped, but SendMessage (by id, or by name after a restart) brings it back. Nothing restarts on its own. Parts upstream added later (2.1.299 name lookup after restart, orphan wording) were dropped in 2.1.318. |
+| `teammate-transcript-view` | 2.1.291 `.5` | In `/tasks`, a named teammate's transcript showed only its last 50 rows and stopped updating once it finished (upstream issue #98550). You couldn't follow or review what a teammate did. | A teammate's view reads its full transcript from disk, grows live while viewed, and keeps everything after it finishes. |
+| `teammate-background-work` | 2.1.291 `.6` | A named teammate couldn't run work in the background. Any Agent it spawned was forced into the foreground, so the teammate was stuck (once for 1.5 h). Results of its background work went to the lead instead of to it, and an idle teammate was never woken when its background Bash finished (one waited 2.5 h). Esc in a teammate's turn killed its background jobs. | Teammates can spawn background agents and Bash. Results are routed to the teammate that owns them, and an idle teammate is woken when one finishes. Esc only ends the current turn. When a teammate really exits, its running children are stopped and any unread results go to the lead (`STOPPED_TEAMMATE_POLICY = "stop-children"`). |
+| `mcp-owner-background` (N1) | 2.1.318 `.2` | A long MCP tool call (e.g. `remote_exec` running a build on another machine) moves to the background after 2 min, **but only in the main conversation**. In a subagent or teammate it blocked the agent until done. Even when it did background, the result was hard-wired to the lead. | Background subagents and teammates can background MCP calls too. The task is owned by the caller, the result goes back to the caller (to the lead only if the caller is gone), and the caller is woken if idle. Foreground subagents still block on purpose: once they return, nothing could wake them for the result. |
+| `mcp-background-now` (N2) | 2.1.318 `.2` | The only control over *when* an MCP call backgrounds was one global threshold (`CLAUDE_CODE_MCP_AUTO_BACKGROUND_MS`) for all tools. A tool that starts a server can't say "I'm up, background me now". MCP Tasks would allow it, but they are main-conversation only and gated by a remote flag that Arthur's setup never fetches. | A server sends a progress notification with `_meta["claudecode/backgroundNow"]: true`, and that one call backgrounds immediately (subject to the normal checks). Stock Claude Code treats the marker as ordinary progress, so it's harmless elsewhere. remote-shell-mcp will use it for a per-call `background_after_s`. |
+| exec launcher (not a graph patch) | 2.1.291 `.7` | The launcher ran Claude as a child of bash, so Rex (and other terminals) showed "bash" as the tab's program. | The launcher `exec`s the official binary. A background watcher still restores `settings.json` models after exit. |
+
+## Related pieces outside this repo
+
+- `~/.claude/hooks/teammate_inbox_wake.py`: makes a **busy** teammate receive a SendMessage after its current tool call, instead of only at the end of its turn. Stock Claude Code's per-tool-round mailbox check is an empty stub.
+- `~/.claude/hooks/subagent_guard.sh`: two layers of agents at most, with cheap models for the second layer.
+- `remote-shell-mcp` (`~/20-29-Development/21-Active-Projects/remote-shell-mcp`): the MCP server N1/N2 were written for, plus its own PreToolUse hook that gives each agent its own remote shell.
+
+## Not done (known gaps)
+
+- In `auto` permission mode, a teammate's helper report can still reach the lead (SubagentHandback path). Arthur uses `default` mode, so this has low priority.
+- Foreground subagents can't background MCP calls. A possible later patch: let them, and wake them through the SendMessage-resume path when the result arrives. Usually not needed, because background subagents already work.
+- `"revive"` policy for stopped teammates (bring a stopped teammate back when its background work finishes): designed, not implemented. The current behaviour hands the result to the lead.
