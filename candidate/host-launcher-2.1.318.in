@@ -338,6 +338,14 @@ else
   verify_full_release
 fi
 
+if [[ "$safe_mode" == false && ",$BAKED_IN," == *",block-server-prompt-injection,"* && "${CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS:-}" != "1" ]]; then
+  if [[ -n "${CLAUDE_CODE_MODEL_CAPABILITIES:-}" ]]; then
+    export CLAUDE_CODE_MODEL_CAPABILITIES="${CLAUDE_CODE_MODEL_CAPABILITIES};-original_games_guidance"
+  else
+    export CLAUDE_CODE_MODEL_CAPABILITIES="-original_games_guidance"
+  fi
+fi
+
 validate_sensitive_files
 start_proxy
 

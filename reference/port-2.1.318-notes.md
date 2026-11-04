@@ -62,3 +62,23 @@ ln -s "$HOME/.local/share/claude-renderpatch/releases/2.1.318-host-darwin-arm64.
 - **`run_in_background:false` still launches asynchronously:** stock `chunk-595kpmgv.js:yr` omits `run_in_background` from the effective Agent schema when `Wft() || DAt()` is true. The manual-session API schema indeed omitted it; the model emitted false, but it was already absent from the input handed to `subagent_guard.sh`. `To` then sees undefined and `Gr` chooses its background default; `chunk-56swczar.js:HO` derives the background request shape. The exact internal predicate enabling omission is inferred, but the schema/input omission is observed. The teammate patch's `Gr` change has no effect for this main caller (`s=false`); it is not N1 or the guard hook overriding false. Foreground blocking remains a contract for actual foreground children, not a guarantee that this interactive schema accepts that flag.
 - **`team-lead` versus `main`:** stock `chunk-xfg1peqx.js:imn` resolves the former to a mailbox and the latter to the direct main queue. `chunk-nhbc679q.js:Ut` writes through `Uv`; lead mailbox consumption is `chunk-4z4cnx58.js:RS.poll`, wired to the loop's `afterRelease`. The `main` branch instead immediately enqueues `DC({mode:"prompt",agentId:ot(),priority:"next",...})`, allowing mid-turn absorption. The relevant `.2` routing blocks match stock; our teammate queue drain does not change the lead mailbox. The observed delivery immediately after `stop_hook_summary`, versus `absorbed_mid_turn` for `main`, matches these paths. Using `main` is the existing mid-turn route.
 - **TaskStop described as rejection:** stock `chunk-363wfywp.js:ki.createSyntheticErrorMessage` maps this interruption to generic user rejection unless the abort reason selects its neutral interruption/remote-cancel branch. Our resume patch does not alter that mapping; no wording change was made.
+
+## `.4` — block server prompt injection (2026-11-05)
+
+Built `~/.local/share/claude-renderpatch/releases/2.1.318-host-darwin-arm64.4/` with the complete `.3` graph plus `block-server-prompt-injection`. The builder applied 99 fail-closed replacements across 25 chunks. Release ID: `2.1.318-host-darwin-arm64-adf9cc07`. Manifest SHA-256: `997d7feabacc34e6f91bc432049704595091afbed6bd9fbd9c8aae01a0837818`.
+
+The patch drops server-controlled free text from `tengu_heron_brook`, `tengu_brook_heron`, `tengu_toasty_thimble`, `tengu_gentle_parasol`, `tengu_kairos_brief_stop_hook_text`, `tengu_projects_thread_recap_prompt`, `tengu_cinder_plover`, and `tengu_cinder_wren`. Built-in fallback text remains where stock has one. Each distinct blocked channel/text pair is appended once per process/session to `~/.local/state/claude-bridge/blocked-injections.jsonl` with timestamp, model, full text and PID. `CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS=1` restores stock behavior.
+
+Normal patched launches also append `-original_games_guidance` to `CLAUDE_CODE_MODEL_CAPABILITIES`. The parser strips `[1m]` before matching, and an unscoped capability entry applies to every model, including proxy IDs such as `claude-o55[1m]`. Safe mode does not set the override. The escape hatch does not set it either.
+
+Verification passed: immutable status, normal version, safe version, real proxy `-p`, and `verify/server-prompt-block-2.1.318.py`. The synthetic test forced distinct text through every patched channel, confirmed null/block behavior, full JSONL records, same-process deduplication, and stock return values under the escape hatch. No full interactive UI, subagent, or teammate prompt capture was run. Those paths use the same patched prompt builders and shared reminder source, but Arthur should inspect a fresh main/subagent/teammate session if visual confirmation is wanted.
+
+Rollback is `.3`:
+
+```bash
+rollback="$HOME/.local/bin/claude-bridge.rollback.$$"
+ln -s "$HOME/.local/share/claude-renderpatch/releases/2.1.318-host-darwin-arm64.3/claude-renderpatch-candidate" "$rollback" &&
+  mv -f "$rollback" "$HOME/.local/bin/claude-bridge"
+```
+
+Rollback affects new launches only.

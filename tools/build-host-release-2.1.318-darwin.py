@@ -26,6 +26,7 @@ from host_patches_2_1_318 import patch_graph
 from host_patches_2_1_318_resume import patch_resume
 from host_patches_2_1_318_teammate_view import patch_teammate_view
 from host_patches_2_1_318_teammate_bg import patch_teammate_bg
+from host_patches_2_1_318_server_prompts import patch_server_prompts
 
 REPO = Path(__file__).resolve().parents[1]
 VERSION = "2.1.318"
@@ -94,6 +95,8 @@ def build(stock, output, revision=1, mcp_background=False):
              "teammate-background-work"]
     if mcp_background:
         baked.extend(["mcp-owner-background", "mcp-background-now"])
+    if revision >= 4:
+        baked.append("block-server-prompt-injection")
     if output.exists():
         raise ValueError("refusing to overwrite an existing release")
     if sha(stock) != STOCK_SHA or stock.stat().st_size != FILE_SIZE:
@@ -156,6 +159,8 @@ def build(stock, output, revision=1, mcp_background=False):
         if mcp_background:
             from host_patches_2_1_318_mcp_bg import patch_mcp_bg
             patch_mcp_bg(result, edit)
+        if revision >= 4:
+            patch_server_prompts(result, edit)
 
     patched, changes = patch_graph(texts, extra_patches)
     output.mkdir(parents=True)
