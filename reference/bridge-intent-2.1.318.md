@@ -96,9 +96,10 @@ The builder refuses existing outputs. Choose a fresh revision/path for another b
 
 ## N1/N2 layer
 
-`tools/host_patches_2_1_318_mcp_bg.py` adds 29 replacements over the core: 85 total across 21 chunks. Build with `--mcp-background`, a fresh release directory, and matching `--revision`. `.2` is the first candidate containing this layer.
+`tools/host_patches_2_1_318_mcp_bg.py` adds 34 replacements over the core: 90 total across 21 chunks. Build with `--mcp-background`, a fresh release directory, and matching `--revision`. `.2` first included this layer; `.3` corrects the child-interactivity policy described below.
 
 - Both MCP clients (`6jypdf2f`, `r2ksrv9a`) allow background plain agents and in-process teammates, but retain foreground-child blocking and existing policy/threshold decisions. Server-side MCP Tasks eligibility stays main-only.
+- Eligible child calls pass the host launch's interactivity to both `getMcpAutoBackgroundMs` and `isMcpCallMovableWithoutTimer`, rather than their always-headless child request flag. The stock `ecyypctx:ye()` reads `!host.launchOptions.isInteractive()`; the first MCP client imports it as `__rpMcpHeadless`, and the second reuses its existing import. Main calls retain their original context flag. Interactive children therefore inherit main's threshold/N2 eligibility without a global environment override; actual headless sessions retain upstream opt-in policy.
 - `kdb20esk:De` records the caller's `agentId` on the new MCP task, acquires `mcp:<taskId>`, and routes normal/degraded completion through `0x9x817t:K3t`. A missing/stopped owner falls back to the lead. TaskStop uses the existing ownership check.
 - `Gne`, `gar`, and `_Rt` recognize MCP work. Deferred `noticeGate` publication is protected by `__rpMcpNoticePending`; enqueue failure, stopped tasks, and task conversion release the keepalive. Queued owner notices survive until consumption; stopped-owner queue forwarding includes MCP tasks.
 - The teammate runner's live-child predicate includes owned running MCP calls. Terminal teammate exit aborts those calls; Esc remains only a turn interruption.

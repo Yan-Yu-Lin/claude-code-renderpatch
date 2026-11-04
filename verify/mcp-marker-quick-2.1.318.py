@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bounded .2 smoke and N2 MCP server-requested backgrounding proof.
+"""Bounded release smoke and N2 MCP server-requested backgrounding proof.
 
 The MCP call runs for 20 seconds, asks to be backgrounded after two seconds,
 and has the normal auto-background threshold pinned at 60 seconds. Evidence is
@@ -316,11 +316,15 @@ def main():
     parser.add_argument("--launcher", type=Path, default=DEFAULT_LAUNCHER)
     parser.add_argument("--fixture", type=Path, default=DEFAULT_FIXTURE)
     parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    parser.add_argument("--revision", type=int, default=2)
     modes = parser.add_mutually_exclusive_group()
     modes.add_argument("--smoke-only", action="store_true")
     modes.add_argument("--marker-only", action="store_true")
     parser.add_argument("--command-timeout", type=float, default=120)
     args = parser.parse_args()
+    if args.revision < 1:
+        parser.error("--revision must be positive")
+    release_id = f"{VERSION}-host-darwin-arm64.{args.revision}"
     args.out = args.out.resolve()
     args.fixture = args.fixture.resolve()
     if args.command_timeout <= 0 or args.command_timeout > MAX_COMMAND_SECONDS:
@@ -329,8 +333,8 @@ def main():
         parser.error(f"refusing to reuse evidence directory: {args.out}")
     if not args.launcher.is_file():
         parser.error(f"launcher not found: {args.launcher}")
-    if RELEASE_ID not in str(args.launcher.resolve()):
-        parser.error(f"launcher is not the required .2 release: {args.launcher}")
+    if release_id not in str(args.launcher.resolve()):
+        parser.error(f"launcher is not the required release {release_id}: {args.launcher}")
     if not args.fixture.is_file():
         parser.error(f"fixture not found: {args.fixture}")
 
@@ -350,7 +354,7 @@ def main():
 
     summary = {
         "pass": False,
-        "releaseId": RELEASE_ID,
+        "releaseId": release_id,
         "launcher": str(args.launcher),
         "environment": {
             "CLAUDE_CONFIG_DIR": str(config_dir),
@@ -412,8 +416,8 @@ def main():
             )
             status_fields = parse_status(status["stdout"])
             proxy_payload = parse_last_json(proxy["stdout"])
-            expected_build_id = f"host-{VERSION}-darwin-arm64.2"
-            expected_release_dir = f"/{RELEASE_ID}/"
+            expected_build_id = f"host-{VERSION}-darwin-arm64.{args.revision}"
+            expected_release_dir = f"/{release_id}/"
             smoke_checks = {
                 "statusExitZero": status["returncode"] == 0 and not status["timedOut"],
                 "statusTargetVersion": status_fields.get("target_version") == VERSION,
@@ -434,7 +438,7 @@ def main():
                 "proxyResult": proxy_payload.get("result"),
             }
             if not summary["smoke"]["pass"]:
-                raise RuntimeError(".2 smoke failed; N2 marker call was not started")
+                raise RuntimeError(f"{release_id} smoke failed; N2 marker call was not started")
             if args.smoke_only:
                 summary["pass"] = True
                 exit_code = 0

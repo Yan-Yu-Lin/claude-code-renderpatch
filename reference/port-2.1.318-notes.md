@@ -40,3 +40,25 @@ ln -s "$HOME/.local/share/claude-renderpatch/releases/2.1.291-host-darwin-arm64.
 ```
 
 Rollback affects new launches only; it does not replace an already-running session's graph.
+
+## `.3` — interactive children inherit host MCP policy (2026-11-05)
+
+Arthur's C10/C11 manual test exposed a real `.2` defect: eligible children still passed their always-true `requestNonInteractive` flag to the upstream threshold check. The earlier quick gate's `CLAUDE_AUTO_BACKGROUND_TASKS=1` masked it. Both MCP clients now use `agentId ? ye() : options.isNonInteractiveSession` for **both** timer and movable-without-timer/N2 eligibility; `ye()` is the host launch predicate, not the child's request mode. Main calls, actual headless-session opt-in, explicit background-disable policy, foreground-child exclusion and server-side Tasks eligibility stay unchanged. No global environment variable or user configuration was changed.
+
+Built and selected `~/.local/share/claude-renderpatch/releases/2.1.318-host-darwin-arm64.3/`. All 90 global replacement checks passed. Status, normal/safe version and a real proxy `-p` smoke passed (`patched/verification-2.1.318/fix3-smoke/summary.json`). Exact built caller expressions and the host predicate are recorded in `fix3-policy-source.json`.
+
+**Verification limit:** the interactive no-opt-in probe did not execute reliably. The first attempt matched prompt echo; the corrected attempt waited for an actual assistant record, timed out at 150s, and produced no transcripts. Summary preceded bounded cleanup, which completed in 0.134s. Evidence: `interactive-mcp-owner-quick-rerun1/`. No further harness debugging or full gates were run. Selection uses Arthur's explicitly permitted built-graph-proof fallback; interactive child/teammate result delivery and N2 timing on `.3` still need manual verification. Start a new Claude process: existing `.2` sessions retain their old graph.
+
+Receipt: `~/.local/share/claude-renderpatch/selections/2026-11-05-2.1.318-mcp-parent-interactivity.json`. Immediate rollback is `.2`; the older `.7` rollback above remains installed:
+
+```bash
+rollback="$HOME/.local/bin/claude-bridge.rollback.$$"
+ln -s "$HOME/.local/share/claude-renderpatch/releases/2.1.318-host-darwin-arm64.2/claude-renderpatch-candidate" "$rollback" &&
+  mv -f "$rollback" "$HOME/.local/bin/claude-bridge"
+```
+
+### Manual-test oddities — investigated, not patched
+
+- **`run_in_background:false` still launches asynchronously:** stock `chunk-595kpmgv.js:yr` omits `run_in_background` from the effective Agent schema when `Wft() || DAt()` is true. The manual-session API schema indeed omitted it; the model emitted false, but it was already absent from the input handed to `subagent_guard.sh`. `To` then sees undefined and `Gr` chooses its background default; `chunk-56swczar.js:HO` derives the background request shape. The exact internal predicate enabling omission is inferred, but the schema/input omission is observed. The teammate patch's `Gr` change has no effect for this main caller (`s=false`); it is not N1 or the guard hook overriding false. Foreground blocking remains a contract for actual foreground children, not a guarantee that this interactive schema accepts that flag.
+- **`team-lead` versus `main`:** stock `chunk-xfg1peqx.js:imn` resolves the former to a mailbox and the latter to the direct main queue. `chunk-nhbc679q.js:Ut` writes through `Uv`; lead mailbox consumption is `chunk-4z4cnx58.js:RS.poll`, wired to the loop's `afterRelease`. The `main` branch instead immediately enqueues `DC({mode:"prompt",agentId:ot(),priority:"next",...})`, allowing mid-turn absorption. The relevant `.2` routing blocks match stock; our teammate queue drain does not change the lead mailbox. The observed delivery immediately after `stop_hook_summary`, versus `absorbed_mid_turn` for `main`, matches these paths. Using `main` is the existing mid-turn route.
+- **TaskStop described as rejection:** stock `chunk-363wfywp.js:ki.createSyntheticErrorMessage` maps this interruption to generic user rejection unless the abort reason selects its neutral interruption/remote-cancel branch. Our resume patch does not alter that mapping; no wording change was made.

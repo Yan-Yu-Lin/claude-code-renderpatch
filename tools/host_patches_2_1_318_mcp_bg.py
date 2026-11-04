@@ -27,6 +27,24 @@ def patch_mcp_bg(result, edit):
             f'foregroundCalls:{ctx}.innerCall?void 0:LEe.of({ctx}.session),noticeGate:',
             f'ownerAgentId:{ctx}.agentId,foregroundCalls:{ctx}.agentId||{ctx}.innerCall?void 0:LEe.of({ctx}.session),noticeGate:',
         )])
+        # Child request loops are always headless. Policy belongs to the host
+        # launch, not that child implementation detail. Main calls keep their
+        # existing context flag; eligibility above still excludes foreground
+        # children. Apply the same policy to timer and N2 early registration.
+        if ctx == "b":
+            edit(name, [(
+                'import{G,di,Mo,fo,Uk,X0,D2,SGn,bte,bGn}from',
+                'import{G,di,Mo,fo,Uk,X0,D2,SGn,bte,bGn,ye as __rpMcpHeadless}from',
+            )])
+        headless = "__rpMcpHeadless()" if ctx == "b" else "ye()"
+        policy = f'{ctx}.agentId?{headless}:{ctx}.options.isNonInteractiveSession'
+        edit(name, [(
+            f'{client}.getMcpAutoBackgroundMs(e.config,{{isNonInteractiveSession:{ctx}.options.isNonInteractiveSession}})',
+            f'{client}.getMcpAutoBackgroundMs(e.config,{{isNonInteractiveSession:{policy}}})',
+        ), (
+            f'{client}.isMcpCallMovableWithoutTimer(e.config,{{isNonInteractiveSession:{ctx}.options.isNonInteractiveSession,isInnerCall:{ctx}.innerCall===!0}})',
+            f'{client}.isMcpCallMovableWithoutTimer(e.config,{{isNonInteractiveSession:{policy},isInnerCall:{ctx}.innerCall===!0}})',
+        )])
         if ctx == "B":
             edit(name, [('if(!rn&&JA()&&!Qcs())zt=', 'if(Qt&&!rn&&JA()&&!Qcs())zt=')])
 
