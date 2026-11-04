@@ -1,0 +1,4 @@
+{
+  "description": "The renderpatch 2.1.318 verification hooks module",
+  "modules": ["./register.js"]
+}
