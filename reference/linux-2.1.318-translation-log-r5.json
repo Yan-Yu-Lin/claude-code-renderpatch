@@ -1,0 +1,2802 @@
+{
+ "summary": {
+  "linux_edits": 96,
+  "linux_import_edits": 7,
+  "darwin_edits": 103,
+  "linux_chunks": 26,
+  "darwin_chunks": 26
+ },
+ "log": [
+  {
+   "darwin_chunk": "chunk-3df33mkc.js",
+   "old": "function Nd(e=j8){if(Gu()===\"local-agent\")return!1;",
+   "new": "function Nd(e=j8){return!1;if(Gu()===\"local-agent\")return!1;",
+   "decisions": [],
+   "linux_chunk": "chunk-yenb1r87.js",
+   "linux_old": "function Nd(e=I8){if(ju()===\"local-agent\")return!1;",
+   "linux_new": "function Nd(e=I8){return!1;if(ju()===\"local-agent\")return!1;",
+   "binding": {
+    "Nd": "Nd",
+    "e": "e",
+    "j8": "I8",
+    "Gu": "ju"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 841
+  },
+  {
+   "darwin_chunk": "chunk-v5qk8x3w.js",
+   "old": "function i1r(o){if(o===null)return xe();",
+   "new": "function i1r(o){return\"inline\";if(o===null)return xe();",
+   "decisions": [],
+   "linux_chunk": "chunk-emhzq435.js",
+   "linux_old": "function jUr(o){if(o===null)return xe();",
+   "linux_new": "function jUr(o){return\"inline\";if(o===null)return xe();",
+   "binding": {
+    "i1r": "jUr",
+    "o": "o",
+    "xe": "xe"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1160
+  },
+  {
+   "darwin_chunk": "chunk-qfycx4yg.js",
+   "old": "function fj(){let n=ro();if(n.decstbmRendererEnabled!==void 0)return n.decstbmRendererEnabled;",
+   "new": "function fj(){return!1;let n=ro();if(n.decstbmRendererEnabled!==void 0)return n.decstbmRendererEnabled;",
+   "decisions": [],
+   "linux_chunk": "chunk-2avr6cej.js",
+   "linux_old": "function cj(){let n=ro();if(n.decstbmRendererEnabled!==void 0)return n.decstbmRendererEnabled;",
+   "linux_new": "function cj(){return!1;let n=ro();if(n.decstbmRendererEnabled!==void 0)return n.decstbmRendererEnabled;",
+   "binding": {
+    "fj": "cj",
+    "n": "n",
+    "ro": "ro"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1132
+  },
+  {
+   "darwin_chunk": "chunk-qfycx4yg.js",
+   "old": "function Ol(n,u,c,h,m,g){let E=h?0:Math.min(m,Math.max(0,n.screen.height-n.viewport.height+1)),",
+   "new": "function Ol(n,u,c,h,m,g){let rp=!h;if(rp)globalThis.__rpResetEpoch=(globalThis.__rpResetEpoch??0)+1;let E=h||rp?0:Math.min(m,Math.max(0,n.screen.height-n.viewport.height+1)),",
+   "decisions": [],
+   "linux_chunk": "chunk-2avr6cej.js",
+   "linux_old": "function Ol(n,u,c,m,p,g){let E=m?0:Math.min(p,Math.max(0,n.screen.height-n.viewport.height+1)),",
+   "linux_new": "function Ol(n,u,c,m,p,g){let rp=!m;if(rp)globalThis.__rpResetEpoch=(globalThis.__rpResetEpoch??0)+1;let E=m||rp?0:Math.min(p,Math.max(0,n.screen.height-n.viewport.height+1)),",
+   "binding": {
+    "Ol": "Ol",
+    "n": "n",
+    "u": "u",
+    "c": "c",
+    "h": "m",
+    "m": "p",
+    "g": "g",
+    "E": "E"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1192
+  },
+  {
+   "darwin_chunk": "chunk-qfycx4yg.js",
+   "old": "type:\"clearTerminal\",reason:u,altScreen:h,viewportRows:n.viewport.height,debug:g",
+   "new": "type:\"clearTerminal\",reason:u,altScreen:h,destructiveReplay:rp,viewportRows:n.viewport.height,debug:g",
+   "decisions": [],
+   "linux_chunk": "chunk-2avr6cej.js",
+   "linux_old": "type:\"clearTerminal\",reason:u,altScreen:m,viewportRows:n.viewport.height,debug:g",
+   "linux_new": "type:\"clearTerminal\",reason:u,altScreen:m,destructiveReplay:rp,viewportRows:n.viewport.height,debug:g",
+   "binding": {
+    "u": "u",
+    "h": "m",
+    "n": "n",
+    "g": "g"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 865
+  },
+  {
+   "darwin_chunk": "chunk-8n1d4f6t.js",
+   "old": "case\"clearTerminal\":d+=c.altScreen?JVs():Wwt(c.viewportRows);",
+   "new": "case\"clearTerminal\":d+=c.altScreen||c.destructiveReplay?JVs():Wwt(c.viewportRows);",
+   "decisions": [],
+   "linux_chunk": "chunk-xd1cb3xs.js",
+   "linux_old": "case\"clearTerminal\":d+=c.altScreen?SVs():Fwt(c.viewportRows);",
+   "linux_new": "case\"clearTerminal\":d+=c.altScreen||c.destructiveReplay?SVs():Fwt(c.viewportRows);",
+   "binding": {
+    "d": "d",
+    "c": "c",
+    "JVs": "SVs",
+    "Wwt": "Fwt"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1152
+  },
+  {
+   "darwin_chunk": "chunk-2388he8y.js",
+   "old": "Ce=H!==void 0,ee=H===\"uncapped\"||we!==void 0,ke=SE(Rc),",
+   "new": "Ce=H!==void 0,ee=!0,ke=SE(Rc),",
+   "decisions": [],
+   "linux_chunk": "chunk-hnxhr3bs.js",
+   "linux_old": "Te=H!==void 0,ee=H===\"uncapped\"||we!==void 0,ke=_E(Rc),",
+   "linux_new": "Te=H!==void 0,ee=!0,ke=_E(Rc),",
+   "binding": {
+    "Ce": "Te",
+    "H": "H",
+    "ee": "ee",
+    "we": "we",
+    "ke": "ke",
+    "SE": "_E",
+    "Rc": "Rc"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1154
+  },
+  {
+   "darwin_chunk": "chunk-2388he8y.js",
+   "old": "me=null,ce=Re!=null&&!bt,Be=ev(Wt,oe),lt;",
+   "new": "me=null,ce=!1,Be=ev(Wt,oe),lt;",
+   "decisions": [],
+   "linux_chunk": "chunk-hnxhr3bs.js",
+   "linux_old": "me=null,le=Re!=null&&!bt,Be=ev(Wt,oe),lt;",
+   "linux_new": "me=null,le=!1,Be=ev(Wt,oe),lt;",
+   "binding": {
+    "me": "me",
+    "ce": "le",
+    "Re": "Re",
+    "bt": "bt",
+    "Be": "Be",
+    "ev": "ev",
+    "Wt": "Wt",
+    "oe": "oe",
+    "lt": "lt"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 968
+  },
+  {
+   "darwin_chunk": "chunk-2388he8y.js",
+   "old": "let gn=Yn,Jo=he&&!Ce&&!ce,Xn;",
+   "new": "let gn=Yn,Jo=!1,Xn;",
+   "decisions": [],
+   "linux_chunk": "chunk-hnxhr3bs.js",
+   "linux_old": "let gn=Yn,Jo=he&&!Te&&!le,Xn;",
+   "linux_new": "let gn=Yn,Jo=!1,Xn;",
+   "binding": {
+    "gn": "gn",
+    "Yn": "Yn",
+    "Jo": "Jo",
+    "he": "he",
+    "Ce": "Te",
+    "ce": "le",
+    "Xn": "Xn"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1098
+  },
+  {
+   "darwin_chunk": "chunk-p2q3ejfg.js",
+   "old": "O()},qe[6]=je,qe[7]=st,",
+   "new": "__rpToggle(O)},qe[6]=je,qe[7]=st,",
+   "decisions": [],
+   "widened_context": {
+    "darwin_context": "ialog_count:je.getState().open.length}),O()},qe[6]=je,qe[7]=st,qe[8]=te,qe[9]=O,qe[10]=D,qe[11]=Ue,qe[1",
+    "width": 40
+   },
+   "linux_chunk": "chunk-czq1j3j2.js",
+   "linux_old": "D()},qe[6]=je,qe[7]=st,",
+   "linux_new": "__rpToggle(D)},qe[6]=je,qe[7]=st,",
+   "binding": {
+    "O": "D",
+    "qe": "qe",
+    "je": "je",
+    "st": "st"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1150
+  },
+  {
+   "darwin_chunk": "chunk-p2q3ejfg.js",
+   "extra": "function __rpToggle(callback){const epoch=globalThis.__rpResetEpoch??0;callback();setTimeout(()=>{if((globalThis.__rpResetEpoch??0)===epoch)TLt()},50)}",
+   "decisions": [
+    {
+     "ident": "TLt",
+     "linux": "ILt",
+     "how": "definition chunk-p2q3ejfg.js:TLt -> chunk-czq1j3j2.js:ILt"
+    }
+   ],
+   "linux_chunk": "chunk-czq1j3j2.js",
+   "linux_extra": "function __rpToggle(callback){const epoch=globalThis.__rpResetEpoch??0;callback();setTimeout(()=>{if((globalThis.__rpResetEpoch??0)===epoch)ILt()},50)}",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "if(r===\"inherit\")return b();if(z8r(r,n))return n;",
+   "new": "if(r===\"inherit\")return b();if(!1&&z8r(r,n))return n;",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "if(r===\"inherit\")return S();if(k8r(r,n))return n;",
+   "linux_new": "if(r===\"inherit\")return S();if(!1&&k8r(r,n))return n;",
+   "binding": {
+    "r": "r",
+    "b": "S",
+    "z8r": "k8r",
+    "n": "n"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 802
+  },
+  {
+   "darwin_chunk": "chunk-0h62541d.js",
+   "old": "function ne(e,n){if(i.CLAUDE_CODE_SUBAGENT_MODEL_FORCE)e=void 0;",
+   "new": "function ne(e,n,rpSource){if(i.CLAUDE_CODE_SUBAGENT_MODEL_FORCE)e=void 0;",
+   "decisions": [],
+   "linux_chunk": "chunk-5j7d17eb.js",
+   "linux_old": "function ne(e,n){if(i.CLAUDE_CODE_SUBAGENT_MODEL_FORCE)e=void 0;",
+   "linux_new": "function ne(e,n,rpSource){if(i.CLAUDE_CODE_SUBAGENT_MODEL_FORCE)e=void 0;",
+   "binding": {
+    "ne": "ne",
+    "e": "e",
+    "n": "n",
+    "i": "i"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1111
+  },
+  {
+   "darwin_chunk": "chunk-0h62541d.js",
+   "old": "if(e!==void 0){if(!Eo(e))return K(e,n);if(n!==null&&z8r(e,n))return n;return e}",
+   "new": "if(e!==void 0){if(!Eo(e))return K(e,n);if(rpSource!==\"tool\"&&n!==null&&z8r(e,n))return n;return e}",
+   "decisions": [],
+   "linux_chunk": "chunk-5j7d17eb.js",
+   "linux_old": "if(e!==void 0){if(!Eo(e))return K(e,n);if(n!==null&&k8r(e,n))return n;return e}",
+   "linux_new": "if(e!==void 0){if(!Eo(e))return K(e,n);if(rpSource!==\"tool\"&&n!==null&&k8r(e,n))return n;return e}",
+   "binding": {
+    "e": "e",
+    "Eo": "Eo",
+    "K": "K",
+    "n": "n",
+    "z8r": "k8r"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 982
+  },
+  {
+   "darwin_chunk": "chunk-0h62541d.js",
+   "old": "function W(e,n,o=\"tool\"){if(i.CLAUDE_CODE_SUBAGENT_MODEL_FORCE)e=void 0;let w=ne(e,n),",
+   "new": "function W(e,n,o=\"tool\"){if(i.CLAUDE_CODE_SUBAGENT_MODEL_FORCE)e=void 0;let w=ne(e,n,o),",
+   "decisions": [],
+   "linux_chunk": "chunk-5j7d17eb.js",
+   "linux_old": "function W(e,n,o=\"tool\"){if(i.CLAUDE_CODE_SUBAGENT_MODEL_FORCE)e=void 0;let w=ne(e,n),",
+   "linux_new": "function W(e,n,o=\"tool\"){if(i.CLAUDE_CODE_SUBAGENT_MODEL_FORCE)e=void 0;let w=ne(e,n,o),",
+   "binding": {
+    "W": "W",
+    "e": "e",
+    "n": "n",
+    "o": "o",
+    "i": "i",
+    "w": "w",
+    "ne": "ne"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1126
+  },
+  {
+   "darwin_chunk": "chunk-z45ktpqq.js",
+   "old": "if((s?.stoppedByUser||tt)&&w?.kind!==\"observer-activity\"){if(!te)throw T(),new G6(",
+   "new": "if((s?.stoppedByUser||tt)&&w?.kind!==\"observer-activity\"&&B!==\"reply\"){if(!te)throw T(),new G6(",
+   "decisions": [
+    {
+     "ident": "B",
+     "linux": "I",
+     "how": "witness {'I': 5}"
+    }
+   ],
+   "linux_chunk": "chunk-yz2nt7xx.js",
+   "linux_old": "if((s?.stoppedByUser||tt)&&w?.kind!==\"observer-activity\"){if(!te)throw T(),new DK(",
+   "linux_new": "if((s?.stoppedByUser||tt)&&w?.kind!==\"observer-activity\"&&I!==\"reply\"){if(!te)throw T(),new DK(",
+   "binding": {
+    "s": "s",
+    "tt": "tt",
+    "w": "w",
+    "te": "te",
+    "T": "T",
+    "G6": "DK",
+    "B": "I"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 749
+  },
+  {
+   "darwin_chunk": "chunk-z45ktpqq.js",
+   "old": "if(Cn(pe)&&pe.stoppedByUser&&(!te||(pe.userStopCount??0)!==je))throw T(),new G6(",
+   "new": "if(Cn(pe)&&pe.stoppedByUser&&(!te&&B!==\"reply\"||(pe.userStopCount??0)!==je))throw T(),new G6(",
+   "decisions": [
+    {
+     "ident": "B",
+     "linux": "I",
+     "how": "witness {'I': 5}"
+    }
+   ],
+   "linux_chunk": "chunk-yz2nt7xx.js",
+   "linux_old": "if(Tn(me)&&me.stoppedByUser&&(!te||(me.userStopCount??0)!==je))throw T(),new DK(",
+   "linux_new": "if(Tn(me)&&me.stoppedByUser&&(!te&&I!==\"reply\"||(me.userStopCount??0)!==je))throw T(),new DK(",
+   "binding": {
+    "Cn": "Tn",
+    "pe": "me",
+    "te": "te",
+    "je": "je",
+    "T": "T",
+    "G6": "DK",
+    "B": "I"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 587
+  },
+  {
+   "darwin_chunk": "chunk-z45ktpqq.js",
+   "old": "let Rt=te&&(s?.stoppedByUser===!0||tt||Cn(H)&&H.stoppedByUser===!0),Ot=",
+   "new": "let Rt=(te||B===\"reply\")&&(s?.stoppedByUser===!0||tt||Cn(H)&&H.stoppedByUser===!0),Ot=",
+   "decisions": [
+    {
+     "ident": "B",
+     "linux": "I",
+     "how": "witness {'I': 5}"
+    }
+   ],
+   "linux_chunk": "chunk-yz2nt7xx.js",
+   "linux_old": "let Rt=te&&(s?.stoppedByUser===!0||tt||Tn(H)&&H.stoppedByUser===!0),Ot=",
+   "linux_new": "let Rt=(te||I===\"reply\")&&(s?.stoppedByUser===!0||tt||Tn(H)&&H.stoppedByUser===!0),Ot=",
+   "binding": {
+    "Rt": "Rt",
+    "te": "te",
+    "s": "s",
+    "tt": "tt",
+    "Cn": "Tn",
+    "H": "H",
+    "Ot": "Ot",
+    "B": "I"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 897
+  },
+  {
+   "darwin_chunk": "chunk-xfg1peqx.js",
+   "old": "if(s.stoppedByUser)return{kind:\"agent-stopped-by-user\",agentName:i};",
+   "new": "/*rp:explicit-reply-may-resume-stopped-agent*/",
+   "decisions": [],
+   "linux_chunk": "chunk-k7agbjgj.js",
+   "linux_old": "if(s.stoppedByUser)return{kind:\"agent-stopped-by-user\",agentName:i};",
+   "linux_new": "/*rp:explicit-reply-may-resume-stopped-agent*/",
+   "binding": {
+    "s": "s",
+    "i": "i"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 681
+  },
+  {
+   "darwin_chunk": "chunk-nhbc679q.js",
+   "old": "if((r.kind===\"agent-stopped\"||r.kind===\"agent-evicted\")&&$di(r.agentId))return cs(r.agentName);",
+   "new": "/*rp:explicit-sendmessage-reaches-resume-engine*/",
+   "decisions": [],
+   "linux_chunk": "chunk-knmkz0q8.js",
+   "linux_old": "if((r.kind===\"agent-stopped\"||r.kind===\"agent-evicted\")&&tdi(r.agentId))return cs(r.agentName);",
+   "linux_new": "/*rp:explicit-sendmessage-reaches-resume-engine*/",
+   "binding": {
+    "r": "r",
+    "$di": "tdi",
+    "cs": "cs"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 392
+  },
+  {
+   "darwin_chunk": "chunk-7fv02std.js",
+   "old": "um,yb,bV,Vc,clt",
+   "new": "um,yb,DCn,bV,Vc,clt",
+   "decisions": [
+    {
+     "import": "DCn",
+     "from": "chunk-0x9x817t.js",
+     "linux_def": "chunk-5xgkngpb.js:bTn",
+     "linux_local": "bTn"
+    }
+   ],
+   "linux_chunk": "chunk-nh1pvp1m.js",
+   "linux_append": "import{bTn}from\"/@linux-graph/chunk-5xgkngpb.js\";"
+  },
+  {
+   "darwin_chunk": "chunk-7fv02std.js",
+   "old": "let ie=s!==void 0&&(O.launchedByAgentTool===!0||O.launchedByForkedSkill===!0)&&N!==null&&await yb(B,y).catch(qOe(\"resume orphan probe\"))!==null;return{mtimeMs:N,hasMeta:ie,fetchable:N===null&&clt()}",
+   "new": "let rpS=!1,ie=!1;if(N!==null)try{let[rpM,rpStop]=await Promise.all([yb(B,y),DCn(B,\"stoppedByUser\",y)]);rpS=rpM?.stoppedByUser===!0||rpStop,ie=s!==void 0&&(O.launchedByAgentTool===!0||O.launchedByForkedSkill===!0)&&rpM!==null}catch(rpE){qOe(\"resume orphan probe\")(rpE),rpS=!0}return{mtimeMs:N,hasMeta:ie,fetchable:N===null&&clt(),rpStopped:rpS}",
+   "decisions": [
+    {
+     "ident": "DCn",
+     "linux": "bTn",
+     "how": "added-import"
+    }
+   ],
+   "linux_chunk": "chunk-nh1pvp1m.js",
+   "linux_old": "let ie=s!==void 0&&(O.launchedByAgentTool===!0||O.launchedByForkedSkill===!0)&&N!==null&&await gS(B,y).catch(jIe(\"resume orphan probe\"))!==null;return{mtimeMs:N,hasMeta:ie,fetchable:N===null&&olt()}",
+   "linux_new": "let rpS=!1,ie=!1;if(N!==null)try{let[rpM,rpStop]=await Promise.all([gS(B,y),bTn(B,\"stoppedByUser\",y)]);rpS=rpM?.stoppedByUser===!0||rpStop,ie=s!==void 0&&(O.launchedByAgentTool===!0||O.launchedByForkedSkill===!0)&&rpM!==null}catch(rpE){jIe(\"resume orphan probe\")(rpE),rpS=!0}return{mtimeMs:N,hasMeta:ie,fetchable:N===null&&olt(),rpStopped:rpS}",
+   "binding": {
+    "ie": "ie",
+    "s": "s",
+    "O": "O",
+    "N": "N",
+    "yb": "gS",
+    "B": "B",
+    "y": "y",
+    "qOe": "jIe",
+    "clt": "olt",
+    "DCn": "bTn"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 918
+  },
+  {
+   "darwin_chunk": "chunk-7fv02std.js",
+   "old": "let{mtimeMs:N,hasMeta:ie,fetchable:Z}=S[O]??{mtimeMs:null,hasMeta:!1,fetchable:!1};",
+   "new": "let{mtimeMs:N,hasMeta:ie,fetchable:Z,rpStopped:rpS}=S[O]??{mtimeMs:null,hasMeta:!1,fetchable:!1,rpStopped:!1};",
+   "decisions": [],
+   "linux_chunk": "chunk-nh1pvp1m.js",
+   "linux_old": "let{mtimeMs:N,hasMeta:ie,fetchable:Z}=w[O]??{mtimeMs:null,hasMeta:!1,fetchable:!1};",
+   "linux_new": "let{mtimeMs:N,hasMeta:ie,fetchable:Z,rpStopped:rpS}=w[O]??{mtimeMs:null,hasMeta:!1,fetchable:!1,rpStopped:!1};",
+   "binding": {
+    "N": "N",
+    "ie": "ie",
+    "Z": "Z",
+    "S": "w",
+    "O": "O"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 839
+  },
+  {
+   "darwin_chunk": "chunk-7fv02std.js",
+   "old": "&&ie&&N!==null&&D-N<ei){C.push({agentId:B.agentId",
+   "new": "&&ie&&N!==null&&!rpS&&D-N<ei){C.push({agentId:B.agentId",
+   "decisions": [],
+   "linux_chunk": "chunk-nh1pvp1m.js",
+   "linux_old": "&&ie&&N!==null&&D-N<ei){S.push({agentId:B.agentId",
+   "linux_new": "&&ie&&N!==null&&!rpS&&D-N<ei){S.push({agentId:B.agentId",
+   "binding": {
+    "ie": "ie",
+    "N": "N",
+    "D": "D",
+    "ei": "ei",
+    "C": "S",
+    "B": "B"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 517
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "function Wut(e){if(e.type===\"in_process_teammate\")return{...e,evictAfter:e.isIdle?Date.now()+uzn:void 0};return{...e,retain:!1,diskLoaded:!1,evictAfter:Ko(e.status)&&!IG(e)?Date.now()+uzn:void 0}}",
+   "new": "function Wut(e){if(e.type===\"in_process_teammate\")return{...e,retain:!1,diskLoaded:!1,evictAfter:e.isIdle||Ko(e.status)?Date.now()+uzn:void 0};return{...e,retain:!1,diskLoaded:!1,evictAfter:Ko(e.status)&&!IG(e)?Date.now()+uzn:void 0}}",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "function Jut(e){if(e.type===\"in_process_teammate\")return{...e,evictAfter:e.isIdle?Date.now()+wzn:void 0};return{...e,retain:!1,diskLoaded:!1,evictAfter:Vo(e.status)&&!Rz(e)?Date.now()+wzn:void 0}}",
+   "linux_new": "function Jut(e){if(e.type===\"in_process_teammate\")return{...e,retain:!1,diskLoaded:!1,evictAfter:e.isIdle||Vo(e.status)?Date.now()+wzn:void 0};return{...e,retain:!1,diskLoaded:!1,evictAfter:Vo(e.status)&&!Rz(e)?Date.now()+wzn:void 0}}",
+   "binding": {
+    "Wut": "Jut",
+    "e": "e",
+    "uzn": "wzn",
+    "Ko": "Vo",
+    "IG": "Rz"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 745
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "w=jut(s)&&(Uut(s)&&!s.retain||s.evictAfter!==void 0),",
+   "new": "w=jut(s)&&(!s.retain||s.evictAfter!==void 0),",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "w=Gut(s)&&(Uut(s)&&!s.retain||s.evictAfter!==void 0),",
+   "linux_new": "w=Gut(s)&&(!s.retain||s.evictAfter!==void 0),",
+   "binding": {
+    "w": "w",
+    "jut": "Gut",
+    "s": "s",
+    "Uut": "Uut"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 754
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "if(w)z[e]=Uut(s)?{...s,retain:!0,evictAfter:void 0}:{...s,evictAfter:void 0}",
+   "new": "if(w)z[e]={...s,retain:!0,evictAfter:void 0}",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "if(w)z[e]=Uut(s)?{...s,retain:!0,evictAfter:void 0}:{...s,evictAfter:void 0}",
+   "linux_new": "if(w)z[e]={...s,retain:!0,evictAfter:void 0}",
+   "binding": {
+    "w": "w",
+    "z": "z",
+    "e": "e",
+    "Uut": "Uut",
+    "s": "s"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1023
+  },
+  {
+   "darwin_chunk": "chunk-p2q3ejfg.js",
+   "old": "function Pqe({store:h,setAppState:D,storageV5:O}){return nD([h],()=>{let{viewingAgentTaskId:H,tasks:te}=h.getState(),Re=H?te[H]:void 0,Oe=Cn(Re)&&Re.retain&&!Re.diskLoaded;return[H,Oe]},(H,te)=>{if(!H||!te)return;let Re=H;ede(Er(Re),O).then((Oe)=>{D((Ue)=>{let je=Ue.tasks[Re];if(!Cn(je)||je.diskLoaded||!je.retain)return Ue;let qe=Ue.transcripts[Re],Ke=qe?.messages??[],Ze=new Set(Ke.map((Rt)=>Rt.uuid)),st=xqe(Oe?.messages??[],Ke),bt=st.filter((Rt)=>!Ze.has(Rt.uuid));return t5e(bt),{...Ue,tasks:{...Ue.tasks,[Re]:{...je,diskLoaded:!0}},transcripts:{...Ue.transcripts,[Re]:{inProgressToolUseIDs:new Set,...qe,messages:st}}}})}).catch(a)})}",
+   "new": "function Pqe({store:h,setAppState:D,storageV5:O}){let rpEpoch=0;let rpOff=nD([h],()=>{let{viewingAgentTaskId:H,tasks:te}=h.getState(),Re=H?te[H]:void 0,Oe=(Cn(Re)||rf(Re))&&Re.retain&&!Re.diskLoaded;return[H,Oe,Re?.startTime,Re?.status,rf(Re)?Re.identity.resumableAgentId:H]},(H,te,rpStart,rpStatus,rpAgentId)=>{let rpRead=++rpEpoch;if(!H||!te||!rpAgentId)return;let Re=H;ede(Er(rpAgentId),O).then((Oe)=>{if(rpRead!==rpEpoch)return;D((Ue)=>{let je=Ue.tasks[Re];if(rpRead!==rpEpoch||Ue.viewingAgentTaskId!==Re||!(Cn(je)||rf(je))||je.startTime!==rpStart||je.diskLoaded||!je.retain||rf(je)&&je.identity.resumableAgentId!==rpAgentId)return Ue;let qe=Ue.transcripts[Re],Ke=qe?.messages??[],Ze=new Set(Ke.map((Rt)=>Rt.uuid)),st,bt;if(rf(je)&&Oe){let rpDisk=Oe.messages??[],rpLive=new Map,rpIndex=new Map,rpPos=0;for(let rpRow of Ke)rpLive.set(rpRow.uuid,rpRow);for(let rpI=0;rpI<rpDisk.length;rpI++)rpIndex.set(rpDisk[rpI].uuid,rpI);st=[];for(let rpRow of Ke){let rpI=rpIndex.get(rpRow.uuid);if(rpI===void 0){while(rpPos<rpDisk.length&&!rpLive.has(rpDisk[rpPos].uuid)&&typeof rpRow.timestamp===\"string\"&&typeof rpDisk[rpPos].timestamp===\"string\"&&rpDisk[rpPos].timestamp<=rpRow.timestamp)st.push(rpDisk[rpPos++]);if(rpLive.has(rpRow.uuid)){st.push(rpLive.get(rpRow.uuid));rpLive.delete(rpRow.uuid)}}else while(rpPos<=rpI){let rpRowDisk=rpDisk[rpPos++];st.push(rpLive.get(rpRowDisk.uuid)??rpRowDisk)}}while(rpPos<rpDisk.length){let rpRowDisk=rpDisk[rpPos++];st.push(rpLive.get(rpRowDisk.uuid)??rpRowDisk)}}else st=xqe(Oe?.messages??[],Ke);bt=st.filter((Rt)=>!Ze.has(Rt.uuid));return t5e(bt),{...Ue,tasks:{...Ue.tasks,[Re]:{...je,diskLoaded:!0}},transcripts:{...Ue.transcripts,[Re]:{inProgressToolUseIDs:new Set,...qe,messages:st}}}})}).catch(a)});return()=>{rpEpoch++;rpOff()}}",
+   "decisions": [
+    {
+     "ident": "rf",
+     "linux": "op",
+     "how": "import chunk-ygm0kzqk.js:rf -> chunk-01kgd7xg.js:op"
+    }
+   ],
+   "linux_chunk": "chunk-czq1j3j2.js",
+   "linux_old": "function Pqe({store:h,setAppState:I,storageV5:D}){return ZD([h],()=>{let{viewingAgentTaskId:H,tasks:te}=h.getState(),Re=H?te[H]:void 0,Ie=Tn(Re)&&Re.retain&&!Re.diskLoaded;return[H,Ie]},(H,te)=>{if(!H||!te)return;let Re=H;Wle(Er(Re),D).then((Ie)=>{I((Fe)=>{let je=Fe.tasks[Re];if(!Tn(je)||je.diskLoaded||!je.retain)return Fe;let qe=Fe.transcripts[Re],Ve=qe?.messages??[],Ze=new Set(Ve.map((Rt)=>Rt.uuid)),st=xqe(Ie?.messages??[],Ve),bt=st.filter((Rt)=>!Ze.has(Rt.uuid));return V5e(bt),{...Fe,tasks:{...Fe.tasks,[Re]:{...je,diskLoaded:!0}},transcripts:{...Fe.transcripts,[Re]:{inProgressToolUseIDs:new Set,...qe,messages:st}}}})}).catch(a)})}",
+   "linux_new": "function Pqe({store:h,setAppState:I,storageV5:D}){let rpEpoch=0;let rpOff=ZD([h],()=>{let{viewingAgentTaskId:H,tasks:te}=h.getState(),Re=H?te[H]:void 0,Ie=(Tn(Re)||op(Re))&&Re.retain&&!Re.diskLoaded;return[H,Ie,Re?.startTime,Re?.status,op(Re)?Re.identity.resumableAgentId:H]},(H,te,rpStart,rpStatus,rpAgentId)=>{let rpRead=++rpEpoch;if(!H||!te||!rpAgentId)return;let Re=H;Wle(Er(rpAgentId),D).then((Ie)=>{if(rpRead!==rpEpoch)return;I((Fe)=>{let je=Fe.tasks[Re];if(rpRead!==rpEpoch||Fe.viewingAgentTaskId!==Re||!(Tn(je)||op(je))||je.startTime!==rpStart||je.diskLoaded||!je.retain||op(je)&&je.identity.resumableAgentId!==rpAgentId)return Fe;let qe=Fe.transcripts[Re],Ve=qe?.messages??[],Ze=new Set(Ve.map((Rt)=>Rt.uuid)),st,bt;if(op(je)&&Ie){let rpDisk=Ie.messages??[],rpLive=new Map,rpIndex=new Map,rpPos=0;for(let rpRow of Ve)rpLive.set(rpRow.uuid,rpRow);for(let rpI=0;rpI<rpDisk.length;rpI++)rpIndex.set(rpDisk[rpI].uuid,rpI);st=[];for(let rpRow of Ve){let rpI=rpIndex.get(rpRow.uuid);if(rpI===void 0){while(rpPos<rpDisk.length&&!rpLive.has(rpDisk[rpPos].uuid)&&typeof rpRow.timestamp===\"string\"&&typeof rpDisk[rpPos].timestamp===\"string\"&&rpDisk[rpPos].timestamp<=rpRow.timestamp)st.push(rpDisk[rpPos++]);if(rpLive.has(rpRow.uuid)){st.push(rpLive.get(rpRow.uuid));rpLive.delete(rpRow.uuid)}}else while(rpPos<=rpI){let rpRowDisk=rpDisk[rpPos++];st.push(rpLive.get(rpRowDisk.uuid)??rpRowDisk)}}while(rpPos<rpDisk.length){let rpRowDisk=rpDisk[rpPos++];st.push(rpLive.get(rpRowDisk.uuid)??rpRowDisk)}}else st=xqe(Ie?.messages??[],Ve);bt=st.filter((Rt)=>!Ze.has(Rt.uuid));return V5e(bt),{...Fe,tasks:{...Fe.tasks,[Re]:{...je,diskLoaded:!0}},transcripts:{...Fe.transcripts,[Re]:{inProgressToolUseIDs:new Set,...qe,messages:st}}}})}).catch(a)});return()=>{rpEpoch++;rpOff()}}",
+   "binding": {
+    "Pqe": "Pqe",
+    "h": "h",
+    "D": "I",
+    "O": "D",
+    "nD": "ZD",
+    "H": "H",
+    "te": "te",
+    "Re": "Re",
+    "Oe": "Ie",
+    "Cn": "Tn",
+    "ede": "Wle",
+    "Er": "Er",
+    "Ue": "Fe",
+    "je": "je",
+    "qe": "qe",
+    "Ke": "Ve",
+    "Ze": "Ze",
+    "Rt": "Rt",
+    "st": "st",
+    "xqe": "xqe",
+    "bt": "bt",
+    "t5e": "V5e",
+    "a": "a",
+    "rf": "op"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1169
+  },
+  {
+   "darwin_chunk": "chunk-ygm0kzqk.js",
+   "old": "function Ult(e,n){if(e===void 0||e.length===0)return[n];if(e.length>=dto){let r=e.slice(-(dto-1));return r.push(n),r}return[...e,n]}function Q_i(e,n){let r=e===void 0||e.every((o)=>o.uuid!==n.uuid)?e:e.filter((o)=>o.uuid!==n.uuid);return Ult(r,n)}",
+   "new": "function Ult(e,n,rpRetain){if(e===void 0||e.length===0)return[n];if(!rpRetain&&e.length>=dto){let r=e.slice(-(dto-1));return r.push(n),r}return[...e,n]}function Q_i(e,n,rpRetain){let r=e===void 0||e.every((o)=>o.uuid!==n.uuid)?e:e.filter((o)=>o.uuid!==n.uuid);return Ult(r,n,rpRetain)}",
+   "decisions": [],
+   "linux_chunk": "chunk-01kgd7xg.js",
+   "linux_old": "function Dlt(e,n){if(e===void 0||e.length===0)return[n];if(e.length>=jeo){let r=e.slice(-(jeo-1));return r.push(n),r}return[...e,n]}function m_i(e,n){let r=e===void 0||e.every((o)=>o.uuid!==n.uuid)?e:e.filter((o)=>o.uuid!==n.uuid);return Dlt(r,n)}",
+   "linux_new": "function Dlt(e,n,rpRetain){if(e===void 0||e.length===0)return[n];if(!rpRetain&&e.length>=jeo){let r=e.slice(-(jeo-1));return r.push(n),r}return[...e,n]}function m_i(e,n,rpRetain){let r=e===void 0||e.every((o)=>o.uuid!==n.uuid)?e:e.filter((o)=>o.uuid!==n.uuid);return Dlt(r,n,rpRetain)}",
+   "binding": {
+    "Ult": "Dlt",
+    "e": "e",
+    "n": "n",
+    "dto": "jeo",
+    "r": "r",
+    "Q_i": "m_i",
+    "o": "o"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 883
+  },
+  {
+   "darwin_chunk": "chunk-me4n0c3r.js",
+   "old": "messages:Ult(n.messages,a)",
+   "new": "messages:Ult(n.messages,a,s.get(e)?.retain)",
+   "decisions": [
+    {
+     "ident": "s",
+     "linux": "s",
+     "how": "witness {'s': 5}"
+    },
+    {
+     "ident": "e",
+     "linux": "e",
+     "how": "witness {'e': 5}"
+    }
+   ],
+   "widened_context": {
+    "darwin_context": "s.updateTranscript(e,(n)=>({...n,messages:Ult(n.messages,a)}))}function gGt(e,a,s,n){let o=s.get(e)",
+    "width": 40
+   },
+   "linux_chunk": "chunk-2dv3kn8z.js",
+   "linux_old": "messages:Dlt(n.messages,a)",
+   "linux_new": "messages:Dlt(n.messages,a,s.get(e)?.retain)",
+   "binding": {
+    "Ult": "Dlt",
+    "n": "n",
+    "a": "a",
+    "s": "s",
+    "e": "e"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 639
+  },
+  {
+   "darwin_chunk": "chunk-me4n0c3r.js",
+   "old": "messages:Ult(r.messages,i)",
+   "new": "messages:Ult(r.messages,i,s.get(e)?.retain)",
+   "decisions": [
+    {
+     "ident": "s",
+     "linux": "s",
+     "how": "witness {'s': 5}"
+    },
+    {
+     "ident": "e",
+     "linux": "e",
+     "how": "witness {'e': 5}"
+    }
+   ],
+   "widened_context": {
+    "darwin_context": "d}]})),s.updateTranscript(e,(r)=>({...r,messages:Ult(r.messages,i)}))}function tUo(e,a){let s=a.get(e);",
+    "width": 40
+   },
+   "linux_chunk": "chunk-2dv3kn8z.js",
+   "linux_old": "messages:Dlt(r.messages,i)",
+   "linux_new": "messages:Dlt(r.messages,i,s.get(e)?.retain)",
+   "binding": {
+    "Ult": "Dlt",
+    "r": "r",
+    "i": "i",
+    "s": "s",
+    "e": "e"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 924
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "let z=k.messages;if(I)for(let Ae of I.slice(-dto))z=Ult(z,Ae);return{...k,messages:Ult(z,Ie({content:Ee}))}",
+   "new": "let z=k.messages,rpRetain=r.get(s)?.retain;if(I)for(let Ae of rpRetain?I:I.slice(-dto))z=Q_i(z,Ae,rpRetain);return{...k,messages:Ult(z,Ie({content:Ee}),rpRetain)}",
+   "decisions": [
+    {
+     "ident": "r",
+     "linux": "r",
+     "how": "definition chunk-nyc0s6f6.js:r -> chunk-gjfaq3rj.js:r"
+    },
+    {
+     "ident": "s",
+     "linux": "s",
+     "how": "witness {'s': 5}"
+    },
+    {
+     "ident": "Q_i",
+     "linux": "m_i",
+     "how": "import chunk-ygm0kzqk.js:Q_i -> chunk-01kgd7xg.js:m_i"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "let z=k.messages;if(R)for(let Ae of R.slice(-jeo))z=Dlt(z,Ae);return{...k,messages:Dlt(z,Me({content:Ne}))}",
+   "linux_new": "let z=k.messages,rpRetain=r.get(s)?.retain;if(R)for(let Ae of rpRetain?R:R.slice(-jeo))z=m_i(z,Ae,rpRetain);return{...k,messages:Dlt(z,Me({content:Ne}),rpRetain)}",
+   "binding": {
+    "z": "z",
+    "k": "k",
+    "I": "R",
+    "Ae": "Ae",
+    "dto": "jeo",
+    "Ult": "Dlt",
+    "Ie": "Me",
+    "Ee": "Ne",
+    "r": "r",
+    "s": "s",
+    "Q_i": "m_i"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1128
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "messages:Q_i(E.messages,o)",
+   "new": "messages:Q_i(E.messages,o,r.get(s)?.retain)",
+   "decisions": [
+    {
+     "ident": "r",
+     "linux": "r",
+     "how": "definition chunk-nyc0s6f6.js:r -> chunk-gjfaq3rj.js:r"
+    },
+    {
+     "ident": "s",
+     "linux": "s",
+     "how": "witness {'s': 5}"
+    }
+   ],
+   "widened_context": {
+    "darwin_context": "lete(te.tool_use_id),D=ve}}}return{...E,messages:Q_i(E.messages,o),...ZTn(E.inProgressToolUseIDs,D)}})}ret",
+    "width": 40
+   },
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "messages:m_i(E.messages,o)",
+   "linux_new": "messages:m_i(E.messages,o,r.get(s)?.retain)",
+   "binding": {
+    "Q_i": "m_i",
+    "E": "E",
+    "o": "o",
+    "r": "r",
+    "s": "s"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1159
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "messages:Ult(v.messages,o)",
+   "new": "messages:Ult(v.messages,o,r.get(s)?.retain)",
+   "decisions": [
+    {
+     "ident": "r",
+     "linux": "r",
+     "how": "definition chunk-nyc0s6f6.js:r -> chunk-gjfaq3rj.js:r"
+    },
+    {
+     "ident": "s",
+     "linux": "s",
+     "how": "witness {'s': 5}"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "messages:Dlt(v.messages,o)",
+   "linux_new": "messages:Dlt(v.messages,o,r.get(s)?.retain)",
+   "binding": {
+    "Ult": "Dlt",
+    "v": "v",
+    "o": "o",
+    "r": "r",
+    "s": "s"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1160
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "evictAfter:oe?void 0:Date.now()+YO,onIdleCallbacks:[]",
+   "new": "evictAfter:oe||o.retain?void 0:Date.now()+YO,onIdleCallbacks:[]",
+   "decisions": [
+    {
+     "ident": "o",
+     "linux": "o",
+     "how": "definition chunk-nyc0s6f6.js:o -> chunk-gjfaq3rj.js:o"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "evictAfter:oe?void 0:Date.now()+KI,onIdleCallbacks:[]",
+   "linux_new": "evictAfter:oe||o.retain?void 0:Date.now()+KI,onIdleCallbacks:[]",
+   "binding": {
+    "oe": "oe",
+    "YO": "KI",
+    "o": "o"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 886
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "return x=k.toolUseId,k.onIdleCallbacks?.forEach((z)=>z()),{...k,status:\"completed\",notified:!0,",
+   "new": "return x=k.toolUseId,k.onIdleCallbacks?.forEach((z)=>z()),{...k,status:\"completed\",diskLoaded:!1,notified:!0,",
+   "decisions": [],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "return x=k.toolUseId,k.onIdleCallbacks?.forEach((z)=>z()),{...k,status:\"completed\",notified:!0,",
+   "linux_new": "return x=k.toolUseId,k.onIdleCallbacks?.forEach((z)=>z()),{...k,status:\"completed\",diskLoaded:!1,notified:!0,",
+   "binding": {
+    "x": "x",
+    "k": "k",
+    "z": "z"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1008
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "r.updateTranscript(s,(k)=>({...k,messages:k.messages.length?[k.messages.at(-1)]:[],inProgressToolUseIDs:new Set}))",
+   "new": "r.updateTranscript(s,(k)=>({...k,messages:r.get(s)?.retain?k.messages:k.messages.length?[k.messages.at(-1)]:[],inProgressToolUseIDs:new Set}))",
+   "decisions": [],
+   "widened_context": {
+    "darwin_context": "Wake:void 0,onIdleCallbacks:[]}},r),!me)r.updateTranscript(s,(k)=>({...k,messages:k.messages.length?[k.messages.at(-1)]:[],inProgressToolUseIDs:new Set}));",
+    "width": 40
+   },
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "r.updateTranscript(s,(k)=>({...k,messages:k.messages.length?[k.messages.at(-1)]:[],inProgressToolUseIDs:new Set}))",
+   "linux_new": "r.updateTranscript(s,(k)=>({...k,messages:r.get(s)?.retain?k.messages:k.messages.length?[k.messages.at(-1)]:[],inProgressToolUseIDs:new Set}))",
+   "binding": {
+    "r": "r",
+    "s": "s",
+    "k": "k"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 922
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "return me=x.toolUseId,x.onIdleCallbacks?.forEach((k)=>k()),{...x,status:\"failed\",notified:!0,",
+   "new": "return me=x.toolUseId,x.onIdleCallbacks?.forEach((k)=>k()),{...x,status:\"failed\",diskLoaded:!1,notified:!0,",
+   "decisions": [],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "return me=x.toolUseId,x.onIdleCallbacks?.forEach((k)=>k()),{...x,status:\"failed\",notified:!0,",
+   "linux_new": "return me=x.toolUseId,x.onIdleCallbacks?.forEach((k)=>k()),{...x,status:\"failed\",diskLoaded:!1,notified:!0,",
+   "binding": {
+    "me": "me",
+    "x": "x",
+    "k": "k"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 959
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "r.updateTranscript(s,(x)=>({...x,messages:x.messages.length?[x.messages.at(-1)]:[],inProgressToolUseIDs:new Set}))",
+   "new": "r.updateTranscript(s,(x)=>({...x,messages:r.get(s)?.retain?x.messages:x.messages.length?[x.messages.at(-1)]:[],inProgressToolUseIDs:new Set}))",
+   "decisions": [],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "r.updateTranscript(s,(x)=>({...x,messages:x.messages.length?[x.messages.at(-1)]:[],inProgressToolUseIDs:new Set}))",
+   "linux_new": "r.updateTranscript(s,(x)=>({...x,messages:r.get(s)?.retain?x.messages:x.messages.length?[x.messages.at(-1)]:[],inProgressToolUseIDs:new Set}))",
+   "binding": {
+    "r": "r",
+    "s": "s",
+    "x": "x"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1124
+  },
+  {
+   "darwin_chunk": "chunk-nn5f14r9.js",
+   "old": "import{rf,I9t}from",
+   "new": "import{rf,I9t,YO}from",
+   "decisions": [
+    {
+     "import": "YO",
+     "from": "chunk-ygm0kzqk.js",
+     "linux_def": "chunk-01kgd7xg.js:KI",
+     "linux_local": "KI"
+    }
+   ],
+   "linux_chunk": "chunk-94s4dsgm.js",
+   "linux_append": "import{KI}from\"/@linux-graph/chunk-01kgd7xg.js\";"
+  },
+  {
+   "darwin_chunk": "chunk-nn5f14r9.js",
+   "old": "paneTeardown:void 0,evictAfter:void 0}});let c=n?Wt(",
+   "new": "paneTeardown:void 0,evictAfter:e.retain?void 0:Date.now()+YO}});let c=n?Wt(",
+   "decisions": [
+    {
+     "ident": "e",
+     "linux": "e",
+     "how": "witness {'e': 5}"
+    },
+    {
+     "ident": "YO",
+     "linux": "KI",
+     "how": "added-import"
+    }
+   ],
+   "linux_chunk": "chunk-94s4dsgm.js",
+   "linux_old": "paneTeardown:void 0,evictAfter:void 0}});let c=n?Wt(",
+   "linux_new": "paneTeardown:void 0,evictAfter:e.retain?void 0:Date.now()+KI}});let c=n?Wt(",
+   "binding": {
+    "c": "c",
+    "n": "n",
+    "Wt": "Wt",
+    "e": "e",
+    "YO": "KI"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1148
+  },
+  {
+   "darwin_chunk": "chunk-595kpmgv.js",
+   "old": "if(He&&W===!0)throw m(\"subagent_launch\",\"subagent_teammate_background_denied\"),new Z(\"In-process teammates cannot spawn background agents. Use run_in_background=false for synchronous subagents.\");",
+   "new": "/*rp:teammate-bg-explicit-allowed*/",
+   "decisions": [],
+   "linux_chunk": "chunk-tmsx2mh0.js",
+   "linux_old": "if(He&&W===!0)throw m(\"subagent_launch\",\"subagent_teammate_background_denied\"),new Z(\"In-process teammates cannot spawn background agents. Use run_in_background=false for synchronous subagents.\");",
+   "linux_new": "/*rp:teammate-bg-explicit-allowed*/",
+   "binding": {
+    "He": "He",
+    "W": "W",
+    "m": "m",
+    "Z": "Z"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 898
+  },
+  {
+   "darwin_chunk": "chunk-595kpmgv.js",
+   "old": "if(He&&w.background===!0)throw m(\"subagent_launch\",\"subagent_teammate_background_denied\"),new Z(`In-process teammates cannot spawn background agents. Agent '${w.agentType}' has background: true in its definition.`);",
+   "new": "/*rp:teammate-bg-definition-allowed*/",
+   "decisions": [],
+   "linux_chunk": "chunk-tmsx2mh0.js",
+   "linux_old": "if(He&&k.background===!0)throw m(\"subagent_launch\",\"subagent_teammate_background_denied\"),new Z(`In-process teammates cannot spawn background agents. Agent '${k.agentType}' has background: true in its definition.`);",
+   "linux_new": "/*rp:teammate-bg-definition-allowed*/",
+   "binding": {
+    "He": "He",
+    "w": "k",
+    "m": "m",
+    "Z": "Z"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1093
+  },
+  {
+   "darwin_chunk": "chunk-595kpmgv.js",
+   "old": "if(Bt&&He&&we&&!Fe)throw m(\"subagent_launch\",\"subagent_teammate_background_denied\"),new Z(\"In-process teammates cannot spawn background agents; a plugin's agent.spawn hook backgrounded this one.\");",
+   "new": "/*rp:teammate-bg-hook-allowed*/",
+   "decisions": [],
+   "linux_chunk": "chunk-tmsx2mh0.js",
+   "linux_old": "if(Bt&&He&&we&&!Fe)throw m(\"subagent_launch\",\"subagent_teammate_background_denied\"),new Z(\"In-process teammates cannot spawn background agents; a plugin's agent.spawn hook backgrounded this one.\");",
+   "linux_new": "/*rp:teammate-bg-hook-allowed*/",
+   "binding": {
+    "Bt": "Bt",
+    "He": "He",
+    "we": "we",
+    "Fe": "Fe",
+    "m": "m",
+    "Z": "Z"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 912
+  },
+  {
+   "darwin_chunk": "chunk-595kpmgv.js",
+   "old": "y=s||n.callerIsHeadlessSubagent,A=n.isCoordinator&&!s||n.forceAsync||!y&&r!==!1",
+   "new": "y=n.callerIsHeadlessSubagent,A=n.isCoordinator&&!s||n.forceAsync||!y&&r!==!1",
+   "decisions": [],
+   "linux_chunk": "chunk-tmsx2mh0.js",
+   "linux_old": "y=s||n.callerIsHeadlessSubagent,S=n.isCoordinator&&!s||n.forceAsync||!y&&r!==!1",
+   "linux_new": "y=n.callerIsHeadlessSubagent,S=n.isCoordinator&&!s||n.forceAsync||!y&&r!==!1",
+   "binding": {
+    "y": "y",
+    "s": "s",
+    "n": "n",
+    "A": "S",
+    "r": "r"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1126
+  },
+  {
+   "darwin_chunk": "chunk-595kpmgv.js",
+   "old": "wn=yn&&DAt()&&!He&&!kn",
+   "new": "wn=yn&&DAt()&&!kn",
+   "decisions": [],
+   "linux_chunk": "chunk-tmsx2mh0.js",
+   "linux_old": "wn=yn&&RCt()&&!He&&!kn",
+   "linux_new": "wn=yn&&RCt()&&!kn",
+   "binding": {
+    "wn": "wn",
+    "yn": "yn",
+    "DAt": "RCt",
+    "He": "He",
+    "kn": "kn"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 851
+  },
+  {
+   "darwin_chunk": "chunk-595kpmgv.js",
+   "old": "let lt=C8(e.agentId,ge)??ot()",
+   "new": "let lt=C8(e.agentId,ge)??(He&&e.agentId!==void 0?e.agentId:ot())",
+   "decisions": [
+    {
+     "ident": "He",
+     "linux": "He",
+     "how": "witness {'He': 4}"
+    }
+   ],
+   "widened_context": {
+    "darwin_context": "i(e)),Ge=[...Tt.copies,Ie({content:X})]}let lt=C8(e.agentId,ge)??ot(),ie={prompt:X,resolvedAgentModel:Ae,isBu",
+    "width": 40
+   },
+   "linux_chunk": "chunk-tmsx2mh0.js",
+   "linux_old": "let lt=m8(e.agentId,fe)??ot()",
+   "linux_new": "let lt=m8(e.agentId,fe)??(He&&e.agentId!==void 0?e.agentId:ot())",
+   "binding": {
+    "lt": "lt",
+    "C8": "m8",
+    "e": "e",
+    "ge": "fe",
+    "ot": "ot",
+    "He": "He"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1092
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "function K3t({ownerAgentId:e,keepaliveReason:n,delivering:r,taskRegistry:s}){let h=e?s.get(e):void 0,b=Cn(h)&&(har(h)||zhe(e,s))&&ok(h)&&!ye()||Cn(h)&&h.status===\"running\";if(!(r&&b))WA(e,n,s);return b&&e?Er(e):ot()}",
+   "new": "function K3t({ownerAgentId:e,keepaliveReason:n,delivering:r,taskRegistry:s}){let h=e?s.get(e):void 0,b=Cn(h)&&(har(h)||zhe(e,s))&&ok(h)&&!ye()||Cn(h)&&h.status===\"running\",rpLive=e&&__rpLiveTeammate(e,s);if(!(r&&(b||rpLive)))WA(e,n,s);return(b||rpLive)&&e?Er(e):ot()}",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "function LYt({ownerAgentId:e,keepaliveReason:n,delivering:r,taskRegistry:s}){let h=e?s.get(e):void 0,S=Tn(h)&&(Vir(h)||Hhe(e,s))&&rv(h)&&!ye()||Tn(h)&&h.status===\"running\";if(!(r&&S))UC(e,n,s);return S&&e?Er(e):ot()}",
+   "linux_new": "function LYt({ownerAgentId:e,keepaliveReason:n,delivering:r,taskRegistry:s}){let h=e?s.get(e):void 0,S=Tn(h)&&(Vir(h)||Hhe(e,s))&&rv(h)&&!ye()||Tn(h)&&h.status===\"running\",rpLive=e&&__rpLiveTeammate(e,s);if(!(r&&(S||rpLive)))UC(e,n,s);return(S||rpLive)&&e?Er(e):ot()}",
+   "binding": {
+    "K3t": "LYt",
+    "e": "e",
+    "n": "n",
+    "r": "r",
+    "s": "s",
+    "h": "h",
+    "b": "S",
+    "Cn": "Tn",
+    "har": "Vir",
+    "zhe": "Hhe",
+    "ok": "rv",
+    "ye": "ye",
+    "WA": "UC",
+    "Er": "Er",
+    "ot": "ot"
+   },
+   "linux_imports": [],
+   "verified_context_chars": "superseded"
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "extra": "function __rpLiveTeammate(e,s){return Object.values(s.all()).some((rpT)=>rpT.type===\"in_process_teammate\"&&rpT.status===\"running\"&&(rpT.identity?.resumableAgentId??rpT.identity?.agentId)===e)}",
+   "decisions": [
+    {
+     "ident": "e",
+     "linux": "rpv_e",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "s",
+     "linux": "rpv_s",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_extra": "function __rpLiveTeammate(rpv_e,rpv_s){return Object.values(rpv_s.all()).some((rpT)=>rpT.type===\"in_process_teammate\"&&rpT.status===\"running\"&&(rpT.identity?.resumableAgentId??rpT.identity?.agentId)===rpv_e)}",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-z45ktpqq.js",
+   "old": "let ie=w?.kind===\"observer-activity\"?void 0:C8(r.agentId,R),yr=",
+   "new": "let ie=w?.kind===\"observer-activity\"?void 0:C8(r.agentId,R)??(r.teammateContext!==void 0&&r.agentId!==void 0?r.agentId:void 0),yr=",
+   "decisions": [],
+   "linux_chunk": "chunk-yz2nt7xx.js",
+   "linux_old": "let ie=w?.kind===\"observer-activity\"?void 0:m8(r.agentId,R),yr=",
+   "linux_new": "let ie=w?.kind===\"observer-activity\"?void 0:m8(r.agentId,R)??(r.teammateContext!==void 0&&r.agentId!==void 0?r.agentId:void 0),yr=",
+   "binding": {
+    "ie": "ie",
+    "w": "w",
+    "C8": "m8",
+    "r": "r",
+    "R": "R",
+    "yr": "yr"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 864
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "import{Ia,a_,bTe,p0,Sm}from",
+   "new": "import{Ia,a_,bTe,p0,Sm,Fn}from",
+   "decisions": [
+    {
+     "import": "Fn",
+     "from": "chunk-axsjfnwn.js",
+     "linux_def": "chunk-exfmq47h.js:$n",
+     "linux_local": "$n"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_append": "import{$n}from\"/@linux-graph/chunk-exfmq47h.js\";"
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "import{pfe,ye}from",
+   "new": "import{pfe,ye,ot}from",
+   "decisions": [
+    {
+     "import": "ot",
+     "from": "chunk-ecyypctx.js",
+     "linux_def": "chunk-5ythzcas.js:ot",
+     "linux_local": "ot"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_append": "import{ot}from\"/@linux-graph/chunk-5ythzcas.js\";"
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": ",lTn,Vs,Ie}from",
+   "new": ",lTn,Vs,Ie,xBe,dl,Jes,rx,fV}from",
+   "decisions": [
+    {
+     "import": "xBe",
+     "from": "chunk-0x9x817t.js",
+     "linux_def": "chunk-5xgkngpb.js:v1e",
+     "linux_local": "v1e"
+    },
+    {
+     "import": "dl",
+     "from": "chunk-0x9x817t.js",
+     "linux_def": "chunk-5xgkngpb.js:dl",
+     "linux_local": "dl"
+    },
+    {
+     "import": "Jes",
+     "from": "chunk-0x9x817t.js",
+     "linux_def": "chunk-5xgkngpb.js:wes",
+     "linux_local": "wes"
+    },
+    {
+     "import": "rx",
+     "from": "chunk-0x9x817t.js",
+     "linux_def": "chunk-5xgkngpb.js:ZR",
+     "linux_local": "ZR"
+    },
+    {
+     "import": "fV",
+     "from": "chunk-0x9x817t.js",
+     "linux_def": "chunk-5xgkngpb.js:nV",
+     "linux_local": "nV"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_append": "import{v1e}from\"/@linux-graph/chunk-5xgkngpb.js\";import{dl}from\"/@linux-graph/chunk-5xgkngpb.js\";import{wes}from\"/@linux-graph/chunk-5xgkngpb.js\";import{ZR}from\"/@linux-graph/chunk-5xgkngpb.js\";import{nV}from\"/@linux-graph/chunk-5xgkngpb.js\";"
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "let i=n.resumableAgentId!==void 0&&I5e(n.resumableAgentId,d),",
+   "new": "{let rpQ=__rpTakeQueued(n);if(rpQ)return rpQ}let i=n.resumableAgentId!==void 0&&(I5e(n.resumableAgentId,d)||__rpHasLiveChildren(n.resumableAgentId,d)),",
+   "decisions": [],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "let i=n.resumableAgentId!==void 0&&k6e(n.resumableAgentId,d),",
+   "linux_new": "{let rpQ=__rpTakeQueued(n);if(rpQ)return rpQ}let i=n.resumableAgentId!==void 0&&(k6e(n.resumableAgentId,d)||__rpHasLiveChildren(n.resumableAgentId,d)),",
+   "binding": {
+    "i": "i",
+    "n": "n",
+    "I5e": "k6e",
+    "d": "d"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1050
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "catch(v){t(`[inProcessRunner] ${e.agentName} turn-end mailbox check failed: ${v}`)}if(o){",
+   "new": "catch(v){t(`[inProcessRunner] ${e.agentName} turn-end mailbox check failed: ${v}`)}if(!o&&!O.signal.aborted)o=__rpTakeQueued(e);if(o){",
+   "decisions": [
+    {
+     "ident": "O",
+     "linux": "O",
+     "how": "witness {'O': 5}"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "catch(v){t(`[inProcessRunner] ${e.agentName} turn-end mailbox check failed: ${v}`)}if(o){",
+   "linux_new": "catch(v){t(`[inProcessRunner] ${e.agentName} turn-end mailbox check failed: ${v}`)}if(!o&&!O.signal.aborted)o=__rpTakeQueued(e);if(o){",
+   "binding": {
+    "v": "v",
+    "t": "t",
+    "e": "e",
+    "o": "o",
+    "O": "O"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1151
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "await xe(Ve)}let me=!1,x;",
+   "new": "await xe(Ve)}__rpTeammateExit(e,r);let me=!1,x;",
+   "decisions": [
+    {
+     "ident": "e",
+     "linux": "e",
+     "how": "witness {'e': 5}"
+    },
+    {
+     "ident": "r",
+     "linux": "r",
+     "how": "definition chunk-nyc0s6f6.js:r -> chunk-gjfaq3rj.js:r"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "await $e(Ve)}let me=!1,x;",
+   "linux_new": "await $e(Ve)}__rpTeammateExit(e,r);let me=!1,x;",
+   "binding": {
+    "xe": "$e",
+    "Ve": "Ve",
+    "me": "me",
+    "x": "x",
+    "e": "e",
+    "r": "r"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 875
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "t(`[inProcessRunner] Agent ${e.agentId} failed: ${ae}`);let ie=!1,me;",
+   "new": "t(`[inProcessRunner] Agent ${e.agentId} failed: ${ae}`);__rpTeammateExit(e,r);let ie=!1,me;",
+   "decisions": [
+    {
+     "ident": "r",
+     "linux": "r",
+     "how": "definition chunk-nyc0s6f6.js:r -> chunk-gjfaq3rj.js:r"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "t(`[inProcessRunner] Agent ${e.agentId} failed: ${ae}`);let ie=!1,me;",
+   "linux_new": "t(`[inProcessRunner] Agent ${e.agentId} failed: ${ae}`);__rpTeammateExit(e,r);let ie=!1,me;",
+   "binding": {
+    "t": "t",
+    "e": "e",
+    "ae": "ae",
+    "ie": "ie",
+    "me": "me",
+    "r": "r"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 835
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "extra": "function __rpTeammateId(n){return n.resumableAgentId??n.agentId}function __rpTakeQueued(n){let rpId=__rpTeammateId(n),rpCmds=xBe((rpC)=>rpC.mode===\"task-notification\"&&rpC.agentId===rpId&&typeof rpC.value===\"string\"&&rpC.value!==\"\"&&!(rpC.uuid!==void 0&&Jes(rpC.uuid)));if(rpCmds.length===0)return null;t(`[inProcessRunner] ${n.agentName} taking ${rpCmds.length} queued task-notification(s)`);return{type:\"new_message\",message:rpCmds.map((rpC)=>rpC.value).join(`\\n\\n`),origin:{kind:\"task-notification\"},from:\"user\"}}function __rpHasLiveChildren(rpId,a){return Object.values(a.all()).some((rpT)=>rpT.type===\"local_agent\"&&rpT.status===\"running\"&&rpT.ownerAgentId===rpId)}function __rpTeammateExit(n,a){try{let rpId=__rpTeammateId(n);for(let[rpTid,rpT]of Object.entries(a.all())){if(rpT.status!==\"running\")continue;if(rpT.type===\"local_agent\"&&rpT.ownerAgentId===rpId){t(`[inProcessRunner] ${n.agentName} exited: stopping its background agent ${rpTid}`);rx(rpTid,a,\"parent\")}else if(rpT.type===\"local_bash\"&&rpT.agentId===rpId){t(`[inProcessRunner] ${n.agentName} exited: stopping its background shell ${rpTid}`);fV(rpTid,a,{cause:\"owner_ended\"})}}Fn().killAgentMonitors?.(Er(rpId),a);let rpLeft=xBe((rpC)=>rpC.mode===\"task-notification\"&&rpC.agentId===rpId);if(rpLeft.length>0)t(`[inProcessRunner] ${n.agentName} exited: forwarding ${rpLeft.length} queued notification(s) to the lead`);for(let rpC of rpLeft)dl({...rpC,agentId:ot()})}catch(rpE){t(`[inProcessRunner] ${n.agentName} exit cleanup failed: ${rpE}`)}}",
+   "decisions": [
+    {
+     "ident": "n",
+     "linux": "rpv_n",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "xBe",
+     "linux": "v1e",
+     "how": "added-import"
+    },
+    {
+     "ident": "Jes",
+     "linux": "wes",
+     "how": "added-import"
+    },
+    {
+     "ident": "t",
+     "linux": "t",
+     "how": "import chunk-5nh49npx.js:t -> chunk-6hadbefe.js:t"
+    },
+    {
+     "ident": "a",
+     "linux": "rpv_a",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "rx",
+     "linux": "ZR",
+     "how": "added-import"
+    },
+    {
+     "ident": "fV",
+     "linux": "nV",
+     "how": "added-import"
+    },
+    {
+     "ident": "Fn",
+     "linux": "$n",
+     "how": "added-import"
+    },
+    {
+     "ident": "Er",
+     "linux": "Er",
+     "how": "import chunk-d50ak5jt.js:Er -> chunk-3jnp0k38.js:Er"
+    },
+    {
+     "ident": "dl",
+     "linux": "dl",
+     "how": "added-import"
+    },
+    {
+     "ident": "ot",
+     "linux": "ot",
+     "how": "added-import"
+    }
+   ],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_extra": "function __rpTeammateId(rpv_n){return rpv_n.resumableAgentId??rpv_n.agentId}function __rpTakeQueued(rpv_n){let rpId=__rpTeammateId(rpv_n),rpCmds=v1e((rpC)=>rpC.mode===\"task-notification\"&&rpC.agentId===rpId&&typeof rpC.value===\"string\"&&rpC.value!==\"\"&&!(rpC.uuid!==void 0&&wes(rpC.uuid)));if(rpCmds.length===0)return null;t(`[inProcessRunner] ${rpv_n.agentName} taking ${rpCmds.length} queued task-notification(s)`);return{type:\"new_message\",message:rpCmds.map((rpC)=>rpC.value).join(`\\n\\n`),origin:{kind:\"task-notification\"},from:\"user\"}}function __rpHasLiveChildren(rpId,rpv_a){return Object.values(rpv_a.all()).some((rpT)=>rpT.type===\"local_agent\"&&rpT.status===\"running\"&&rpT.ownerAgentId===rpId)}function __rpTeammateExit(rpv_n,rpv_a){try{let rpId=__rpTeammateId(rpv_n);for(let[rpTid,rpT]of Object.entries(rpv_a.all())){if(rpT.status!==\"running\")continue;if(rpT.type===\"local_agent\"&&rpT.ownerAgentId===rpId){t(`[inProcessRunner] ${rpv_n.agentName} exited: stopping its background agent ${rpTid}`);ZR(rpTid,rpv_a,\"parent\")}else if(rpT.type===\"local_bash\"&&rpT.agentId===rpId){t(`[inProcessRunner] ${rpv_n.agentName} exited: stopping its background shell ${rpTid}`);nV(rpTid,rpv_a,{cause:\"owner_ended\"})}}$n().killAgentMonitors?.(Er(rpId),rpv_a);let rpLeft=v1e((rpC)=>rpC.mode===\"task-notification\"&&rpC.agentId===rpId);if(rpLeft.length>0)t(`[inProcessRunner] ${rpv_n.agentName} exited: forwarding ${rpLeft.length} queued notification(s) to the lead`);for(let rpC of rpLeft)dl({...rpC,agentId:ot()})}catch(rpE){t(`[inProcessRunner] ${rpv_n.agentName} exit cleanup failed: ${rpE}`)}}",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-56swczar.js",
+   "old": "&&(Vkn(me,r.taskRegistry)||I5e(me,r.taskRegistry)),Ze=",
+   "new": "&&(Vkn(me,r.taskRegistry)||I5e(me,r.taskRegistry))||Ve,Ze=",
+   "decisions": [
+    {
+     "ident": "Ve",
+     "linux": "Ve",
+     "how": "witness {'Ve': 5}"
+    }
+   ],
+   "linux_chunk": "chunk-frs14hy1.js",
+   "linux_old": "&&(Ivn(me,r.taskRegistry)||k6e(me,r.taskRegistry)),Ze=",
+   "linux_new": "&&(Ivn(me,r.taskRegistry)||k6e(me,r.taskRegistry))||Ve,Ze=",
+   "binding": {
+    "Vkn": "Ivn",
+    "me": "me",
+    "r": "r",
+    "I5e": "k6e",
+    "Ze": "Ze",
+    "Ve": "Ve"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1171
+  },
+  {
+   "darwin_chunk": "chunk-6jypdf2f.js",
+   "old": "if(ut&&!b.agentId&&b.taskRegistry!==TV&&te.name!==Uk())",
+   "new": "if(ut&&(!b.agentId||PTe(b.agentContext)!==void 0||b.isBackgroundAgent||b.teammateContext!==void 0||b.agentContext?.agentType===\"in_process_teammate\")&&b.taskRegistry!==TV&&te.name!==Uk())",
+   "decisions": [
+    {
+     "ident": "PTe",
+     "linux": "vAe",
+     "how": "import chunk-axsjfnwn.js:PTe -> chunk-exfmq47h.js:vAe"
+    }
+   ],
+   "linux_chunk": "chunk-h44h5gdv.js",
+   "linux_old": "if(ut&&!I.agentId&&I.taskRegistry!==hV&&ee.name!==Fv())",
+   "linux_new": "if(ut&&(!I.agentId||vAe(I.agentContext)!==void 0||I.isBackgroundAgent||I.teammateContext!==void 0||I.agentContext?.agentType===\"in_process_teammate\")&&I.taskRegistry!==hV&&ee.name!==Fv())",
+   "binding": {
+    "ut": "ut",
+    "b": "I",
+    "TV": "hV",
+    "te": "ee",
+    "Uk": "Fv",
+    "PTe": "vAe"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 862
+  },
+  {
+   "darwin_chunk": "chunk-6jypdf2f.js",
+   "old": "foregroundCalls:b.innerCall?void 0:LEe.of(b.session),noticeGate:",
+   "new": "ownerAgentId:b.agentId,foregroundCalls:b.agentId||b.innerCall?void 0:LEe.of(b.session),noticeGate:",
+   "decisions": [],
+   "widened_context": {
+    "darwin_context": "oid 0)??0)>0,onBackgrounded:()=>{be=!0},foregroundCalls:b.innerCall?void 0:LEe.of(b.session),noticeGate:Wor({hookCaller:b.hookCaller,hookServesM",
+    "width": 40
+   },
+   "linux_chunk": "chunk-h44h5gdv.js",
+   "linux_old": "foregroundCalls:I.innerCall?void 0:xEe.of(I.session),noticeGate:",
+   "linux_new": "ownerAgentId:I.agentId,foregroundCalls:I.agentId||I.innerCall?void 0:xEe.of(I.session),noticeGate:",
+   "binding": {
+    "b": "I",
+    "LEe": "xEe"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 690
+  },
+  {
+   "darwin_chunk": "chunk-6jypdf2f.js",
+   "old": "import{G,di,Mo,fo,Uk,X0,D2,SGn,bte,bGn}from",
+   "new": "import{G,di,Mo,fo,Uk,X0,D2,SGn,bte,bGn,ye as __rpMcpHeadless}from",
+   "decisions": [
+    {
+     "import": "ye as __rpMcpHeadless",
+     "from": "chunk-ecyypctx.js",
+     "linux_def": "chunk-5ythzcas.js:ye",
+     "linux_local": "__rpMcpHeadless"
+    }
+   ],
+   "linux_chunk": "chunk-h44h5gdv.js",
+   "linux_append": "import{ye as __rpMcpHeadless}from\"/@linux-graph/chunk-5ythzcas.js\";"
+  },
+  {
+   "darwin_chunk": "chunk-6jypdf2f.js",
+   "old": "ut.getMcpAutoBackgroundMs(e.config,{isNonInteractiveSession:b.options.isNonInteractiveSession})",
+   "new": "ut.getMcpAutoBackgroundMs(e.config,{isNonInteractiveSession:b.agentId?__rpMcpHeadless():b.options.isNonInteractiveSession})",
+   "decisions": [],
+   "widened_context": {
+    "darwin_context": "skRegistry!==TV&&te.name!==Uk()){let Xe=ut.getMcpAutoBackgroundMs(e.config,{isNonInteractiveSession:b.options.isNonInteractiveSession}),bt=Xe===0&&ut.isMcpCallMovableWithoutTi",
+    "width": 40
+   },
+   "linux_chunk": "chunk-h44h5gdv.js",
+   "linux_old": "ut.getMcpAutoBackgroundMs(e.config,{isNonInteractiveSession:I.options.isNonInteractiveSession})",
+   "linux_new": "ut.getMcpAutoBackgroundMs(e.config,{isNonInteractiveSession:I.agentId?__rpMcpHeadless():I.options.isNonInteractiveSession})",
+   "binding": {
+    "ut": "ut",
+    "e": "e",
+    "b": "I"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 713
+  },
+  {
+   "darwin_chunk": "chunk-6jypdf2f.js",
+   "old": "ut.isMcpCallMovableWithoutTimer(e.config,{isNonInteractiveSession:b.options.isNonInteractiveSession,isInnerCall:b.innerCall===!0})",
+   "new": "ut.isMcpCallMovableWithoutTimer(e.config,{isNonInteractiveSession:b.agentId?__rpMcpHeadless():b.options.isNonInteractiveSession,isInnerCall:b.innerCall===!0})",
+   "decisions": [],
+   "widened_context": {
+    "darwin_context": "sion:b.agentId?__rpMcpHeadless():b.options.isNonInteractiveSession}),bt=Xe===0&&ut.isMcpCallMovableWithoutTimer(e.config,{isNonInteractiveSession:b.options.isNonInteractiveSession,isInnerCall:b.innerCall===!0});",
+    "width": 80
+   },
+   "linux_chunk": "chunk-h44h5gdv.js",
+   "linux_old": "ut.isMcpCallMovableWithoutTimer(e.config,{isNonInteractiveSession:I.options.isNonInteractiveSession,isInnerCall:I.innerCall===!0})",
+   "linux_new": "ut.isMcpCallMovableWithoutTimer(e.config,{isNonInteractiveSession:I.agentId?__rpMcpHeadless():I.options.isNonInteractiveSession,isInnerCall:I.innerCall===!0})",
+   "binding": {
+    "ut": "ut",
+    "e": "e",
+    "b": "I"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 455
+  },
+  {
+   "darwin_chunk": "chunk-r2ksrv9a.js",
+   "old": "if(hn&&Qt){let Nt=hn.getMcpAutoBackgroundMs",
+   "new": "if(hn&&(!B.agentId||PTe(B.agentContext)!==void 0||B.isBackgroundAgent||B.teammateContext!==void 0||B.agentContext?.agentType===\"in_process_teammate\")&&B.taskRegistry!==TV&&ge.name!==Uk()){let Nt=hn.getMcpAutoBackgroundMs",
+   "decisions": [
+    {
+     "ident": "B",
+     "linux": "B",
+     "how": "definition chunk-r2ksrv9a.js:B -> chunk-sywnjtqb.js:B"
+    },
+    {
+     "ident": "PTe",
+     "linux": "vAe",
+     "how": "import chunk-axsjfnwn.js:PTe -> chunk-exfmq47h.js:vAe"
+    },
+    {
+     "ident": "TV",
+     "linux": "hV",
+     "how": "import chunk-ygm0kzqk.js:TV -> chunk-01kgd7xg.js:hV"
+    },
+    {
+     "ident": "ge",
+     "linux": "he",
+     "how": "definition chunk-r2ksrv9a.js:ge -> chunk-sywnjtqb.js:he"
+    },
+    {
+     "ident": "Uk",
+     "linux": "Fv",
+     "how": "import chunk-ecyypctx.js:Uk -> chunk-5ythzcas.js:Fv"
+    }
+   ],
+   "linux_chunk": "chunk-sywnjtqb.js",
+   "linux_old": "if(hn&&Qt){let Nt=hn.getMcpAutoBackgroundMs",
+   "linux_new": "if(hn&&(!B.agentId||vAe(B.agentContext)!==void 0||B.isBackgroundAgent||B.teammateContext!==void 0||B.agentContext?.agentType===\"in_process_teammate\")&&B.taskRegistry!==hV&&he.name!==Fv()){let Nt=hn.getMcpAutoBackgroundMs",
+   "binding": {
+    "hn": "hn",
+    "Qt": "Qt",
+    "Nt": "Nt",
+    "B": "B",
+    "PTe": "vAe",
+    "TV": "hV",
+    "ge": "he",
+    "Uk": "Fv"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 816
+  },
+  {
+   "darwin_chunk": "chunk-r2ksrv9a.js",
+   "old": "foregroundCalls:B.innerCall?void 0:LEe.of(B.session),noticeGate:",
+   "new": "ownerAgentId:B.agentId,foregroundCalls:B.agentId||B.innerCall?void 0:LEe.of(B.session),noticeGate:",
+   "decisions": [],
+   "linux_chunk": "chunk-sywnjtqb.js",
+   "linux_old": "foregroundCalls:B.innerCall?void 0:xEe.of(B.session),noticeGate:",
+   "linux_new": "ownerAgentId:B.agentId,foregroundCalls:B.agentId||B.innerCall?void 0:xEe.of(B.session),noticeGate:",
+   "binding": {
+    "B": "B",
+    "LEe": "xEe"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1096
+  },
+  {
+   "darwin_chunk": "chunk-r2ksrv9a.js",
+   "old": "hn.getMcpAutoBackgroundMs(e.config,{isNonInteractiveSession:B.options.isNonInteractiveSession})",
+   "new": "hn.getMcpAutoBackgroundMs(e.config,{isNonInteractiveSession:B.agentId?ye():B.options.isNonInteractiveSession})",
+   "decisions": [
+    {
+     "ident": "ye",
+     "linux": "ye",
+     "how": "import chunk-ecyypctx.js:ye -> chunk-5ythzcas.js:ye"
+    }
+   ],
+   "linux_chunk": "chunk-sywnjtqb.js",
+   "linux_old": "hn.getMcpAutoBackgroundMs(e.config,{isNonInteractiveSession:B.options.isNonInteractiveSession})",
+   "linux_new": "hn.getMcpAutoBackgroundMs(e.config,{isNonInteractiveSession:B.agentId?ye():B.options.isNonInteractiveSession})",
+   "binding": {
+    "hn": "hn",
+    "e": "e",
+    "B": "B",
+    "ye": "ye"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 867
+  },
+  {
+   "darwin_chunk": "chunk-r2ksrv9a.js",
+   "old": "hn.isMcpCallMovableWithoutTimer(e.config,{isNonInteractiveSession:B.options.isNonInteractiveSession,isInnerCall:B.innerCall===!0})",
+   "new": "hn.isMcpCallMovableWithoutTimer(e.config,{isNonInteractiveSession:B.agentId?ye():B.options.isNonInteractiveSession,isInnerCall:B.innerCall===!0})",
+   "decisions": [
+    {
+     "ident": "ye",
+     "linux": "ye",
+     "how": "import chunk-ecyypctx.js:ye -> chunk-5ythzcas.js:ye"
+    }
+   ],
+   "linux_chunk": "chunk-sywnjtqb.js",
+   "linux_old": "hn.isMcpCallMovableWithoutTimer(e.config,{isNonInteractiveSession:B.options.isNonInteractiveSession,isInnerCall:B.innerCall===!0})",
+   "linux_new": "hn.isMcpCallMovableWithoutTimer(e.config,{isNonInteractiveSession:B.agentId?ye():B.options.isNonInteractiveSession,isInnerCall:B.innerCall===!0})",
+   "binding": {
+    "hn": "hn",
+    "e": "e",
+    "B": "B",
+    "ye": "ye"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 667
+  },
+  {
+   "darwin_chunk": "chunk-r2ksrv9a.js",
+   "old": "if(!rn&&JA()&&!Qcs())zt=",
+   "new": "if(Qt&&!rn&&JA()&&!Qcs())zt=",
+   "decisions": [
+    {
+     "ident": "Qt",
+     "linux": "Qt",
+     "how": "definition chunk-r2ksrv9a.js:Qt -> chunk-sywnjtqb.js:Qt"
+    }
+   ],
+   "linux_chunk": "chunk-sywnjtqb.js",
+   "linux_old": "if(!rn&&qC()&&!Wds())zt=",
+   "linux_new": "if(Qt&&!rn&&qC()&&!Wds())zt=",
+   "binding": {
+    "rn": "rn",
+    "JA": "qC",
+    "Qcs": "Wds",
+    "zt": "zt",
+    "Qt": "Qt"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 603
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "extra_imports": [
+    "import{XO,WA}from\"./chunk-ygm0kzqk.js\";"
+   ],
+   "decisions": [
+    {
+     "import": "XO",
+     "from": "chunk-ygm0kzqk.js",
+     "linux_def": "chunk-01kgd7xg.js:VI",
+     "linux_local": "VI"
+    },
+    {
+     "import": "WA",
+     "from": "chunk-ygm0kzqk.js",
+     "linux_def": "chunk-01kgd7xg.js:UC",
+     "linux_local": "UC"
+    }
+   ],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_append": "import{UC}from\"/@linux-graph/chunk-01kgd7xg.js\";import{VI}from\"/@linux-graph/chunk-01kgd7xg.js\";"
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "import{Ine,N8r,dl}",
+   "new": "import{Ine,N8r,dl,K3t,ucr}",
+   "decisions": [
+    {
+     "import": "K3t",
+     "from": "chunk-0x9x817t.js",
+     "linux_def": "chunk-5xgkngpb.js:LYt",
+     "linux_local": "LYt"
+    },
+    {
+     "import": "ucr",
+     "from": "chunk-0x9x817t.js",
+     "linux_def": "chunk-5xgkngpb.js:Wdr",
+     "linux_local": "Wdr"
+    }
+   ],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_append": "import{LYt}from\"/@linux-graph/chunk-5xgkngpb.js\";import{Wdr}from\"/@linux-graph/chunk-5xgkngpb.js\";"
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "foregroundCalls:V,noticeGate:B}){if(p)",
+   "new": "foregroundCalls:V,noticeGate:B,ownerAgentId:rpOwner}){if(p)",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "foregroundCalls:V,noticeGate:B}){if(p)",
+   "linux_new": "foregroundCalls:V,noticeGate:B,ownerAgentId:rpOwner}){if(p)",
+   "binding": {
+    "V": "V",
+    "B": "B",
+    "p": "p"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1149
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "Q=V?.add({toolUseId:u,backgroundNow:()=>{if(!C||d.signal.aborted||R?.()===!0)return!1;return C=!1,D(),!0}}),_=!1;try{",
+   "new": "rpReason, rpMove=(rpWhy)=>{if(!C||d.signal.aborted||R?.()===!0)return!1;return C=!1,rpReason=rpWhy,D(),!0},Q=V?.add({toolUseId:u,backgroundNow:()=>rpMove(\"message\")}),_=!1;__rpMcpEarly.set(b.signal,()=>rpMove(\"server\"));try{",
+   "decisions": [
+    {
+     "ident": "b",
+     "linux": "T",
+     "how": "definition chunk-kdb20esk.js:b -> chunk-b9vpay08.js:T"
+    }
+   ],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "Q=V?.add({toolUseId:u,backgroundNow:()=>{if(!w||d.signal.aborted||R?.()===!0)return!1;return w=!1,D(),!0}}),S=!1;try{",
+   "linux_new": "rpReason, rpMove=(rpWhy)=>{if(!w||d.signal.aborted||R?.()===!0)return!1;return w=!1,rpReason=rpWhy,D(),!0},Q=V?.add({toolUseId:u,backgroundNow:()=>rpMove(\"message\")}),S=!1;__rpMcpEarly.set(T.signal,()=>rpMove(\"server\"));try{",
+   "binding": {
+    "Q": "Q",
+    "V": "V",
+    "u": "u",
+    "C": "w",
+    "d": "d",
+    "R": "R",
+    "D": "D",
+    "_": "S",
+    "b": "T"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 748
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "finally{C=!1,Q?.(),N.abort()}E();let P=Rnr",
+   "new": "finally{C=!1,__rpMcpEarly.delete(b.signal),Q?.(),N.abort()}E();let P=Rnr",
+   "decisions": [
+    {
+     "ident": "b",
+     "linux": "T",
+     "how": "definition chunk-kdb20esk.js:b -> chunk-b9vpay08.js:T"
+    }
+   ],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "finally{w=!1,Q?.(),N.abort()}E();let C=Ntr",
+   "linux_new": "finally{w=!1,__rpMcpEarly.delete(T.signal),Q?.(),N.abort()}E();let C=Ntr",
+   "binding": {
+    "C": "w",
+    "Q": "Q",
+    "N": "N",
+    "E": "E",
+    "P": "C",
+    "Rnr": "Ntr",
+    "b": "T"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 933
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "backgroundedToDeliverMessage:_||void 0}),{id:s,description:I}=P;T.register(P);let Z=le",
+   "new": "backgroundedToDeliverMessage:_&&rpReason!==\"server\"||void 0}),{id:s,description:I}=P;if(rpOwner)P.agentId=rpOwner;T.register(P);if(rpOwner)XO(rpOwner,`mcp:${s}`,T);let Z=le",
+   "decisions": [
+    {
+     "ident": "XO",
+     "linux": "VI",
+     "how": "added-import"
+    }
+   ],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "backgroundedToDeliverMessage:S||void 0}),{id:s,description:I}=C;h.register(C);let Z=le",
+   "linux_new": "backgroundedToDeliverMessage:S&&rpReason!==\"server\"||void 0}),{id:s,description:I}=C;if(rpOwner)C.agentId=rpOwner;h.register(C);if(rpOwner)VI(rpOwner,`mcp:${s}`,h);let Z=le",
+   "binding": {
+    "_": "S",
+    "s": "s",
+    "I": "I",
+    "P": "C",
+    "T": "h",
+    "Z": "Z",
+    "le": "le",
+    "XO": "VI"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1078
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "trigger:_?S(\"deliver_message\"):S(\"timeout\")",
+   "new": "trigger:rpReason===\"server\"?S(\"server_request\"):_?S(\"deliver_message\"):S(\"timeout\")",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "trigger:S?b(\"deliver_message\"):b(\"timeout\")",
+   "linux_new": "trigger:rpReason===\"server\"?b(\"server_request\"):S?b(\"deliver_message\"):b(\"timeout\")",
+   "binding": {
+    "_": "S",
+    "S": "b"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1093
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "function x(n,L,oe,U,O){if(q(Z),M?.becameTask)return;",
+   "new": "function rpRelease(){WA(rpOwner,`mcp:${s}`,T)}function x(n,L,oe,U,O){q(Z);if(M?.becameTask){rpRelease();return}",
+   "decisions": [
+    {
+     "ident": "WA",
+     "linux": "UC",
+     "how": "added-import"
+    },
+    {
+     "ident": "s",
+     "linux": "s",
+     "how": "witness {'s': 5}"
+    },
+    {
+     "ident": "T",
+     "linux": "h",
+     "how": "witness {'h': 5}"
+    }
+   ],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "function x(n,L,oe,U,O){if(q(Z),M?.becameTask)return;",
+   "linux_new": "function rpRelease(){UC(rpOwner,`mcp:${s}`,h)}function x(n,L,oe,U,O){q(Z);if(M?.becameTask){rpRelease();return}",
+   "binding": {
+    "x": "x",
+    "n": "n",
+    "L": "L",
+    "oe": "oe",
+    "U": "U",
+    "O": "O",
+    "q": "q",
+    "Z": "Z",
+    "M": "M",
+    "WA": "UC",
+    "s": "s",
+    "T": "h"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1055
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "return W=!0,{...f,status:n,mcpStatus:n,statusMessage:F,endTime:Date.now(),notified:!0,abortController:void 0",
+   "new": "return W=!0,{...f,status:n,mcpStatus:n,statusMessage:F,endTime:Date.now(),notified:!0,__rpMcpNoticePending:rpOwner!==void 0,abortController:void 0",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "return W=!0,{...f,status:n,mcpStatus:n,statusMessage:F,endTime:Date.now(),notified:!0,abortController:void 0",
+   "linux_new": "return W=!0,{...f,status:n,mcpStatus:n,statusMessage:F,endTime:Date.now(),notified:!0,__rpMcpNoticePending:rpOwner!==void 0,abortController:void 0",
+   "binding": {
+    "W": "W",
+    "f": "f",
+    "n": "n",
+    "F": "F"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 884
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "}}),!W)return;if(n===\"completed\")g(\"mcp_auto_background\")",
+   "new": "}}),!W){rpRelease();return}if(n===\"completed\")g(\"mcp_auto_background\")",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "}}),!W)return;if(n===\"completed\")g(\"mcp_auto_background\")",
+   "linux_new": "}}),!W){rpRelease();return}if(n===\"completed\")g(\"mcp_auto_background\")",
+   "binding": {
+    "W": "W",
+    "n": "n",
+    "g": "g"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 881
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "let v=()=>{try{let f=Pr(r,o);Wf(f),dl(",
+   "new": "let v=()=>{let rpRecipient=K3t({ownerAgentId:rpOwner,keepaliveReason:`mcp:${s}`,delivering:!0,taskRegistry:T});try{let f=Pr(r,o);Wf(f),dl(",
+   "decisions": [
+    {
+     "ident": "K3t",
+     "linux": "LYt",
+     "how": "added-import"
+    },
+    {
+     "ident": "s",
+     "linux": "s",
+     "how": "witness {'s': 5}"
+    },
+    {
+     "ident": "T",
+     "linux": "h",
+     "how": "witness {'h': 5}"
+    }
+   ],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "let P=()=>{try{let f=Wr(r,o);Wp(f),dl(",
+   "linux_new": "let P=()=>{let rpRecipient=LYt({ownerAgentId:rpOwner,keepaliveReason:`mcp:${s}`,delivering:!0,taskRegistry:h});try{let f=Wr(r,o);Wp(f),dl(",
+   "binding": {
+    "v": "P",
+    "f": "f",
+    "Pr": "Wr",
+    "r": "r",
+    "o": "o",
+    "Wf": "Wp",
+    "dl": "dl",
+    "K3t": "LYt",
+    "s": "s",
+    "T": "h"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 875
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "statusMessage:F}),toolsUsed:[f],mode:\"task-notification\",skipAttachments:!0,priority:\"next\",agentId:ot(),taskId:s}",
+   "new": "statusMessage:F}),toolsUsed:[f],mode:\"task-notification\",skipAttachments:!0,priority:\"next\",agentId:rpRecipient,taskId:s}",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "statusMessage:F}),toolsUsed:[f],mode:\"task-notification\",skipAttachments:!0,priority:\"next\",agentId:ot(),taskId:s}",
+   "linux_new": "statusMessage:F}),toolsUsed:[f],mode:\"task-notification\",skipAttachments:!0,priority:\"next\",agentId:rpRecipient,taskId:s}",
+   "binding": {
+    "F": "F",
+    "f": "f",
+    "ot": "ot",
+    "s": "s"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 944
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "value:`MCP task ${s} ${n}; the result could not be rendered.`,mode:\"task-notification\",skipAttachments:!0,priority:\"next\",agentId:ot(),taskId:s}",
+   "new": "value:`MCP task ${s} ${n}; the result could not be rendered.`,mode:\"task-notification\",skipAttachments:!0,priority:\"next\",agentId:rpRecipient,taskId:s}",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "value:`MCP task ${s} ${n}; the result could not be rendered.`,mode:\"task-notification\",skipAttachments:!0,priority:\"next\",agentId:ot(),taskId:s}",
+   "linux_new": "value:`MCP task ${s} ${n}; the result could not be rendered.`,mode:\"task-notification\",skipAttachments:!0,priority:\"next\",agentId:rpRecipient,taskId:s}",
+   "binding": {
+    "s": "s",
+    "n": "n",
+    "ot": "ot"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1133
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "catch(ne){t(`degraded MCP task notification enqueue failed: ${String(ne)}`,{level:\"error\"})}}};if(B===void 0)",
+   "new": "catch(ne){t(`degraded MCP task notification enqueue failed: ${String(ne)}`,{level:\"error\"})}}finally{if(rpOwner){T.update(s,(rpT)=>({...rpT,__rpMcpNoticePending:!1}));if(!ucr(rpOwner,s))rpRelease()}}};if(B===void 0)",
+   "decisions": [
+    {
+     "ident": "T",
+     "linux": "h",
+     "how": "witness {'h': 5}"
+    },
+    {
+     "ident": "s",
+     "linux": "s",
+     "how": "witness {'s': 5}"
+    },
+    {
+     "ident": "ucr",
+     "linux": "Wdr",
+     "how": "added-import"
+    }
+   ],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "catch(ne){t(`degraded MCP task notification enqueue failed: ${String(ne)}`,{level:\"error\"})}}};if(B===void 0)",
+   "linux_new": "catch(ne){t(`degraded MCP task notification enqueue failed: ${String(ne)}`,{level:\"error\"})}}finally{if(rpOwner){h.update(s,(rpT)=>({...rpT,__rpMcpNoticePending:!1}));if(!Wdr(rpOwner,s))rpRelease()}}};if(B===void 0)",
+   "binding": {
+    "ne": "ne",
+    "t": "t",
+    "B": "B",
+    "T": "h",
+    "s": "s",
+    "ucr": "Wdr"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1020
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "te=_?`MCP tool \"${I}\" was moved to the background as task ${s} so that a message",
+   "new": "te=rpReason===\"server\"?`MCP tool \"${I}\" was moved to the background as task ${s} because the server requested backgrounding; it was not interrupted and keeps running`:_?`MCP tool \"${I}\" was moved to the background as task ${s} so that a message",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "te=S?`MCP tool \"${I}\" was moved to the background as task ${s} so that a message",
+   "linux_new": "te=rpReason===\"server\"?`MCP tool \"${I}\" was moved to the background as task ${s} because the server requested backgrounding; it was not interrupted and keeps running`:S?`MCP tool \"${I}\" was moved to the background as task ${s} so that a message",
+   "binding": {
+    "te": "te",
+    "_": "S",
+    "I": "I",
+    "s": "s"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 474
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "re=Py()?`. You can keep working in the meantime.",
+   "new": "re=Py()&&!rpOwner?`. You can keep working in the meantime.",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "re=Py()?`. You can keep working in the meantime.",
+   "linux_new": "re=Py()&&!rpOwner?`. You can keep working in the meantime.",
+   "binding": {
+    "re": "re",
+    "Py": "Py"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1086
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "old": "function Ie(e,r){try{Fn().mcpCallProgress.get(e)?.(r)}catch(o){a(o)}}",
+   "new": "function Ie(e,r){try{if(r?._meta?.[\"claudecode/backgroundNow\"]===!0)__rpMcpEarly.get(e)?.();Fn().mcpCallProgress.get(e)?.(r)}catch(o){a(o)}}",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_old": "function Ie(e,r){try{$n().mcpCallProgress.get(e)?.(r)}catch(o){a(o)}}",
+   "linux_new": "function Ie(e,r){try{if(r?._meta?.[\"claudecode/backgroundNow\"]===!0)__rpMcpEarly.get(e)?.();$n().mcpCallProgress.get(e)?.(r)}catch(o){a(o)}}",
+   "binding": {
+    "Ie": "Ie",
+    "e": "e",
+    "r": "r",
+    "Fn": "$n",
+    "o": "o",
+    "a": "a"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 618
+  },
+  {
+   "darwin_chunk": "chunk-kdb20esk.js",
+   "extra": "import{XO,WA}from\"./chunk-ygm0kzqk.js\";const __rpMcpEarly=new WeakMap;",
+   "decisions": [],
+   "linux_chunk": "chunk-b9vpay08.js",
+   "linux_extra": "const __rpMcpEarly=new WeakMap;",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "if(r.startsWith(\"monitor:\")||r.startsWith(\"workflow:\")||nAn(r))return!0;",
+   "new": "if(r.startsWith(\"monitor:\")||r.startsWith(\"workflow:\")||r.startsWith(\"mcp:\")||nAn(r))return!0;",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "if(r.startsWith(\"monitor:\")||r.startsWith(\"workflow:\")||BAn(r))return!0;",
+   "linux_new": "if(r.startsWith(\"monitor:\")||r.startsWith(\"workflow:\")||r.startsWith(\"mcp:\")||BAn(r))return!0;",
+   "binding": {
+    "r": "r",
+    "nAn": "BAn"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1174
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "if(r.isBackgrounded&&(h.startsWith(\"workflow:\")||nAn(h)))return!0;",
+   "new": "if(r.isBackgrounded&&(h.startsWith(\"workflow:\")||h.startsWith(\"mcp:\")||nAn(h)))return!0;",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "if(r.isBackgrounded&&(h.startsWith(\"workflow:\")||BAn(h)))return!0;",
+   "linux_new": "if(r.isBackgrounded&&(h.startsWith(\"workflow:\")||h.startsWith(\"mcp:\")||BAn(h)))return!0;",
+   "binding": {
+    "r": "r",
+    "h": "h",
+    "nAn": "BAn"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 870
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "else if(s.startsWith(\"bash:\"))h=s.slice(5);else continue;if(ucr(e,h))continue;",
+   "new": "else if(s.startsWith(\"bash:\"))h=s.slice(5);else if(s.startsWith(\"mcp:\"))h=s.slice(4);else continue;if(ucr(e,h))continue;",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "else if(s.startsWith(\"bash:\"))h=s.slice(5);else continue;if(Wdr(e,h))continue;",
+   "linux_new": "else if(s.startsWith(\"bash:\"))h=s.slice(5);else if(s.startsWith(\"mcp:\"))h=s.slice(4);else continue;if(Wdr(e,h))continue;",
+   "binding": {
+    "s": "s",
+    "h": "h",
+    "ucr": "Wdr",
+    "e": "e"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 980
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "y.type===\"local_bash\"&&y.notified&&Ko(y.status))WA(e,s,n)",
+   "new": "y.type===\"local_bash\"&&y.notified&&Ko(y.status)||y.type===\"mcp_task\"&&y.notified&&!y.__rpMcpNoticePending)WA(e,s,n)",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "y.type===\"local_bash\"&&y.notified&&Vo(y.status))UC(e,s,n)",
+   "linux_new": "y.type===\"local_bash\"&&y.notified&&Vo(y.status)||y.type===\"mcp_task\"&&y.notified&&!y.__rpMcpNoticePending)UC(e,s,n)",
+   "binding": {
+    "y": "y",
+    "Ko": "Vo",
+    "WA": "UC",
+    "e": "e",
+    "s": "s",
+    "n": "n"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1112
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "b=Cn(h)&&(har(h)||zhe(e,s))&&ok(h)&&!ye()||Cn(h)&&h.status===\"running\",rpLive=",
+   "new": "b=Cn(h)&&(har(h)||zhe(e,s))&&ok(h)&&(!ye()||n.startsWith(\"mcp:\"))||Cn(h)&&h.status===\"running\",rpLive=",
+   "decisions": [
+    {
+     "ident": "n",
+     "linux": "n",
+     "how": "definition chunk-0x9x817t.js:n -> chunk-5xgkngpb.js:n"
+    }
+   ],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "S=Tn(h)&&(Vir(h)||Hhe(e,s))&&rv(h)&&!ye()||Tn(h)&&h.status===\"running\",rpLive=",
+   "linux_new": "S=Tn(h)&&(Vir(h)||Hhe(e,s))&&rv(h)&&(!ye()||n.startsWith(\"mcp:\"))||Tn(h)&&h.status===\"running\",rpLive=",
+   "binding": {
+    "b": "S",
+    "Cn": "Tn",
+    "h": "h",
+    "har": "Vir",
+    "zhe": "Hhe",
+    "e": "e",
+    "s": "s",
+    "ok": "rv",
+    "ye": "ye",
+    "n": "n"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 509
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "return(Cn(y)||y?.type===\"local_workflow\")&&y.ownerAgentId===e});for(let h of s)dl",
+   "new": "return((Cn(y)||y?.type===\"local_workflow\")&&y.ownerAgentId===e)||(y?.type===\"mcp_task\"&&y.agentId===e)});for(let h of s)dl",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "return(Tn(y)||y?.type===\"local_workflow\")&&y.ownerAgentId===e});for(let h of s)dl",
+   "linux_new": "return((Tn(y)||y?.type===\"local_workflow\")&&y.ownerAgentId===e)||(y?.type===\"mcp_task\"&&y.agentId===e)});for(let h of s)dl",
+   "binding": {
+    "Cn": "Tn",
+    "y": "y",
+    "e": "e",
+    "h": "h",
+    "s": "s",
+    "dl": "dl"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1100
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "rpT.type===\"local_agent\"&&rpT.status===\"running\"&&rpT.ownerAgentId===rpId)}",
+   "new": "rpT.status===\"running\"&&(rpT.type===\"local_agent\"&&rpT.ownerAgentId===rpId||rpT.type===\"mcp_task\"&&rpT.agentId===rpId))}",
+   "decisions": [],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "rpT.type===\"local_agent\"&&rpT.status===\"running\"&&rpT.ownerAgentId===rpId)}",
+   "linux_new": "rpT.status===\"running\"&&(rpT.type===\"local_agent\"&&rpT.ownerAgentId===rpId||rpT.type===\"mcp_task\"&&rpT.agentId===rpId))}",
+   "binding": {},
+   "linux_imports": [],
+   "verified_context_chars": 918
+  },
+  {
+   "darwin_chunk": "chunk-nyc0s6f6.js",
+   "old": "fV(rpTid,a,{cause:\"owner_ended\"})}}Fn().killAgentMonitors",
+   "new": "fV(rpTid,a,{cause:\"owner_ended\"})}else if(rpT.type===\"mcp_task\"&&rpT.agentId===rpId){rpT.abortController?.abort()}}Fn().killAgentMonitors",
+   "decisions": [],
+   "linux_chunk": "chunk-gjfaq3rj.js",
+   "linux_old": "nV(rpTid,rpv_a,{cause:\"owner_ended\"})}}$n().killAgentMonitors",
+   "linux_new": "nV(rpTid,rpv_a,{cause:\"owner_ended\"})}else if(rpT.type===\"mcp_task\"&&rpT.agentId===rpId){rpT.abortController?.abort()}}$n().killAgentMonitors",
+   "binding": {
+    "fV": "nV",
+    "a": "rpv_a",
+    "Fn": "$n"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 596
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "function Cmr(e){if(!e)return null;return l(\"tengu_heron_brook_applied\",{len:e.value.length,fromClientData:e.fromClientData}),e.value}",
+   "new": "function Cmr(e,n){if(!e)return null;let r=__rpBlockPrompt0(\"tengu_heron_brook\",e.value,n);if(r===null)return null;return l(\"tengu_heron_brook_applied\",{len:r.length,fromClientData:e.fromClientData}),r}",
+   "decisions": [
+    {
+     "ident": "n",
+     "linux": "rpv_n",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "r",
+     "linux": "rpv_r",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "function Ymr(e){if(!e)return null;return l(\"tengu_heron_brook_applied\",{len:e.value.length,fromClientData:e.fromClientData}),e.value}",
+   "linux_new": "function Ymr(e,rpv_n){if(!e)return null;let rpv_r=__rpBlockPrompt0(\"tengu_heron_brook\",e.value,rpv_n);if(rpv_r===null)return null;return l(\"tengu_heron_brook_applied\",{len:rpv_r.length,fromClientData:e.fromClientData}),rpv_r}",
+   "binding": {
+    "Cmr": "Ymr",
+    "e": "e",
+    "l": "l",
+    "n": "rpv_n",
+    "r": "rpv_r"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 612
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "function $mr(e){let n=gSt(),r=cS(e,n===void 0?void 0:vl(n,e)),s=Ufn(e,r);if(s===null)return null;return l(\"tengu_brook_heron_applied\",{len:s.length,effort:ce(r)}),s}",
+   "new": "function $mr(e){let n=gSt(),r=cS(e,n===void 0?void 0:vl(n,e)),s=Ufn(e,r);if(s===null)return null;let h=__rpBlockPrompt0(\"tengu_brook_heron\",s,e);if(h===null)return null;return l(\"tengu_brook_heron_applied\",{len:h.length,effort:ce(r)}),h}",
+   "decisions": [
+    {
+     "ident": "h",
+     "linux": "rpv_h",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "function ugr(e){let n=fbt(),r=db(e,n===void 0?void 0:kl(n,e)),s=Hfn(e,r);if(s===null)return null;return l(\"tengu_brook_heron_applied\",{len:s.length,effort:ce(r)}),s}",
+   "linux_new": "function ugr(e){let n=fbt(),r=db(e,n===void 0?void 0:kl(n,e)),s=Hfn(e,r);if(s===null)return null;let rpv_h=__rpBlockPrompt0(\"tengu_brook_heron\",s,e);if(rpv_h===null)return null;return l(\"tengu_brook_heron_applied\",{len:rpv_h.length,effort:ce(r)}),rpv_h}",
+   "binding": {
+    "$mr": "ugr",
+    "e": "e",
+    "n": "n",
+    "gSt": "fbt",
+    "r": "r",
+    "cS": "db",
+    "vl": "kl",
+    "s": "s",
+    "Ufn": "Hfn",
+    "l": "l",
+    "ce": "ce",
+    "h": "rpv_h"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1067
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "let uo=Cmr(Re());if(uo!==null)return{kind:\"served\",text:uo}",
+   "new": "let uo=Cmr(Re(),h);if(uo!==null)return{kind:\"served\",text:uo}",
+   "decisions": [
+    {
+     "ident": "h",
+     "linux": "h",
+     "how": "definition chunk-0x9x817t.js:h -> chunk-5xgkngpb.js:h"
+    }
+   ],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "let co=Ymr(Ce());if(co!==null)return{kind:\"served\",text:co}",
+   "linux_new": "let co=Ymr(Ce(),h);if(co!==null)return{kind:\"served\",text:co}",
+   "binding": {
+    "uo": "co",
+    "Cmr": "Ymr",
+    "Re": "Ce",
+    "h": "h"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 859
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "function BMn(){let e=i.CLAUDE_CODE_SILENT_TURN_REMINDER_TEXT;if(e!==void 0)return e;let n=k(\"tengu_hushed_lark_text\",$Mn);return typeof n===\"string\"&&n.trim()!==\"\"?n:$Mn}",
+   "new": "function BMn(){let e=i.CLAUDE_CODE_SILENT_TURN_REMINDER_TEXT;if(e!==void 0)return e;let n=k(\"tengu_hushed_lark_text\",$Mn);if(typeof n===\"string\"&&n.trim()!==\"\"){let r=__rpBlockPrompt0(\"tengu_hushed_lark_text\",n);if(r!==null)return r}return $Mn}",
+   "decisions": [
+    {
+     "ident": "r",
+     "linux": "rpv_r",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "function FMn(){let e=i.CLAUDE_CODE_SILENT_TURN_REMINDER_TEXT;if(e!==void 0)return e;let n=v(\"tengu_hushed_lark_text\",LMn);return typeof n===\"string\"&&n.trim()!==\"\"?n:LMn}",
+   "linux_new": "function FMn(){let e=i.CLAUDE_CODE_SILENT_TURN_REMINDER_TEXT;if(e!==void 0)return e;let n=v(\"tengu_hushed_lark_text\",LMn);if(typeof n===\"string\"&&n.trim()!==\"\"){let rpv_r=__rpBlockPrompt0(\"tengu_hushed_lark_text\",n);if(rpv_r!==null)return rpv_r}return LMn}",
+   "binding": {
+    "BMn": "FMn",
+    "e": "e",
+    "i": "i",
+    "n": "n",
+    "k": "v",
+    "$Mn": "LMn",
+    "r": "rpv_r"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 523
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "old": "async getPromptForCommand(e,n){let r=k(\"tengu_flint_harbor_prompt\",{}),s=typeof r?.prompt===\"string\"?r.prompt:y5o,",
+   "new": "async getPromptForCommand(e,n){let r=k(\"tengu_flint_harbor_prompt\",{});if(r&&typeof r===\"object\"&&Object.keys(r).length>0&&__rpBlockPrompt0(\"tengu_flint_harbor_prompt\",JSON.stringify(r))===null)r={};let s=typeof r?.prompt===\"string\"?r.prompt:y5o,",
+   "decisions": [],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_old": "async getPromptForCommand(e,n){let r=v(\"tengu_flint_harbor_prompt\",{}),s=typeof r?.prompt===\"string\"?r.prompt:K4o,",
+   "linux_new": "async getPromptForCommand(e,n){let r=v(\"tengu_flint_harbor_prompt\",{});if(r&&typeof r===\"object\"&&Object.keys(r).length>0&&__rpBlockPrompt0(\"tengu_flint_harbor_prompt\",JSON.stringify(r))===null)r={};let s=typeof r?.prompt===\"string\"?r.prompt:K4o,",
+   "binding": {
+    "e": "e",
+    "n": "n",
+    "r": "r",
+    "k": "v",
+    "s": "s",
+    "y5o": "K4o"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 688
+  },
+  {
+   "darwin_chunk": "chunk-0x9x817t.js",
+   "extra": "function __rpBlockPrompt0(e,n,r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof n!==\"string\"||n===\"\")return n;let s=globalThis.__claudeBridgeBlockedPrompts??=new Set,h=`${e}\\0${n}`;if(!s.has(h)){s.add(h);try{let y=import.meta.require(\"fs\"),b=import.meta.require(\"path\"),w=process.env.HOME||import.meta.require(\"os\").homedir(),M=b.join(w,\".local\",\"state\",\"claude-bridge\"),x=b.join(M,\"blocked-injections.jsonl\");y.mkdirSync(M,{recursive:!0,mode:448}),y.appendFileSync(x,JSON.stringify({timestamp:new Date().toISOString(),channel:e,model:r??process.env.ANTHROPIC_MODEL??null,text:n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "decisions": [
+    {
+     "ident": "e",
+     "linux": "rpv_e",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "n",
+     "linux": "rpv_n",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "r",
+     "linux": "rpv_r",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "s",
+     "linux": "rpv_s",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "h",
+     "linux": "rpv_h",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "y",
+     "linux": "rpv_y",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "b",
+     "linux": "rpv_b",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "w",
+     "linux": "rpv_w",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "M",
+     "linux": "rpv_M",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "x",
+     "linux": "rpv_x",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-5xgkngpb.js",
+   "linux_extra": "function __rpBlockPrompt0(rpv_e,rpv_n,rpv_r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof rpv_n!==\"string\"||rpv_n===\"\")return rpv_n;let rpv_s=globalThis.__claudeBridgeBlockedPrompts??=new Set,rpv_h=`${rpv_e}\\0${rpv_n}`;if(!rpv_s.has(rpv_h)){rpv_s.add(rpv_h);try{let rpv_y=import.meta.require(\"fs\"),rpv_b=import.meta.require(\"path\"),rpv_w=process.env.HOME||import.meta.require(\"os\").homedir(),rpv_M=rpv_b.join(rpv_w,\".local\",\"state\",\"claude-bridge\"),rpv_x=rpv_b.join(rpv_M,\"blocked-injections.jsonl\");rpv_y.mkdirSync(rpv_M,{recursive:!0,mode:448}),rpv_y.appendFileSync(rpv_x,JSON.stringify({timestamp:new Date().toISOString(),channel:rpv_e,model:rpv_r??process.env.ANTHROPIC_MODEL??null,text:rpv_n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-363wfywp.js",
+   "old": "else{let y=q3t(s,n);if(y!==void 0)return Zm(e,y)}let h=e.modelOwn?.(et(n));",
+   "new": "else{let y=q3t(s,n);if(y!==void 0){let b=Zm(e,y,n);if(b!==null)return b}}let h=e.modelOwn?.(et(n));",
+   "decisions": [
+    {
+     "ident": "b",
+     "linux": "rpv_b",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-w3ch4xq2.js",
+   "linux_old": "else{let h=HYt(s,n);if(h!==void 0)return kf(e,h)}let y=e.modelOwn?.(et(n));",
+   "linux_new": "else{let h=HYt(s,n);if(h!==void 0){let rpv_b=kf(e,h,n);if(rpv_b!==null)return rpv_b}}let y=e.modelOwn?.(et(n));",
+   "binding": {
+    "y": "h",
+    "q3t": "HYt",
+    "s": "s",
+    "n": "n",
+    "Zm": "kf",
+    "e": "e",
+    "h": "y",
+    "et": "et",
+    "b": "rpv_b"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 652
+  },
+  {
+   "darwin_chunk": "chunk-363wfywp.js",
+   "old": "function Zm(e,[n,r]){if(typeof r!==\"string\")return ql(e.clientDataKey,`value for pattern \"${n}\" is ${typeof r}, expected the reminder text`),null;return mi(r,\"clientData\",n)}",
+   "new": "function Zm(e,[n,r],s){if(typeof r!==\"string\")return ql(e.clientDataKey,`value for pattern \"${n}\" is ${typeof r}, expected the reminder text`),null;let h=__rpBlockPrompt1(e.clientDataKey,r,s);return h===null?null:mi(h,\"clientData\",n)}",
+   "decisions": [
+    {
+     "ident": "s",
+     "linux": "rpv_s",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "h",
+     "linux": "rpv_h",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-w3ch4xq2.js",
+   "linux_old": "function kf(e,[n,r]){if(typeof r!==\"string\")return Gl(e.clientDataKey,`value for pattern \"${n}\" is ${typeof r}, expected the reminder text`),null;return yi(r,\"clientData\",n)}",
+   "linux_new": "function kf(e,[n,r],rpv_s){if(typeof r!==\"string\")return Gl(e.clientDataKey,`value for pattern \"${n}\" is ${typeof r}, expected the reminder text`),null;let rpv_h=__rpBlockPrompt1(e.clientDataKey,r,rpv_s);return rpv_h===null?null:yi(rpv_h,\"clientData\",n)}",
+   "binding": {
+    "Zm": "kf",
+    "e": "e",
+    "n": "n",
+    "r": "r",
+    "ql": "Gl",
+    "mi": "yi",
+    "s": "rpv_s",
+    "h": "rpv_h"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 60
+  },
+  {
+   "darwin_chunk": "chunk-363wfywp.js",
+   "extra": "function __rpBlockPrompt1(e,n,r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof n!==\"string\"||n===\"\")return n;let s=globalThis.__claudeBridgeBlockedPrompts??=new Set,h=`${e}\\0${n}`;if(!s.has(h)){s.add(h);try{let y=import.meta.require(\"fs\"),b=import.meta.require(\"path\"),w=process.env.HOME||import.meta.require(\"os\").homedir(),M=b.join(w,\".local\",\"state\",\"claude-bridge\"),x=b.join(M,\"blocked-injections.jsonl\");y.mkdirSync(M,{recursive:!0,mode:448}),y.appendFileSync(x,JSON.stringify({timestamp:new Date().toISOString(),channel:e,model:r??process.env.ANTHROPIC_MODEL??null,text:n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "decisions": [
+    {
+     "ident": "e",
+     "linux": "rpv_e",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "n",
+     "linux": "rpv_n",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "r",
+     "linux": "rpv_r",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "s",
+     "linux": "rpv_s",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "h",
+     "linux": "rpv_h",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "y",
+     "linux": "rpv_y",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "b",
+     "linux": "rpv_b",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "w",
+     "linux": "rpv_w",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "M",
+     "linux": "rpv_M",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "x",
+     "linux": "rpv_x",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-w3ch4xq2.js",
+   "linux_extra": "function __rpBlockPrompt1(rpv_e,rpv_n,rpv_r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof rpv_n!==\"string\"||rpv_n===\"\")return rpv_n;let rpv_s=globalThis.__claudeBridgeBlockedPrompts??=new Set,rpv_h=`${rpv_e}\\0${rpv_n}`;if(!rpv_s.has(rpv_h)){rpv_s.add(rpv_h);try{let rpv_y=import.meta.require(\"fs\"),rpv_b=import.meta.require(\"path\"),rpv_w=process.env.HOME||import.meta.require(\"os\").homedir(),rpv_M=rpv_b.join(rpv_w,\".local\",\"state\",\"claude-bridge\"),rpv_x=rpv_b.join(rpv_M,\"blocked-injections.jsonl\");rpv_y.mkdirSync(rpv_M,{recursive:!0,mode:448}),rpv_y.appendFileSync(rpv_x,JSON.stringify({timestamp:new Date().toISOString(),channel:rpv_e,model:rpv_r??process.env.ANTHROPIC_MODEL??null,text:rpv_n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-3xyf3gs0.js",
+   "old": "function gca(){let e=k(\"tengu_kairos_brief_stop_hook_text\",\"\");return typeof e===\"string\"&&e.length>0?e:r}",
+   "new": "function gca(){let e=k(\"tengu_kairos_brief_stop_hook_text\",\"\");if(typeof e===\"string\"&&e.length>0){let n=__rpBlockPrompt2(\"tengu_kairos_brief_stop_hook_text\",e);if(n!==null)return n}return r}",
+   "decisions": [
+    {
+     "ident": "n",
+     "linux": "rpv_n",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-8erkng7v.js",
+   "linux_old": "function Dda(){let e=v(\"tengu_kairos_brief_stop_hook_text\",\"\");return typeof e===\"string\"&&e.length>0?e:r}",
+   "linux_new": "function Dda(){let e=v(\"tengu_kairos_brief_stop_hook_text\",\"\");if(typeof e===\"string\"&&e.length>0){let rpv_n=__rpBlockPrompt2(\"tengu_kairos_brief_stop_hook_text\",e);if(rpv_n!==null)return rpv_n}return r}",
+   "binding": {
+    "gca": "Dda",
+    "e": "e",
+    "k": "v",
+    "r": "r",
+    "n": "rpv_n"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 612
+  },
+  {
+   "darwin_chunk": "chunk-3xyf3gs0.js",
+   "extra": "function __rpBlockPrompt2(e,n,r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof n!==\"string\"||n===\"\")return n;let s=globalThis.__claudeBridgeBlockedPrompts??=new Set,h=`${e}\\0${n}`;if(!s.has(h)){s.add(h);try{let y=import.meta.require(\"fs\"),b=import.meta.require(\"path\"),w=process.env.HOME||import.meta.require(\"os\").homedir(),M=b.join(w,\".local\",\"state\",\"claude-bridge\"),x=b.join(M,\"blocked-injections.jsonl\");y.mkdirSync(M,{recursive:!0,mode:448}),y.appendFileSync(x,JSON.stringify({timestamp:new Date().toISOString(),channel:e,model:r??process.env.ANTHROPIC_MODEL??null,text:n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "decisions": [
+    {
+     "ident": "e",
+     "linux": "rpv_e",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "n",
+     "linux": "rpv_n",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "r",
+     "linux": "rpv_r",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "s",
+     "linux": "rpv_s",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "h",
+     "linux": "rpv_h",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "y",
+     "linux": "rpv_y",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "b",
+     "linux": "rpv_b",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "w",
+     "linux": "rpv_w",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "M",
+     "linux": "rpv_M",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "x",
+     "linux": "rpv_x",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-8erkng7v.js",
+   "linux_extra": "function __rpBlockPrompt2(rpv_e,rpv_n,rpv_r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof rpv_n!==\"string\"||rpv_n===\"\")return rpv_n;let rpv_s=globalThis.__claudeBridgeBlockedPrompts??=new Set,rpv_h=`${rpv_e}\\0${rpv_n}`;if(!rpv_s.has(rpv_h)){rpv_s.add(rpv_h);try{let rpv_y=import.meta.require(\"fs\"),rpv_b=import.meta.require(\"path\"),rpv_w=process.env.HOME||import.meta.require(\"os\").homedir(),rpv_M=rpv_b.join(rpv_w,\".local\",\"state\",\"claude-bridge\"),rpv_x=rpv_b.join(rpv_M,\"blocked-injections.jsonl\");rpv_y.mkdirSync(rpv_M,{recursive:!0,mode:448}),rpv_y.appendFileSync(rpv_x,JSON.stringify({timestamp:new Date().toISOString(),channel:rpv_e,model:rpv_r??process.env.ANTHROPIC_MODEL??null,text:rpv_n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-52mcbrhk.js",
+   "old": "function tt(e){let n=k(\"tengu_projects_thread_recap_prompt\",\"\");return typeof n===\"string\"&&n.trim()!==\"\"?n:e}",
+   "new": "function tt(e,n){let r=k(\"tengu_projects_thread_recap_prompt\",\"\");if(typeof r===\"string\"&&r.trim()!==\"\"){let s=__rpBlockPrompt3(\"tengu_projects_thread_recap_prompt\",r,n);if(s!==null)return s}return e}",
+   "decisions": [
+    {
+     "ident": "r",
+     "linux": "rpv_r",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "s",
+     "linux": "rpv_s",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-rytc8e8q.js",
+   "linux_old": "function tt(e){let n=v(\"tengu_projects_thread_recap_prompt\",\"\");return typeof n===\"string\"&&n.trim()!==\"\"?n:e}",
+   "linux_new": "function tt(e,n){let rpv_r=v(\"tengu_projects_thread_recap_prompt\",\"\");if(typeof rpv_r===\"string\"&&rpv_r.trim()!==\"\"){let rpv_s=__rpBlockPrompt3(\"tengu_projects_thread_recap_prompt\",rpv_r,n);if(rpv_s!==null)return rpv_s}return e}",
+   "binding": {
+    "tt": "tt",
+    "e": "e",
+    "n": "n",
+    "k": "v",
+    "r": "rpv_r",
+    "s": "rpv_s"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 322
+  },
+  {
+   "darwin_chunk": "chunk-52mcbrhk.js",
+   "old": "text:w?tt(oe):te,cache_control:Q",
+   "new": "text:w?tt(oe,de):te,cache_control:Q",
+   "decisions": [
+    {
+     "ident": "de",
+     "linux": "de",
+     "how": "witness {'de': 4}"
+    }
+   ],
+   "linux_chunk": "chunk-rytc8e8q.js",
+   "linux_old": "text:A?tt(oe):te,cache_control:Q",
+   "linux_new": "text:A?tt(oe,de):te,cache_control:Q",
+   "binding": {
+    "w": "A",
+    "tt": "tt",
+    "oe": "oe",
+    "te": "te",
+    "Q": "Q",
+    "de": "de"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 879
+  },
+  {
+   "darwin_chunk": "chunk-52mcbrhk.js",
+   "extra": "function __rpBlockPrompt3(e,n,r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof n!==\"string\"||n===\"\")return n;let s=globalThis.__claudeBridgeBlockedPrompts??=new Set,h=`${e}\\0${n}`;if(!s.has(h)){s.add(h);try{let y=import.meta.require(\"fs\"),b=import.meta.require(\"path\"),w=process.env.HOME||import.meta.require(\"os\").homedir(),M=b.join(w,\".local\",\"state\",\"claude-bridge\"),x=b.join(M,\"blocked-injections.jsonl\");y.mkdirSync(M,{recursive:!0,mode:448}),y.appendFileSync(x,JSON.stringify({timestamp:new Date().toISOString(),channel:e,model:r??process.env.ANTHROPIC_MODEL??null,text:n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "decisions": [
+    {
+     "ident": "e",
+     "linux": "rpv_e",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "n",
+     "linux": "rpv_n",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "r",
+     "linux": "rpv_r",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "s",
+     "linux": "rpv_s",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "h",
+     "linux": "rpv_h",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "y",
+     "linux": "rpv_y",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "b",
+     "linux": "rpv_b",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "w",
+     "linux": "rpv_w",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "M",
+     "linux": "rpv_M",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "x",
+     "linux": "rpv_x",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-rytc8e8q.js",
+   "linux_extra": "function __rpBlockPrompt3(rpv_e,rpv_n,rpv_r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof rpv_n!==\"string\"||rpv_n===\"\")return rpv_n;let rpv_s=globalThis.__claudeBridgeBlockedPrompts??=new Set,rpv_h=`${rpv_e}\\0${rpv_n}`;if(!rpv_s.has(rpv_h)){rpv_s.add(rpv_h);try{let rpv_y=import.meta.require(\"fs\"),rpv_b=import.meta.require(\"path\"),rpv_w=process.env.HOME||import.meta.require(\"os\").homedir(),rpv_M=rpv_b.join(rpv_w,\".local\",\"state\",\"claude-bridge\"),rpv_x=rpv_b.join(rpv_M,\"blocked-injections.jsonl\");rpv_y.mkdirSync(rpv_M,{recursive:!0,mode:448}),rpv_y.appendFileSync(rpv_x,JSON.stringify({timestamp:new Date().toISOString(),channel:rpv_e,model:rpv_r??process.env.ANTHROPIC_MODEL??null,text:rpv_n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-v5d8s1b8.js",
+   "old": "let q=k(\"tengu_cinder_plover\",\"\").trim();c=q?`\n${q}\n`:nIi}let m=k(\"tengu_cinder_wren\",\"\"),r=typeof m===\"string\"?m.trim():\"\",w=r?`\n${r}\n`:\"\",",
+   "new": "let q=k(\"tengu_cinder_plover\",\"\").trim(),B=__rpBlockPrompt4(\"tengu_cinder_plover\",q,e);c=B===null?nIi:B?`\n${B}\n`:nIi}let m=k(\"tengu_cinder_wren\",\"\"),r=typeof m===\"string\"?m.trim():\"\",R=__rpBlockPrompt4(\"tengu_cinder_wren\",r,e),w=R===null?\"\":R?`\n${R}\n`:\"\",",
+   "decisions": [
+    {
+     "ident": "B",
+     "linux": "rpv_B",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "e",
+     "linux": "e",
+     "how": "witness {'e': 5}"
+    },
+    {
+     "ident": "R",
+     "linux": "rpv_R",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-zxdsqmea.js",
+   "linux_old": "let q=v(\"tengu_cinder_plover\",\"\").trim();c=q?`\n${q}\n`:_Ii}let m=v(\"tengu_cinder_wren\",\"\"),r=typeof m===\"string\"?m.trim():\"\",w=r?`\n${r}\n`:\"\",",
+   "linux_new": "let q=v(\"tengu_cinder_plover\",\"\").trim(),rpv_B=__rpBlockPrompt4(\"tengu_cinder_plover\",q,e);c=rpv_B===null?_Ii:rpv_B?`\n${rpv_B}\n`:_Ii}let m=v(\"tengu_cinder_wren\",\"\"),r=typeof m===\"string\"?m.trim():\"\",rpv_R=__rpBlockPrompt4(\"tengu_cinder_wren\",r,e),w=rpv_R===null?\"\":rpv_R?`\n${rpv_R}\n`:\"\",",
+   "binding": {
+    "q": "q",
+    "k": "v",
+    "c": "c",
+    "nIi": "_Ii",
+    "m": "m",
+    "r": "r",
+    "w": "w",
+    "B": "rpv_B",
+    "e": "e",
+    "R": "rpv_R"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 582
+  },
+  {
+   "darwin_chunk": "chunk-v5d8s1b8.js",
+   "extra": "function __rpBlockPrompt4(e,n,r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof n!==\"string\"||n===\"\")return n;let s=globalThis.__claudeBridgeBlockedPrompts??=new Set,h=`${e}\\0${n}`;if(!s.has(h)){s.add(h);try{let y=import.meta.require(\"fs\"),b=import.meta.require(\"path\"),w=process.env.HOME||import.meta.require(\"os\").homedir(),M=b.join(w,\".local\",\"state\",\"claude-bridge\"),x=b.join(M,\"blocked-injections.jsonl\");y.mkdirSync(M,{recursive:!0,mode:448}),y.appendFileSync(x,JSON.stringify({timestamp:new Date().toISOString(),channel:e,model:r??process.env.ANTHROPIC_MODEL??null,text:n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "decisions": [
+    {
+     "ident": "e",
+     "linux": "rpv_e",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "n",
+     "linux": "rpv_n",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "r",
+     "linux": "rpv_r",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "s",
+     "linux": "rpv_s",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "h",
+     "linux": "rpv_h",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "y",
+     "linux": "rpv_y",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "b",
+     "linux": "rpv_b",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "w",
+     "linux": "rpv_w",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "M",
+     "linux": "rpv_M",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "x",
+     "linux": "rpv_x",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-zxdsqmea.js",
+   "linux_extra": "function __rpBlockPrompt4(rpv_e,rpv_n,rpv_r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof rpv_n!==\"string\"||rpv_n===\"\")return rpv_n;let rpv_s=globalThis.__claudeBridgeBlockedPrompts??=new Set,rpv_h=`${rpv_e}\\0${rpv_n}`;if(!rpv_s.has(rpv_h)){rpv_s.add(rpv_h);try{let rpv_y=import.meta.require(\"fs\"),rpv_b=import.meta.require(\"path\"),rpv_w=process.env.HOME||import.meta.require(\"os\").homedir(),rpv_M=rpv_b.join(rpv_w,\".local\",\"state\",\"claude-bridge\"),rpv_x=rpv_b.join(rpv_M,\"blocked-injections.jsonl\");rpv_y.mkdirSync(rpv_M,{recursive:!0,mode:448}),rpv_y.appendFileSync(rpv_x,JSON.stringify({timestamp:new Date().toISOString(),channel:rpv_e,model:rpv_r??process.env.ANTHROPIC_MODEL??null,text:rpv_n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-2b6sw7z3.js",
+   "old": "let r=k(\"tengu_official_plugin_prompt_overrides\",{}),s=I().safeParse(r);",
+   "new": "let r=k(\"tengu_official_plugin_prompt_overrides\",{});if(r&&typeof r===\"object\"&&Object.keys(r).length>0&&__rpBlockPrompt5(\"tengu_official_plugin_prompt_overrides\",JSON.stringify(r))===null)return;let s=I().safeParse(r);",
+   "decisions": [],
+   "linux_chunk": "chunk-n6f7qd6s.js",
+   "linux_old": "let r=v(\"tengu_official_plugin_prompt_overrides\",{}),s=I().safeParse(r);",
+   "linux_new": "let r=v(\"tengu_official_plugin_prompt_overrides\",{});if(r&&typeof r===\"object\"&&Object.keys(r).length>0&&__rpBlockPrompt5(\"tengu_official_plugin_prompt_overrides\",JSON.stringify(r))===null)return;let s=I().safeParse(r);",
+   "binding": {
+    "r": "r",
+    "k": "v",
+    "s": "s",
+    "I": "I"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 995
+  },
+  {
+   "darwin_chunk": "chunk-2b6sw7z3.js",
+   "extra": "function __rpBlockPrompt5(e,n,r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof n!==\"string\"||n===\"\")return n;let s=globalThis.__claudeBridgeBlockedPrompts??=new Set,h=`${e}\\0${n}`;if(!s.has(h)){s.add(h);try{let y=import.meta.require(\"fs\"),b=import.meta.require(\"path\"),w=process.env.HOME||import.meta.require(\"os\").homedir(),M=b.join(w,\".local\",\"state\",\"claude-bridge\"),x=b.join(M,\"blocked-injections.jsonl\");y.mkdirSync(M,{recursive:!0,mode:448}),y.appendFileSync(x,JSON.stringify({timestamp:new Date().toISOString(),channel:e,model:r??process.env.ANTHROPIC_MODEL??null,text:n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "decisions": [
+    {
+     "ident": "e",
+     "linux": "rpv_e",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "n",
+     "linux": "rpv_n",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "r",
+     "linux": "rpv_r",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "s",
+     "linux": "rpv_s",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "h",
+     "linux": "rpv_h",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "y",
+     "linux": "rpv_y",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "b",
+     "linux": "rpv_b",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "w",
+     "linux": "rpv_w",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "M",
+     "linux": "rpv_M",
+     "how": "declared-in-replacement"
+    },
+    {
+     "ident": "x",
+     "linux": "rpv_x",
+     "how": "declared-in-replacement"
+    }
+   ],
+   "linux_chunk": "chunk-n6f7qd6s.js",
+   "linux_extra": "function __rpBlockPrompt5(rpv_e,rpv_n,rpv_r){if(process.env.CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS===\"1\"||typeof rpv_n!==\"string\"||rpv_n===\"\")return rpv_n;let rpv_s=globalThis.__claudeBridgeBlockedPrompts??=new Set,rpv_h=`${rpv_e}\\0${rpv_n}`;if(!rpv_s.has(rpv_h)){rpv_s.add(rpv_h);try{let rpv_y=import.meta.require(\"fs\"),rpv_b=import.meta.require(\"path\"),rpv_w=process.env.HOME||import.meta.require(\"os\").homedir(),rpv_M=rpv_b.join(rpv_w,\".local\",\"state\",\"claude-bridge\"),rpv_x=rpv_b.join(rpv_M,\"blocked-injections.jsonl\");rpv_y.mkdirSync(rpv_M,{recursive:!0,mode:448}),rpv_y.appendFileSync(rpv_x,JSON.stringify({timestamp:new Date().toISOString(),channel:rpv_e,model:rpv_r??process.env.ANTHROPIC_MODEL??null,text:rpv_n,pid:process.pid})+\"\\n\",{encoding:\"utf8\",mode:384})}catch{}}return null}",
+   "linux_imports": []
+  },
+  {
+   "darwin_chunk": "chunk-p2q3ejfg.js",
+   "old": "if(!Oo&&!z2o()&&!Sn&&!Jo&&!Wn&&!this._haikuTitleAttempted){",
+   "new": "if(!Oo&&!i.CLAUDE_CODE_DISABLE_TERMINAL_TITLE&&!Sn&&!Jo&&!Wn&&!this._haikuTitleAttempted){",
+   "decisions": [
+    {
+     "ident": "i",
+     "linux": "i",
+     "how": "witness {'i': 5}"
+    }
+   ],
+   "linux_chunk": "chunk-czq1j3j2.js",
+   "linux_old": "if(!Io&&!uGo()&&!bn&&!Xo&&!Fn&&!this._haikuTitleAttempted){",
+   "linux_new": "if(!Io&&!i.CLAUDE_CODE_DISABLE_TERMINAL_TITLE&&!bn&&!Xo&&!Fn&&!this._haikuTitleAttempted){",
+   "binding": {
+    "Oo": "Io",
+    "z2o": "uGo",
+    "Sn": "bn",
+    "Jo": "Xo",
+    "Wn": "Fn",
+    "i": "i"
+   },
+   "linux_imports": [],
+   "verified_context_chars": 1077
+  }
+ ]
+}

@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+# Immutable Claude Code 2.1.318 Linux x64 host bridge (release launcher).
+# The official executable is copied verbatim into the release and runs a
+# patched copy of its own module graph via a trusted --preload host loader.
+#
+# Interface matches the omarchy 2.1.246 release launcher, so the outer
+# ~/.local/bin/claude-bridge (proxy check, settings overlay, routing note,
+# /model guard) can call either one through a single link:
+#   --renderpatch-status   verify every asset and print identity
+#   --renderpatch-safe     same official executable, no preload, no patches
+# Wrapper options are recognized anywhere before a literal `--`.
+# Only /usr/bin tools are used (T3 Code's service PATH is /usr/local/bin:/usr/bin).
+
+set -euo pipefail
+
+@@RELEASE_CONSTANTS@@
+
+fail() { echo "claude-renderpatch: $*" >&2; exit 1; }
+
+SCRIPT_PATH="$(/usr/bin/realpath -e -- "${BASH_SOURCE[0]}")"
+RELEASE_DIR="$(/usr/bin/dirname -- "$SCRIPT_PATH")"
+TARGET="$RELEASE_DIR/runtime/claude"
+HOST_LOADER="$RELEASE_DIR/host.mjs"
+RELEASE_MANIFEST="$RELEASE_DIR/release-manifest.json"
+PYTHON=/usr/bin/python3
+
+sha256() { /usr/bin/sha256sum -- "$1" | /usr/bin/cut -d ' ' -f 1; }
+
+verify_hash() {
+  local label="$1" path="$2" expected="$3"
+  [[ ! -L "$path" && -f "$path" ]] || fail "$label is missing, not regular, or a symlink: $path"
+  [[ "$(sha256 "$path")" == "$expected" ]] || fail "$label SHA-256 mismatch"
+}
+
+verify_release() {
+  [[ -x "$PYTHON" ]] || fail "required $PYTHON not found"
+  verify_hash "release manifest" "$RELEASE_MANIFEST" "$RELEASE_MANIFEST_SHA256"
+  verify_hash "verifier" "$RELEASE_DIR/helpers/verify-assets.py" "$VERIFY_HELPER_SHA256"
+  "$PYTHON" -I "$RELEASE_DIR/helpers/verify-assets.py" "$RELEASE_DIR" "$MARKER_CONTENT"
+  verify_hash "official executable" "$TARGET" "$TARGET_SHA256"
+}
+
+PRELOAD_VARIABLES=(
+  BUN_OPTIONS CLAUDE_RENDERPATCH_ACTIVE CLAUDE_RENDERPATCH_MODULE
+  CLAUDE_RENDERPATCH_USER_MODULE CLAUDE_RENDERPATCH_TARGET
+  CLAUDE_RENDERPATCH_BRIDGE_BUILD_ID CLAUDE_RENDERPATCH_BRIDGE_ARTIFACT_SHA256
+  CLAUDE_RENDERPATCH_BRIDGE_TARGET_VERSION CLAUDE_PRELOAD_TARGET
+  CLAUDE_PRELOAD_VERSIONS_DIR CLAUDE_PRELOAD_BOOTSTRAP
+)
+scrub() { unset "${PRELOAD_VARIABLES[@]}"; }
+reject_ambient() {
+  for name in "${PRELOAD_VARIABLES[@]}"; do
+    [[ ! -v "$name" ]] || fail "refusing inherited $name; use --renderpatch-safe or unset it"
+  done
+}
+
+mode=normal
+args=()
+while (($#)); do
+  case "$1" in
+    --renderpatch-safe) [[ "$mode" == normal ]] || fail "wrapper modes are exclusive"; mode=safe; shift ;;
+    --renderpatch-status) [[ "$mode" == normal ]] || fail "wrapper modes are exclusive"; mode=status; shift ;;
+    --renderpatch-*) fail "unknown wrapper option: $1" ;;
+    --) args+=("$@"); break ;;
+    *) args+=("$1"); shift ;;
+  esac
+done
+set -- "${args[@]}"
+
+verify_release
+if [[ "$mode" == status ]]; then
+  (($# == 0)) || fail "--renderpatch-status accepts no Claude arguments"
+  scrub
+  reported="$("$TARGET" --version)"
+  printf 'release_id=%s\n' "$RELEASE_ID"
+  printf 'target=%s\n' "$TARGET"
+  printf 'target_version=%s\n' "$TARGET_VERSION"
+  printf 'reported_version=%s\n' "$reported"
+  printf 'target_sha256=%s\n' "$TARGET_SHA256"
+  printf 'release_manifest_sha256=%s\n' "$RELEASE_MANIFEST_SHA256"
+  printf 'bridge_build_id=%s\n' "$BRIDGE_BUILD_ID"
+  printf 'architecture=official-executable-host\n'
+  printf 'host_loader=%s\n' "$HOST_LOADER"
+  printf 'baked_in=%s\n' "$BAKED_IN"
+  printf 'verification=ok\n'
+  exit 0
+fi
+if [[ "$mode" == safe ]]; then
+  scrub
+  exec "$TARGET" "$@"
+fi
+reject_ambient
+if [[ ",$BAKED_IN," == *",block-server-prompt-injection,"* && "${CLAUDE_BRIDGE_ALLOW_SERVER_PROMPTS:-}" != "1" ]]; then
+  if [[ -n "${CLAUDE_CODE_MODEL_CAPABILITIES:-}" ]]; then
+    export CLAUDE_CODE_MODEL_CAPABILITIES="${CLAUDE_CODE_MODEL_CAPABILITIES};-original_games_guidance"
+  else
+    export CLAUDE_CODE_MODEL_CAPABILITIES="-original_games_guidance"
+  fi
+fi
+# host.mjs deletes BUN_OPTIONS before anything else runs: no child inherits it.
+export BUN_OPTIONS="--preload=$HOST_LOADER"
+exec "$TARGET" "$@"

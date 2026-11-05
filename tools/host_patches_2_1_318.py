@@ -18,9 +18,27 @@ unchanged. Both plain Agent and named-teammate collision paths remain distinct.
 """
 
 
-def patch_graph(texts, extra=None):
+def patch_graph(texts, extra=None, wrap_edit=None):
+    """Apply the recipes. ``wrap_edit(edit)`` may return a replacement editor
+    (used by the Linux port to translate Darwin anchors before the same strict
+    fail-closed ``edit`` runs); Darwin builds pass nothing."""
     result = dict(texts)
     changed = {}
+    edit = strict_editor(result, changed)
+    if wrap_edit is not None:
+        edit = wrap_edit(edit, result)
+    _apply_core(edit)
+    # Optional additional fail-closed edit sets share this edit function and its
+    # global before/after uniqueness checks.
+    if extra is not None:
+        extra(result, edit)
+    # Each edit checks global pre/postconditions immediately. Later recipe
+    # layers may intentionally refine an earlier layer's replacement text.
+    return result, changed
+
+
+def strict_editor(result, changed):
+    """Fail-closed exact editor over the whole graph ``result`` (mutated)."""
 
     def global_count(needle):
         return sum(text.count(needle) for text in result.values())
@@ -74,6 +92,10 @@ def patch_graph(texts, extra=None):
                 raise ValueError(f"extra postcondition failed for {name}: {extra[:160]}")
         changed[name] = changed.get(name, 0) + len(changes)
 
+    return edit
+
+
+def _apply_core(edit):
     # R1: never select the fullscreen alternate-screen renderer.
     edit(
         "chunk-3df33mkc.js",
@@ -186,10 +208,3 @@ def patch_graph(texts, extra=None):
             ),
         ],
     )
-    # Optional additional fail-closed edit sets share this edit function and its
-    # global before/after uniqueness checks.
-    if extra is not None:
-        extra(result, edit)
-    # Each edit checks global pre/postconditions immediately. Later recipe
-    # layers may intentionally refine an earlier layer's replacement text.
-    return result, changed
